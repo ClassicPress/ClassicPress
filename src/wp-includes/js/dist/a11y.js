@@ -9,15 +9,27 @@
 /* harmony export */   "default": function() { return /* binding */ domReady; }
 /* harmony export */ });
 // packages/dom-ready/src/index.ts
+/**
+* Specify a function to execute when the DOM is fully loaded.
+*
+* @param callback A function to execute after the DOM is ready.
+*
+* @example
+* ```js
+* import domReady from '@wordpress/dom-ready';
+*
+* domReady( function() {
+* 	//do something after DOM loads.
+* } );
+* ```
+*/
 function domReady(callback) {
-  if (typeof document === "undefined") {
-    return;
-  }
-  if (document.readyState === "complete" || // DOMContentLoaded + Images/Styles/etc loaded, so we call directly.
-  document.readyState === "interactive") {
-    return void callback();
-  }
-  document.addEventListener("DOMContentLoaded", callback);
+	if (typeof document === "undefined") return;
+	if (document.readyState === "complete" || document.readyState === "interactive") {
+		callback();
+		return;
+	}
+	document.addEventListener("DOMContentLoaded", callback);
 }
 
 
@@ -37,360 +49,369 @@ __webpack_require__.d(__webpack_exports__, {
 
 ;// ./node_modules/@wordpress/hooks/build-module/validateNamespace.mjs
 // packages/hooks/src/validateNamespace.ts
+/**
+* Validate a namespace string.
+*
+* @param namespace The namespace to validate - should take the form
+*                  `vendor/plugin/function`.
+*
+* @return Whether the namespace is valid.
+*/
 function validateNamespace(namespace) {
-  if ("string" !== typeof namespace || "" === namespace) {
-    console.error("The namespace must be a non-empty string.");
-    return false;
-  }
-  if (!/^[a-zA-Z][a-zA-Z0-9_.\-\/]*$/.test(namespace)) {
-    console.error(
-      "The namespace can only contain numbers, letters, dashes, periods, underscores and slashes."
-    );
-    return false;
-  }
-  return true;
+	if ("string" !== typeof namespace || "" === namespace) {
+		console.error("The namespace must be a non-empty string.");
+		return false;
+	}
+	if (!/^[a-zA-Z][a-zA-Z0-9_.\-\/]*$/.test(namespace)) {
+		console.error("The namespace can only contain numbers, letters, dashes, periods, underscores and slashes.");
+		return false;
+	}
+	return true;
 }
-var validateNamespace_default = validateNamespace;
 
 
+//# sourceMappingURL=validateNamespace.mjs.map
 ;// ./node_modules/@wordpress/hooks/build-module/validateHookName.mjs
 // packages/hooks/src/validateHookName.ts
+/**
+* Validate a hookName string.
+*
+* @param hookName The hook name to validate. Should be a non empty string containing
+*                 only numbers, letters, dashes, periods and underscores. Also,
+*                 the hook name cannot begin with `__`.
+*
+* @return Whether the hook name is valid.
+*/
 function validateHookName(hookName) {
-  if ("string" !== typeof hookName || "" === hookName) {
-    console.error("The hook name must be a non-empty string.");
-    return false;
-  }
-  if (/^__/.test(hookName)) {
-    console.error("The hook name cannot begin with `__`.");
-    return false;
-  }
-  if (!/^[a-zA-Z][a-zA-Z0-9_.-]*$/.test(hookName)) {
-    console.error(
-      "The hook name can only contain numbers, letters, dashes, periods and underscores."
-    );
-    return false;
-  }
-  return true;
+	if ("string" !== typeof hookName || "" === hookName) {
+		console.error("The hook name must be a non-empty string.");
+		return false;
+	}
+	if (/^__/.test(hookName)) {
+		console.error("The hook name cannot begin with `__`.");
+		return false;
+	}
+	if (!/^[a-zA-Z][a-zA-Z0-9_.-]*$/.test(hookName)) {
+		console.error("The hook name can only contain numbers, letters, dashes, periods and underscores.");
+		return false;
+	}
+	return true;
 }
-var validateHookName_default = validateHookName;
 
 
+//# sourceMappingURL=validateHookName.mjs.map
 ;// ./node_modules/@wordpress/hooks/build-module/createAddHook.mjs
+
+
 // packages/hooks/src/createAddHook.ts
-
-
+/**
+* Returns a function which, when invoked, will add a hook.
+*
+* @param hooks    Hooks instance.
+* @param storeKey
+*
+* @return  Function that adds a new hook.
+*/
 function createAddHook(hooks, storeKey) {
-  return function addHook(hookName, namespace, callback, priority = 10) {
-    const hooksStore = hooks[storeKey];
-    if (!validateHookName_default(hookName)) {
-      return;
-    }
-    if (!validateNamespace_default(namespace)) {
-      return;
-    }
-    if ("function" !== typeof callback) {
-      console.error("The hook callback must be a function.");
-      return;
-    }
-    if ("number" !== typeof priority) {
-      console.error(
-        "If specified, the hook priority must be a number."
-      );
-      return;
-    }
-    const handler = { callback, priority, namespace };
-    if (hooksStore[hookName]) {
-      const handlers = hooksStore[hookName].handlers;
-      let i;
-      for (i = handlers.length; i > 0; i--) {
-        if (priority >= handlers[i - 1].priority) {
-          break;
-        }
-      }
-      if (i === handlers.length) {
-        handlers[i] = handler;
-      } else {
-        handlers.splice(i, 0, handler);
-      }
-      hooksStore.__current.forEach((hookInfo) => {
-        if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
-          hookInfo.currentIndex++;
-        }
-      });
-    } else {
-      hooksStore[hookName] = {
-        handlers: [handler],
-        runs: 0
-      };
-    }
-    if (hookName !== "hookAdded") {
-      hooks.doAction(
-        "hookAdded",
-        hookName,
-        namespace,
-        callback,
-        priority
-      );
-    }
-  };
+	return function addHook(hookName, namespace, callback, priority = 10) {
+		const hooksStore = hooks[storeKey];
+		if (!validateHookName(hookName)) return;
+		if (!validateNamespace(namespace)) return;
+		if ("function" !== typeof callback) {
+			console.error("The hook callback must be a function.");
+			return;
+		}
+		if ("number" !== typeof priority) {
+			console.error("If specified, the hook priority must be a number.");
+			return;
+		}
+		const handler = {
+			callback,
+			priority,
+			namespace
+		};
+		if (hooksStore[hookName]) {
+			const handlers = hooksStore[hookName].handlers;
+			let i;
+			for (i = handlers.length; i > 0; i--) if (priority >= handlers[i - 1].priority) break;
+			if (i === handlers.length) handlers[i] = handler;
+			else handlers.splice(i, 0, handler);
+			hooksStore.__current.forEach((hookInfo) => {
+				if (hookInfo.name === hookName && hookInfo.currentIndex >= i) hookInfo.currentIndex++;
+			});
+		} else hooksStore[hookName] = {
+			handlers: [handler],
+			runs: 0
+		};
+		if (hookName !== "hookAdded") hooks.doAction("hookAdded", hookName, namespace, callback, priority);
+	};
 }
-var createAddHook_default = createAddHook;
 
 
+//# sourceMappingURL=createAddHook.mjs.map
 ;// ./node_modules/@wordpress/hooks/build-module/createRemoveHook.mjs
+
+
 // packages/hooks/src/createRemoveHook.ts
-
-
 function createRemoveHook(hooks, storeKey, removeAll = false) {
-  return function removeHook(hookName, namespace) {
-    const hooksStore = hooks[storeKey];
-    if (!validateHookName_default(hookName)) {
-      return;
-    }
-    if (!removeAll && !validateNamespace_default(namespace)) {
-      return;
-    }
-    if (!hooksStore[hookName]) {
-      return 0;
-    }
-    let handlersRemoved = 0;
-    if (removeAll) {
-      handlersRemoved = hooksStore[hookName].handlers.length;
-      hooksStore[hookName] = {
-        runs: hooksStore[hookName].runs,
-        handlers: []
-      };
-    } else {
-      const handlers = hooksStore[hookName].handlers;
-      for (let i = handlers.length - 1; i >= 0; i--) {
-        if (handlers[i].namespace === namespace) {
-          handlers.splice(i, 1);
-          handlersRemoved++;
-          hooksStore.__current.forEach((hookInfo) => {
-            if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
-              hookInfo.currentIndex--;
-            }
-          });
-        }
-      }
-    }
-    if (hookName !== "hookRemoved") {
-      hooks.doAction("hookRemoved", hookName, namespace);
-    }
-    return handlersRemoved;
-  };
+	return function removeHook(hookName, namespace) {
+		const hooksStore = hooks[storeKey];
+		if (!validateHookName(hookName)) return;
+		if (!removeAll && !validateNamespace(namespace)) return;
+		if (!hooksStore[hookName]) return 0;
+		let handlersRemoved = 0;
+		if (removeAll) {
+			handlersRemoved = hooksStore[hookName].handlers.length;
+			hooksStore[hookName] = {
+				runs: hooksStore[hookName].runs,
+				handlers: []
+			};
+		} else {
+			const handlers = hooksStore[hookName].handlers;
+			for (let i = handlers.length - 1; i >= 0; i--) if (handlers[i].namespace === namespace) {
+				handlers.splice(i, 1);
+				handlersRemoved++;
+				hooksStore.__current.forEach((hookInfo) => {
+					if (hookInfo.name === hookName && hookInfo.currentIndex >= i) hookInfo.currentIndex--;
+				});
+			}
+		}
+		if (hookName !== "hookRemoved") hooks.doAction("hookRemoved", hookName, namespace);
+		return handlersRemoved;
+	};
 }
-var createRemoveHook_default = createRemoveHook;
 
 
+//# sourceMappingURL=createRemoveHook.mjs.map
 ;// ./node_modules/@wordpress/hooks/build-module/createHasHook.mjs
 // packages/hooks/src/createHasHook.ts
+/**
+* Returns a function which, when invoked, will return whether any handlers are
+* attached to a particular hook.
+*
+* @param hooks    Hooks instance.
+* @param storeKey
+*
+* @return  Function that returns whether any handlers are
+*                   attached to a particular hook and optional namespace.
+*/
 function createHasHook(hooks, storeKey) {
-  return function hasHook(hookName, namespace) {
-    const hooksStore = hooks[storeKey];
-    if ("undefined" !== typeof namespace) {
-      return hookName in hooksStore && hooksStore[hookName].handlers.some(
-        (hook) => hook.namespace === namespace
-      );
-    }
-    return hookName in hooksStore;
-  };
+	return function hasHook(hookName, namespace) {
+		const hooksStore = hooks[storeKey];
+		if ("undefined" !== typeof namespace) return hookName in hooksStore && hooksStore[hookName].handlers.some((hook) => hook.namespace === namespace);
+		return hookName in hooksStore;
+	};
 }
-var createHasHook_default = createHasHook;
 
 
+//# sourceMappingURL=createHasHook.mjs.map
 ;// ./node_modules/@wordpress/hooks/build-module/createRunHook.mjs
 // packages/hooks/src/createRunHook.ts
+/**
+* Returns a function which, when invoked, will execute all callbacks
+* registered to a hook of the specified type, optionally returning the final
+* value of the call chain.
+*
+* @param hooks          Hooks instance.
+* @param storeKey
+* @param returnFirstArg Whether each hook callback is expected to return its first argument.
+* @param async          Whether the hook callback should be run asynchronously
+*
+* @return Function that runs hook callbacks.
+*/
 function createRunHook(hooks, storeKey, returnFirstArg, async) {
-  return function runHook(hookName, ...args) {
-    const hooksStore = hooks[storeKey];
-    if (!hooksStore[hookName]) {
-      hooksStore[hookName] = {
-        handlers: [],
-        runs: 0
-      };
-    }
-    hooksStore[hookName].runs++;
-    const handlers = hooksStore[hookName].handlers;
-    if (false) // removed by dead control flow
+	return function runHook(hookName, ...args) {
+		const hooksStore = hooks[storeKey];
+		if (!hooksStore[hookName]) hooksStore[hookName] = {
+			handlers: [],
+			runs: 0
+		};
+		hooksStore[hookName].runs++;
+		const handlers = hooksStore[hookName].handlers;
+		if (false) // removed by dead control flow
 {}
-    if (!handlers || !handlers.length) {
-      return returnFirstArg ? args[0] : void 0;
-    }
-    const hookInfo = {
-      name: hookName,
-      currentIndex: 0
-    };
-    async function asyncRunner() {
-      try {
-        hooksStore.__current.add(hookInfo);
-        let result = returnFirstArg ? args[0] : void 0;
-        while (hookInfo.currentIndex < handlers.length) {
-          const handler = handlers[hookInfo.currentIndex];
-          result = await handler.callback.apply(null, args);
-          if (returnFirstArg) {
-            args[0] = result;
-          }
-          hookInfo.currentIndex++;
-        }
-        return returnFirstArg ? result : void 0;
-      } finally {
-        hooksStore.__current.delete(hookInfo);
-      }
-    }
-    function syncRunner() {
-      try {
-        hooksStore.__current.add(hookInfo);
-        let result = returnFirstArg ? args[0] : void 0;
-        while (hookInfo.currentIndex < handlers.length) {
-          const handler = handlers[hookInfo.currentIndex];
-          result = handler.callback.apply(null, args);
-          if (returnFirstArg) {
-            args[0] = result;
-          }
-          hookInfo.currentIndex++;
-        }
-        return returnFirstArg ? result : void 0;
-      } finally {
-        hooksStore.__current.delete(hookInfo);
-      }
-    }
-    return (async ? asyncRunner : syncRunner)();
-  };
+		if (!handlers || !handlers.length) return returnFirstArg ? args[0] : void 0;
+		const hookInfo = {
+			name: hookName,
+			currentIndex: 0
+		};
+		async function asyncRunner() {
+			try {
+				hooksStore.__current.add(hookInfo);
+				let result = returnFirstArg ? args[0] : void 0;
+				while (hookInfo.currentIndex < handlers.length) {
+					result = await handlers[hookInfo.currentIndex].callback.apply(null, args);
+					if (returnFirstArg) args[0] = result;
+					hookInfo.currentIndex++;
+				}
+				return returnFirstArg ? result : void 0;
+			} finally {
+				hooksStore.__current.delete(hookInfo);
+			}
+		}
+		function syncRunner() {
+			try {
+				hooksStore.__current.add(hookInfo);
+				let result = returnFirstArg ? args[0] : void 0;
+				while (hookInfo.currentIndex < handlers.length) {
+					result = handlers[hookInfo.currentIndex].callback.apply(null, args);
+					if (returnFirstArg) args[0] = result;
+					hookInfo.currentIndex++;
+				}
+				return returnFirstArg ? result : void 0;
+			} finally {
+				hooksStore.__current.delete(hookInfo);
+			}
+		}
+		return (async ? asyncRunner : syncRunner)();
+	};
 }
-var createRunHook_default = createRunHook;
 
 
+//# sourceMappingURL=createRunHook.mjs.map
 ;// ./node_modules/@wordpress/hooks/build-module/createCurrentHook.mjs
 // packages/hooks/src/createCurrentHook.ts
+/**
+* Returns a function which, when invoked, will return the name of the
+* currently running hook, or `null` if no hook of the given type is currently
+* running.
+*
+* @param hooks    Hooks instance.
+* @param storeKey
+*
+* @return Function that returns the current hook name or null.
+*/
 function createCurrentHook(hooks, storeKey) {
-  return function currentHook() {
-    const hooksStore = hooks[storeKey];
-    const currentArray = Array.from(hooksStore.__current);
-    return currentArray.at(-1)?.name ?? null;
-  };
+	return function currentHook() {
+		const hooksStore = hooks[storeKey];
+		return Array.from(hooksStore.__current).at(-1)?.name ?? null;
+	};
 }
-var createCurrentHook_default = createCurrentHook;
 
 
+//# sourceMappingURL=createCurrentHook.mjs.map
 ;// ./node_modules/@wordpress/hooks/build-module/createDoingHook.mjs
 // packages/hooks/src/createDoingHook.ts
+/**
+* Returns a function which, when invoked, will return whether a hook is
+* currently being executed.
+*
+* @param hooks    Hooks instance.
+* @param storeKey
+*
+* @return Function that returns whether a hook is currently
+*                     being executed.
+*/
 function createDoingHook(hooks, storeKey) {
-  return function doingHook(hookName) {
-    const hooksStore = hooks[storeKey];
-    if ("undefined" === typeof hookName) {
-      return hooksStore.__current.size > 0;
-    }
-    return Array.from(hooksStore.__current).some(
-      (hook) => hook.name === hookName
-    );
-  };
+	return function doingHook(hookName) {
+		const hooksStore = hooks[storeKey];
+		if ("undefined" === typeof hookName) return hooksStore.__current.size > 0;
+		return Array.from(hooksStore.__current).some((hook) => hook.name === hookName);
+	};
 }
-var createDoingHook_default = createDoingHook;
 
 
+//# sourceMappingURL=createDoingHook.mjs.map
 ;// ./node_modules/@wordpress/hooks/build-module/createDidHook.mjs
+
 // packages/hooks/src/createDidHook.ts
-
+/**
+* Returns a function which, when invoked, will return the number of times a
+* hook has been called.
+*
+* @param hooks    Hooks instance.
+* @param storeKey
+*
+* @return  Function that returns a hook's call count.
+*/
 function createDidHook(hooks, storeKey) {
-  return function didHook(hookName) {
-    const hooksStore = hooks[storeKey];
-    if (!validateHookName_default(hookName)) {
-      return;
-    }
-    return hooksStore[hookName] && hooksStore[hookName].runs ? hooksStore[hookName].runs : 0;
-  };
+	return function didHook(hookName) {
+		const hooksStore = hooks[storeKey];
+		if (!validateHookName(hookName)) return;
+		return hooksStore[hookName] && hooksStore[hookName].runs ? hooksStore[hookName].runs : 0;
+	};
 }
-var createDidHook_default = createDidHook;
 
 
+//# sourceMappingURL=createDidHook.mjs.map
 ;// ./node_modules/@wordpress/hooks/build-module/createHooks.mjs
+
+
+
+
+
+
+
 // packages/hooks/src/createHooks.ts
-
-
-
-
-
-
-
+/**
+* Internal class for constructing hooks. Use `createHooks()` function
+*
+* Note, it is necessary to expose this class to make its type public.
+*
+* @private
+*/
 var _Hooks = class {
-  actions;
-  filters;
-  addAction;
-  addFilter;
-  removeAction;
-  removeFilter;
-  hasAction;
-  hasFilter;
-  removeAllActions;
-  removeAllFilters;
-  doAction;
-  doActionAsync;
-  applyFilters;
-  applyFiltersAsync;
-  currentAction;
-  currentFilter;
-  doingAction;
-  doingFilter;
-  didAction;
-  didFilter;
-  constructor() {
-    this.actions = /* @__PURE__ */ Object.create(null);
-    this.actions.__current = /* @__PURE__ */ new Set();
-    this.filters = /* @__PURE__ */ Object.create(null);
-    this.filters.__current = /* @__PURE__ */ new Set();
-    this.addAction = createAddHook_default(this, "actions");
-    this.addFilter = createAddHook_default(this, "filters");
-    this.removeAction = createRemoveHook_default(this, "actions");
-    this.removeFilter = createRemoveHook_default(this, "filters");
-    this.hasAction = createHasHook_default(this, "actions");
-    this.hasFilter = createHasHook_default(this, "filters");
-    this.removeAllActions = createRemoveHook_default(this, "actions", true);
-    this.removeAllFilters = createRemoveHook_default(this, "filters", true);
-    this.doAction = createRunHook_default(this, "actions", false, false);
-    this.doActionAsync = createRunHook_default(this, "actions", false, true);
-    this.applyFilters = createRunHook_default(this, "filters", true, false);
-    this.applyFiltersAsync = createRunHook_default(this, "filters", true, true);
-    this.currentAction = createCurrentHook_default(this, "actions");
-    this.currentFilter = createCurrentHook_default(this, "filters");
-    this.doingAction = createDoingHook_default(this, "actions");
-    this.doingFilter = createDoingHook_default(this, "filters");
-    this.didAction = createDidHook_default(this, "actions");
-    this.didFilter = createDidHook_default(this, "filters");
-  }
+	actions;
+	filters;
+	addAction;
+	addFilter;
+	removeAction;
+	removeFilter;
+	hasAction;
+	hasFilter;
+	removeAllActions;
+	removeAllFilters;
+	doAction;
+	doActionAsync;
+	applyFilters;
+	applyFiltersAsync;
+	currentAction;
+	currentFilter;
+	doingAction;
+	doingFilter;
+	didAction;
+	didFilter;
+	constructor() {
+		this.actions = Object.create(null);
+		this.actions.__current = /* @__PURE__ */ new Set();
+		this.filters = Object.create(null);
+		this.filters.__current = /* @__PURE__ */ new Set();
+		this.addAction = createAddHook(this, "actions");
+		this.addFilter = createAddHook(this, "filters");
+		this.removeAction = createRemoveHook(this, "actions");
+		this.removeFilter = createRemoveHook(this, "filters");
+		this.hasAction = createHasHook(this, "actions");
+		this.hasFilter = createHasHook(this, "filters");
+		this.removeAllActions = createRemoveHook(this, "actions", true);
+		this.removeAllFilters = createRemoveHook(this, "filters", true);
+		this.doAction = createRunHook(this, "actions", false, false);
+		this.doActionAsync = createRunHook(this, "actions", false, true);
+		this.applyFilters = createRunHook(this, "filters", true, false);
+		this.applyFiltersAsync = createRunHook(this, "filters", true, true);
+		this.currentAction = createCurrentHook(this, "actions");
+		this.currentFilter = createCurrentHook(this, "filters");
+		this.doingAction = createDoingHook(this, "actions");
+		this.doingFilter = createDoingHook(this, "filters");
+		this.didAction = createDidHook(this, "actions");
+		this.didFilter = createDidHook(this, "filters");
+	}
 };
+/**
+* Returns an instance of the hooks object.
+*
+* @return A Hooks instance.
+*/
 function createHooks() {
-  return new _Hooks();
+	return new _Hooks();
 }
-var createHooks_default = createHooks;
 
 
+//# sourceMappingURL=createHooks.mjs.map
 ;// ./node_modules/@wordpress/hooks/build-module/index.mjs
-// packages/hooks/src/index.ts
 
-var defaultHooks = createHooks_default();
-var {
-  addAction,
-  addFilter,
-  removeAction,
-  removeFilter,
-  hasAction,
-  hasFilter,
-  removeAllActions,
-  removeAllFilters,
-  doAction,
-  doActionAsync,
-  applyFilters,
-  applyFiltersAsync,
-  currentAction,
-  currentFilter,
-  doingAction,
-  doingFilter,
-  didAction,
-  didFilter,
-  actions,
-  filters
-} = defaultHooks;
+// packages/hooks/src/index.ts
+const defaultHooks = createHooks();
+const { addAction, addFilter, removeAction, removeFilter, hasAction, hasFilter, removeAllActions, removeAllFilters, doAction, doActionAsync, applyFilters, applyFiltersAsync, currentAction, currentFilter, doingAction, doingFilter, didAction, didFilter, actions, filters } = defaultHooks;
 
 
 
@@ -407,6 +428,8 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: _n, _nx, _x, createI18n, defaultI18n, getLocaleData, hasTranslation, isRTL, resetLocaleData, setLocaleData, sprintf, subscribe
 
+// EXTERNAL MODULE: ./node_modules/@wordpress/hooks/build-module/index.mjs + 10 modules
+var build_module = __webpack_require__(685);
 ;// ./node_modules/@tannin/postfix/index.js
 var PRECEDENCE, OPENERS, TERMINATORS, PATTERN;
 
@@ -912,239 +935,339 @@ Tannin.prototype.dcnpgettext = function( domain, context, singular, plural, n ) 
 };
 
 ;// ./node_modules/@wordpress/i18n/build-module/create-i18n.mjs
+
 // packages/i18n/src/create-i18n.ts
-
-var DEFAULT_LOCALE_DATA = {
-  "": {
-    plural_forms(n) {
-      return n === 1 ? 0 : 1;
-    }
-  }
-};
-var I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
-var createI18n = (initialData, initialDomain, hooks) => {
-  const tannin = new Tannin({});
-  const listeners = /* @__PURE__ */ new Set();
-  const notifyListeners = () => {
-    listeners.forEach((listener) => listener());
-  };
-  const subscribe = (callback) => {
-    listeners.add(callback);
-    return () => listeners.delete(callback);
-  };
-  const getLocaleData = (domain = "default") => tannin.data[domain];
-  const doSetLocaleData = (data, domain = "default") => {
-    tannin.data[domain] = {
-      ...tannin.data[domain],
-      ...data
-    };
-    tannin.data[domain][""] = {
-      ...DEFAULT_LOCALE_DATA[""],
-      ...tannin.data[domain]?.[""]
-    };
-    delete tannin.pluralForms[domain];
-  };
-  const setLocaleData = (data, domain) => {
-    doSetLocaleData(data, domain);
-    notifyListeners();
-  };
-  const addLocaleData = (data, domain = "default") => {
-    tannin.data[domain] = {
-      ...tannin.data[domain],
-      ...data,
-      // Populate default domain configuration (supported locale date which omits
-      // a plural forms expression).
-      "": {
-        ...DEFAULT_LOCALE_DATA[""],
-        ...tannin.data[domain]?.[""],
-        ...data?.[""]
-      }
-    };
-    delete tannin.pluralForms[domain];
-    notifyListeners();
-  };
-  const resetLocaleData = (data, domain) => {
-    tannin.data = {};
-    tannin.pluralForms = {};
-    setLocaleData(data, domain);
-  };
-  const dcnpgettext = (domain = "default", context, single, plural, number) => {
-    if (!tannin.data[domain]) {
-      doSetLocaleData(void 0, domain);
-    }
-    return tannin.dcnpgettext(domain, context, single, plural, number);
-  };
-  const getFilterDomain = (domain) => domain || "default";
-  const __ = (text, domain) => {
-    let translation = dcnpgettext(domain, void 0, text);
-    if (!hooks) {
-      return translation;
-    }
-    translation = hooks.applyFilters(
-      "i18n.gettext",
-      translation,
-      text,
-      domain
-    );
-    return hooks.applyFilters(
-      "i18n.gettext_" + getFilterDomain(domain),
-      translation,
-      text,
-      domain
-    );
-  };
-  const _x = (text, context, domain) => {
-    let translation = dcnpgettext(domain, context, text);
-    if (!hooks) {
-      return translation;
-    }
-    translation = hooks.applyFilters(
-      "i18n.gettext_with_context",
-      translation,
-      text,
-      context,
-      domain
-    );
-    return hooks.applyFilters(
-      "i18n.gettext_with_context_" + getFilterDomain(domain),
-      translation,
-      text,
-      context,
-      domain
-    );
-  };
-  const _n = (single, plural, number, domain) => {
-    let translation = dcnpgettext(
-      domain,
-      void 0,
-      single,
-      plural,
-      number
-    );
-    if (!hooks) {
-      return translation;
-    }
-    translation = hooks.applyFilters(
-      "i18n.ngettext",
-      translation,
-      single,
-      plural,
-      number,
-      domain
-    );
-    return hooks.applyFilters(
-      "i18n.ngettext_" + getFilterDomain(domain),
-      translation,
-      single,
-      plural,
-      number,
-      domain
-    );
-  };
-  const _nx = (single, plural, number, context, domain) => {
-    let translation = dcnpgettext(
-      domain,
-      context,
-      single,
-      plural,
-      number
-    );
-    if (!hooks) {
-      return translation;
-    }
-    translation = hooks.applyFilters(
-      "i18n.ngettext_with_context",
-      translation,
-      single,
-      plural,
-      number,
-      context,
-      domain
-    );
-    return hooks.applyFilters(
-      "i18n.ngettext_with_context_" + getFilterDomain(domain),
-      translation,
-      single,
-      plural,
-      number,
-      context,
-      domain
-    );
-  };
-  const isRTL = () => {
-    return "rtl" === _x("ltr", "text direction");
-  };
-  const hasTranslation = (single, context, domain) => {
-    const key = context ? context + "" + single : single;
-    let result = !!tannin.data?.[domain ?? "default"]?.[key];
-    if (hooks) {
-      result = hooks.applyFilters(
-        "i18n.has_translation",
-        result,
-        single,
-        context,
-        domain
-      );
-      result = hooks.applyFilters(
-        "i18n.has_translation_" + getFilterDomain(domain),
-        result,
-        single,
-        context,
-        domain
-      );
-    }
-    return result;
-  };
-  if (initialData) {
-    setLocaleData(initialData, initialDomain);
-  }
-  if (hooks) {
-    const onHookAddedOrRemoved = (hookName) => {
-      if (I18N_HOOK_REGEXP.test(hookName)) {
-        notifyListeners();
-      }
-    };
-    hooks.addAction("hookAdded", "core/i18n", onHookAddedOrRemoved);
-    hooks.addAction("hookRemoved", "core/i18n", onHookAddedOrRemoved);
-  }
-  return {
-    getLocaleData,
-    setLocaleData,
-    addLocaleData,
-    resetLocaleData,
-    subscribe,
-    __,
-    _x,
-    _n,
-    _nx,
-    isRTL,
-    hasTranslation
-  };
+/**
+* Default locale data to use for Tannin domain when not otherwise provided.
+* Assumes an English plural forms expression.
+*/
+const DEFAULT_LOCALE_DATA = { "": { plural_forms(n) {
+	return n === 1 ? 0 : 1;
+} } };
+const I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
+/**
+* Create an i18n instance
+*
+* @param [initialData]   Locale data configuration.
+* @param [initialDomain] Domain for which configuration applies.
+* @param [hooks]         Hooks implementation.
+*
+* @return I18n instance.
+*/
+const createI18n = (initialData, initialDomain, hooks) => {
+	/**
+	* The underlying instance of Tannin to which exported functions interface.
+	*/
+	const tannin = new Tannin({});
+	const listeners = /* @__PURE__ */ new Set();
+	const notifyListeners = () => {
+		listeners.forEach((listener) => listener());
+	};
+	/**
+	* Subscribe to changes of locale data.
+	*
+	* @param callback Subscription callback.
+	* @return Unsubscribe callback.
+	*/
+	const subscribe = (callback) => {
+		listeners.add(callback);
+		return () => listeners.delete(callback);
+	};
+	const getLocaleData = (domain = "default") => tannin.data[domain];
+	/**
+	* @param [data]
+	* @param [domain]
+	*/
+	const doSetLocaleData = (data, domain = "default") => {
+		tannin.data[domain] = {
+			...tannin.data[domain],
+			...data
+		};
+		tannin.data[domain][""] = {
+			...DEFAULT_LOCALE_DATA[""],
+			...tannin.data[domain]?.[""]
+		};
+		delete tannin.pluralForms[domain];
+	};
+	const setLocaleData = (data, domain) => {
+		doSetLocaleData(data, domain);
+		notifyListeners();
+	};
+	const addLocaleData = (data, domain = "default") => {
+		tannin.data[domain] = {
+			...tannin.data[domain],
+			...data,
+			"": {
+				...DEFAULT_LOCALE_DATA[""],
+				...tannin.data[domain]?.[""],
+				...data?.[""]
+			}
+		};
+		delete tannin.pluralForms[domain];
+		notifyListeners();
+	};
+	const resetLocaleData = (data, domain) => {
+		tannin.data = {};
+		tannin.pluralForms = {};
+		setLocaleData(data, domain);
+	};
+	/**
+	* Wrapper for Tannin's `dcnpgettext`. Populates default locale data if not
+	* otherwise previously assigned.
+	*
+	* @param domain   Domain to retrieve the translated text.
+	* @param context  Context information for the translators.
+	* @param single   Text to translate if non-plural. Used as
+	*                 fallback return value on a caught error.
+	* @param [plural] The text to be used if the number is
+	*                 plural.
+	* @param [number] The number to compare against to use
+	*                 either the singular or plural form.
+	*
+	* @return The translated string.
+	*/
+	const dcnpgettext = (domain = "default", context, single, plural, number) => {
+		if (!tannin.data[domain]) doSetLocaleData(void 0, domain);
+		return tannin.dcnpgettext(domain, context, single, plural, number);
+	};
+	const getFilterDomain = (domain) => domain || "default";
+	const __ = (text, domain) => {
+		let translation = dcnpgettext(domain, void 0, text);
+		if (!hooks) return translation;
+		/**
+		* Filters text with its translation.
+		*
+		* @param translation Translated text.
+		* @param text        Text to translate.
+		* @param domain      Text domain. Unique identifier for retrieving translated strings.
+		*/
+		translation = hooks.applyFilters("i18n.gettext", translation, text, domain);
+		return hooks.applyFilters("i18n.gettext_" + getFilterDomain(domain), translation, text, domain);
+	};
+	const _x = (text, context, domain) => {
+		let translation = dcnpgettext(domain, context, text);
+		if (!hooks) return translation;
+		/**
+		* Filters text with its translation based on context information.
+		*
+		* @param translation Translated text.
+		* @param text        Text to translate.
+		* @param context     Context information for the translators.
+		* @param domain      Text domain. Unique identifier for retrieving translated strings.
+		*/
+		translation = hooks.applyFilters("i18n.gettext_with_context", translation, text, context, domain);
+		return hooks.applyFilters("i18n.gettext_with_context_" + getFilterDomain(domain), translation, text, context, domain);
+	};
+	const _n = (single, plural, number, domain) => {
+		let translation = dcnpgettext(domain, void 0, single, plural, number);
+		if (!hooks) return translation;
+		/**
+		* Filters the singular or plural form of a string.
+		*
+		* @param translation Translated text.
+		* @param single      The text to be used if the number is singular.
+		* @param plural      The text to be used if the number is plural.
+		* @param number      The number to compare against to use either the singular or plural form.
+		* @param domain      Text domain. Unique identifier for retrieving translated strings.
+		*/
+		translation = hooks.applyFilters("i18n.ngettext", translation, single, plural, number, domain);
+		return hooks.applyFilters("i18n.ngettext_" + getFilterDomain(domain), translation, single, plural, number, domain);
+	};
+	const _nx = (single, plural, number, context, domain) => {
+		let translation = dcnpgettext(domain, context, single, plural, number);
+		if (!hooks) return translation;
+		/**
+		* Filters the singular or plural form of a string with gettext context.
+		*
+		* @param translation Translated text.
+		* @param single      The text to be used if the number is singular.
+		* @param plural      The text to be used if the number is plural.
+		* @param number      The number to compare against to use either the singular or plural form.
+		* @param context     Context information for the translators.
+		* @param domain      Text domain. Unique identifier for retrieving translated strings.
+		*/
+		translation = hooks.applyFilters("i18n.ngettext_with_context", translation, single, plural, number, context, domain);
+		return hooks.applyFilters("i18n.ngettext_with_context_" + getFilterDomain(domain), translation, single, plural, number, context, domain);
+	};
+	const isRTL = () => {
+		return "rtl" === _x("ltr", "text direction");
+	};
+	const hasTranslation = (single, context, domain) => {
+		const key = context ? context + "" + single : single;
+		let result = !!tannin.data?.[domain ?? "default"]?.[key];
+		if (hooks) {
+			/**
+			* Filters the presence of a translation in the locale data.
+			*
+			* @param hasTranslation Whether the translation is present or not..
+			* @param single         The singular form of the translated text (used as key in locale data)
+			* @param context        Context information for the translators.
+			* @param domain         Text domain. Unique identifier for retrieving translated strings.
+			*/
+			result = hooks.applyFilters("i18n.has_translation", result, single, context, domain);
+			result = hooks.applyFilters("i18n.has_translation_" + getFilterDomain(domain), result, single, context, domain);
+		}
+		return result;
+	};
+	if (initialData) setLocaleData(initialData, initialDomain);
+	if (hooks) {
+		/**
+		* @param hookName
+		*/
+		const onHookAddedOrRemoved = (hookName) => {
+			if (I18N_HOOK_REGEXP.test(hookName)) notifyListeners();
+		};
+		hooks.addAction("hookAdded", "core/i18n", onHookAddedOrRemoved);
+		hooks.addAction("hookRemoved", "core/i18n", onHookAddedOrRemoved);
+	}
+	return {
+		getLocaleData,
+		setLocaleData,
+		addLocaleData,
+		resetLocaleData,
+		subscribe,
+		__,
+		_x,
+		_n,
+		_nx,
+		isRTL,
+		hasTranslation
+	};
 };
 
 
-// EXTERNAL MODULE: ./node_modules/@wordpress/hooks/build-module/index.mjs + 10 modules
-var build_module = __webpack_require__(685);
+//# sourceMappingURL=create-i18n.mjs.map
 ;// ./node_modules/@wordpress/i18n/build-module/default-i18n.mjs
+
+
 // packages/i18n/src/default-i18n.ts
+const i18n = createI18n(void 0, void 0, build_module.defaultHooks);
+/**
+* Returns locale data by domain in a Jed-formatted JSON object shape.
+*
+* @see http://messageformat.github.io/Jed/
+*
+* @param { string | undefined } [domain] Domain for which to get the data.
+* @return { LocaleData } Locale data.
+*/
+const getLocaleData = i18n.getLocaleData.bind(i18n);
+/**
+* Merges locale data into the Tannin instance by domain. Accepts data in a
+* Jed-formatted JSON object shape.
+*
+* @see http://messageformat.github.io/Jed/
+*
+* @param {LocaleData }        [data]   Locale data configuration.
+* @param {string | undefined} [domain] Domain for which configuration applies.
+*/
+const setLocaleData = i18n.setLocaleData.bind(i18n);
+/**
+* Resets all current Tannin instance locale data and sets the specified
+* locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
+*
+* @see http://messageformat.github.io/Jed/
+*
+* @param {LocaleData}         [data]   Locale data configuration.
+* @param {string | undefined} [domain] Domain for which configuration applies.
+*/
+const resetLocaleData = i18n.resetLocaleData.bind(i18n);
+/**
+* Subscribes to changes of locale data
+*
+* @param {SubscribeCallback} callback Subscription callback
+* @return {UnsubscribeCallback} Unsubscribe callback
+*/
+const subscribe = i18n.subscribe.bind(i18n);
+/**
+* Retrieve the translation of text.
+*
+* @see https://developer.wordpress.org/reference/functions/__/
+*
+* @template {string} Text
+*
+* @param {Text}               text   Text to translate.
+* @param {string | undefined} domain Domain to retrieve the translated text.
+*
+* @return {TransformedText<Text>} Translated text.
+*/
+const __ = i18n.__.bind(i18n);
+/**
+* Retrieve translated string with gettext context.
+*
+* @see https://developer.wordpress.org/reference/functions/_x/
+*
+* @template {string} Text
+*
+* @param {Text}               text    Text to translate.
+* @param {string}             context Context information for the translators.
+* @param {string | undefined} domain  Domain to retrieve the translated text.
+*
+* @return {TransformedText<Text>} Translated context string without pipe.
+*/
+const _x = i18n._x.bind(i18n);
+/**
+* Translates and retrieves the singular or plural form based on the supplied
+* number.
+*
+* @see https://developer.wordpress.org/reference/functions/_n/
+*
+* @template {string} Single
+* @template {string} Plural
+*
+* @param {Single}             single The text to be used if the number is singular.
+* @param {Plural}             plural The text to be used if the number is plural.
+* @param {number}             number The number to compare against to use either the
+*                                    singular or plural form.
+* @param {string | undefined} domain Domain to retrieve the translated text.
+*
+* @return {TransformedText<Single | Plural>} The translated singular or plural form.
+*/
+const _n = i18n._n.bind(i18n);
+/**
+* Translates and retrieves the singular or plural form based on the supplied
+* number, with gettext context.
+*
+* @see https://developer.wordpress.org/reference/functions/_nx/
+*
+* @template {string} Single
+* @template {string} Plural
+* @param {Single}             single   The text to be used if the number is singular.
+*
+* @param {Single}             single   The text to be used if the number is singular.
+* @param {Plural}             plural   The text to be used if the number is plural.
+* @param {number}             number   The number to compare against to use either the
+*                                      singular or plural form.
+* @param {string}             context  Context information for the translators.
+* @param {string | undefined} [domain] Domain to retrieve the translated text.
+*
+* @return {TransformedText<Single | Plural>} The translated singular or plural form.
+*/
+const _nx = i18n._nx.bind(i18n);
+/**
+* Check if current locale is RTL.
+*
+* **RTL (Right To Left)** is a locale property indicating that text is written from right to left.
+* For example, the `he` locale (for Hebrew) specifies right-to-left. Arabic (ar) is another common
+* language written RTL. The opposite of RTL, LTR (Left To Right) is used in other languages,
+* including English (`en`, `en-US`, `en-GB`, etc.), Spanish (`es`), and French (`fr`).
+*
+* @return {boolean} Whether locale is RTL.
+*/
+const isRTL = i18n.isRTL.bind(i18n);
+/**
+* Check if there is a translation for a given string (in singular form).
+*
+* @param {string} single  Singular form of the string to look up.
+* @param {string} context Context information for the translators.
+* @param {string} domain  Domain to retrieve the translated text.
+*
+* @return {boolean} Whether the translation exists or not.
+*/
+const hasTranslation = i18n.hasTranslation.bind(i18n);
 
 
-var i18n = createI18n(void 0, void 0, build_module.defaultHooks);
-var default_i18n_default = (/* unused pure expression or super */ null && (i18n));
-var getLocaleData = i18n.getLocaleData.bind(i18n);
-var setLocaleData = i18n.setLocaleData.bind(i18n);
-var resetLocaleData = i18n.resetLocaleData.bind(i18n);
-var subscribe = i18n.subscribe.bind(i18n);
-var __ = i18n.__.bind(i18n);
-var _x = i18n._x.bind(i18n);
-var _n = i18n._n.bind(i18n);
-var _nx = i18n._nx.bind(i18n);
-var isRTL = i18n.isRTL.bind(i18n);
-var hasTranslation = i18n.hasTranslation.bind(i18n);
-
-
+//# sourceMappingURL=default-i18n.mjs.map
 ;// ./node_modules/@wordpress/i18n/build-module/index.mjs
-// packages/i18n/src/index.ts
 
 
 
@@ -1215,123 +1338,147 @@ __webpack_require__.d(__webpack_exports__, {
 var build_module = __webpack_require__(819);
 ;// ./node_modules/@wordpress/a11y/build-module/script/add-container.mjs
 // packages/a11y/src/script/add-container.ts
+/**
+* Build the live regions markup.
+*
+* @param {'polite'|'assertive'} [ariaLive] Value for the 'aria-live' attribute; default: 'polite'.
+*
+* @return The ARIA live region HTML element.
+*/
 function addContainer(ariaLive = "polite") {
-  const container = document.createElement("div");
-  container.id = `a11y-speak-${ariaLive}`;
-  container.className = "a11y-speak-region";
-  container.setAttribute(
-    "style",
-    "position:absolute;margin:-1px;padding:0;height:1px;width:1px;overflow:hidden;clip-path:inset(50%);border:0;word-wrap:normal !important;word-break:normal !important;"
-  );
-  container.setAttribute("aria-live", ariaLive);
-  container.setAttribute("aria-relevant", "additions text");
-  container.setAttribute("aria-atomic", "true");
-  const { body } = document;
-  if (body) {
-    body.appendChild(container);
-  }
-  return container;
+	const container = document.createElement("div");
+	container.id = `a11y-speak-${ariaLive}`;
+	container.className = "a11y-speak-region";
+	container.setAttribute("style", "position:absolute;margin:-1px;padding:0;height:1px;width:1px;overflow:hidden;clip-path:inset(50%);border:0;word-wrap:normal !important;word-break:normal !important;");
+	container.setAttribute("aria-live", ariaLive);
+	container.setAttribute("aria-relevant", "additions text");
+	container.setAttribute("aria-atomic", "true");
+	const { body } = document;
+	if (body) body.appendChild(container);
+	return container;
 }
 
 
+//# sourceMappingURL=add-container.mjs.map
 // EXTERNAL MODULE: ./node_modules/@wordpress/i18n/build-module/index.mjs + 7 modules
 var i18n_build_module = __webpack_require__(911);
 ;// ./node_modules/@wordpress/a11y/build-module/script/add-intro-text.mjs
-// packages/a11y/src/script/add-intro-text.ts
 
+// packages/a11y/src/script/add-intro-text.ts
+/**
+* Build the explanatory text to be placed before the aria live regions.
+*
+* This text is initially hidden from assistive technologies by using a `hidden`
+* HTML attribute which is then removed once a message fills the aria-live regions.
+*
+* @return The explanatory text HTML element.
+*/
 function addIntroText() {
-  const introText = document.createElement("p");
-  introText.id = "a11y-speak-intro-text";
-  introText.className = "a11y-speak-intro-text";
-  introText.textContent = (0,i18n_build_module.__)("Notifications");
-  introText.setAttribute(
-    "style",
-    "position:absolute;margin:-1px;padding:0;height:1px;width:1px;overflow:hidden;clip-path:inset(50%);border:0;word-wrap:normal !important;word-break:normal !important;"
-  );
-  introText.setAttribute("hidden", "");
-  const { body } = document;
-  if (body) {
-    body.appendChild(introText);
-  }
-  return introText;
+	const introText = document.createElement("p");
+	introText.id = "a11y-speak-intro-text";
+	introText.className = "a11y-speak-intro-text";
+	introText.textContent = (0,i18n_build_module.__)("Notifications");
+	introText.setAttribute("style", "position:absolute;margin:-1px;padding:0;height:1px;width:1px;overflow:hidden;clip-path:inset(50%);border:0;word-wrap:normal !important;word-break:normal !important;");
+	introText.setAttribute("hidden", "");
+	const { body } = document;
+	if (body) body.appendChild(introText);
+	return introText;
 }
 
 
+//# sourceMappingURL=add-intro-text.mjs.map
 ;// ./node_modules/@wordpress/a11y/build-module/shared/clear.mjs
 // packages/a11y/src/shared/clear.ts
+/**
+* Clears the a11y-speak-region elements and hides the explanatory text.
+*/
 function clear() {
-  const regions = document.getElementsByClassName("a11y-speak-region");
-  const introText = document.getElementById("a11y-speak-intro-text");
-  for (let i = 0; i < regions.length; i++) {
-    regions[i].textContent = "";
-  }
-  if (introText) {
-    introText.setAttribute("hidden", "hidden");
-  }
+	const regions = document.getElementsByClassName("a11y-speak-region");
+	const introText = document.getElementById("a11y-speak-intro-text");
+	for (let i = 0; i < regions.length; i++) regions[i].textContent = "";
+	if (introText) introText.setAttribute("hidden", "hidden");
 }
 
 
+//# sourceMappingURL=clear.mjs.map
 ;// ./node_modules/@wordpress/a11y/build-module/shared/filter-message.mjs
 // packages/a11y/src/shared/filter-message.ts
-var previousMessage = "";
+let previousMessage = "";
+/**
+* Filter the message to be announced to the screenreader.
+*
+* @param message The message to be announced.
+*
+* @return The filtered message.
+*/
 function filterMessage(message) {
-  message = message.replace(/<[^<>]+>/g, " ");
-  if (previousMessage === message) {
-    message += " ";
-  }
-  previousMessage = message;
-  return message;
+	message = message.replace(/<[^<>]+>/g, " ");
+	if (previousMessage === message) message += "\xA0";
+	previousMessage = message;
+	return message;
 }
 
 
+//# sourceMappingURL=filter-message.mjs.map
 ;// ./node_modules/@wordpress/a11y/build-module/shared/index.mjs
+
+
 // packages/a11y/src/shared/index.ts
-
-
+/**
+* Allows you to easily announce dynamic interface updates to screen readers using ARIA live regions.
+* This module is inspired by the `speak` function in `wp-a11y.js`.
+*
+* @param message    The message to be announced by assistive technologies.
+* @param [ariaLive] The politeness level for aria-live; default: 'polite'.
+*
+* @example
+* ```js
+* import { speak } from '@wordpress/a11y';
+*
+* // For polite messages that shouldn't interrupt what screen readers are currently announcing.
+* speak( 'The message you want to send to the ARIA live region' );
+*
+* // For assertive messages that should interrupt what screen readers are currently announcing.
+* speak( 'The message you want to send to the ARIA live region', 'assertive' );
+* ```
+*/
 function speak(message, ariaLive) {
-  clear();
-  message = filterMessage(message);
-  const introText = document.getElementById("a11y-speak-intro-text");
-  const containerAssertive = document.getElementById(
-    "a11y-speak-assertive"
-  );
-  const containerPolite = document.getElementById("a11y-speak-polite");
-  if (containerAssertive && ariaLive === "assertive") {
-    containerAssertive.textContent = message;
-  } else if (containerPolite) {
-    containerPolite.textContent = message;
-  }
-  if (introText) {
-    introText.removeAttribute("hidden");
-  }
+	clear();
+	message = filterMessage(message);
+	const introText = document.getElementById("a11y-speak-intro-text");
+	const containerAssertive = document.getElementById("a11y-speak-assertive");
+	const containerPolite = document.getElementById("a11y-speak-polite");
+	if (containerAssertive && ariaLive === "assertive") containerAssertive.textContent = message;
+	else if (containerPolite) containerPolite.textContent = message;
+	if (introText) introText.removeAttribute("hidden");
 }
 
 
+//# sourceMappingURL=index.mjs.map
 ;// ./node_modules/@wordpress/a11y/build-module/index.mjs
+
+
+
+
 // packages/a11y/src/index.ts
-
-
-
-
+/**
+* Create the live regions.
+*/
 function setup() {
-  const introText = document.getElementById("a11y-speak-intro-text");
-  const containerAssertive = document.getElementById(
-    "a11y-speak-assertive"
-  );
-  const containerPolite = document.getElementById("a11y-speak-polite");
-  if (introText === null) {
-    addIntroText();
-  }
-  if (containerAssertive === null) {
-    addContainer("assertive");
-  }
-  if (containerPolite === null) {
-    addContainer("polite");
-  }
+	const introText = document.getElementById("a11y-speak-intro-text");
+	const containerAssertive = document.getElementById("a11y-speak-assertive");
+	const containerPolite = document.getElementById("a11y-speak-polite");
+	if (introText === null) addIntroText();
+	if (containerAssertive === null) addContainer("assertive");
+	if (containerPolite === null) addContainer("polite");
 }
+/**
+* Run setup on domReady.
+*/
 ;(0,build_module["default"])(setup);
 
 
+//# sourceMappingURL=index.mjs.map
 (window.wp = window.wp || {}).a11y = __webpack_exports__;
 /******/ })()
 ;
