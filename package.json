@@ -33,7 +33,7 @@
     "install-changed": "^1.1.0",
     "postcss": "8.5.32",
     "qunit": "^3.0.0",
-    "rollup": "4.67.4",
+    "rollup": "4.68.0",
     "sass": "1.107.1",
     "sinon": "^22.0.0",
     "sinon-test": "^3.1.5",
