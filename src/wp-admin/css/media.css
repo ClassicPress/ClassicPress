@@ -444,12 +444,6 @@
 	position: relative;
 }
 
-.upload-plugin .drag-drop #drag-drop-area,
-.upload-theme .drag-drop #drag-drop-area {
-	height: auto;
-	padding: 1em 0 2em;
-}
-
 /**
  * Media Library grid view
  */
