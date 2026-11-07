@@ -2395,6 +2395,7 @@ body.adding-widget .add-new-widget:before,
 }
 
 #widgets-right {
+	overflow-y: auto;
 	flex: 1;
 }
 
