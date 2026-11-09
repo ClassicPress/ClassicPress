@@ -554,7 +554,7 @@ switch ( $action ) {
 				 *
 				 * @since CP-2.1.0
 				 */
-				$tax_list = '<h2>' . __( 'User Taxonomies' ) . '</h2>';
+				$tax_list = '';
 
 				/**
 				 * Filters user level taxonomy data used to create a table list.
@@ -570,36 +570,42 @@ switch ( $action ) {
 				 */
 				$taxonomies = apply_filters( 'cp_user_taxonomies', get_object_taxonomies( 'user', 'objects' ), $profile_user );
 				if ( ! empty( $taxonomies ) ) {
-
-					$tax_list .= '<table class="form-table" role="presentation"><tbody>';
-
 					foreach ( $taxonomies as $taxonomy ) {
-						$tax_list .= '<tr class="user-taxonomy-wrap"><th><label for="taxonomy-' . esc_attr( $taxonomy->name ) . '">' . esc_html( $taxonomy->labels->name ) . '</label></th><td id="taxonomy-' . esc_attr( $taxonomy->name ) . '">';
-
-						$tax_names = array();
-						$user_terms = wp_get_object_terms( $profile_user->ID, $taxonomy->name );
-						if ( ! empty( $user_terms ) && ! is_wp_error( $user_terms ) ) {
-							foreach ( $user_terms as $user_term ) {
-								$tax_names[] = $user_term->name;
+						if ( current_user_can( $taxonomy->cap->edit_terms ) ) {
+							if ( '' === $tax_list ) {
+								$tax_list .= '<h2>' . __( 'User Taxonomies' ) . '</h2>';
+								$tax_list .= '<table class="form-table" role="presentation"><tbody>';
 							}
-						}
 
-						$terms = get_terms(
-							array(
-								'taxonomy'   => $taxonomy->name,
-								'hide_empty' => false,
-							)
-						);
-						if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
-							foreach ( $terms as $term ) {
-								$tax_list .= '<input id="' . esc_attr( $taxonomy->name . '-term-' . $term->slug ) . '" name="' . esc_attr( $taxonomy->name ) . '[]" type="checkbox" value="' . esc_attr( $term->slug ) . '"' . checked( in_array( $term->name, $tax_names, true ), true, false ) . '>&nbsp;';
-								$tax_list .= '<label for="' . esc_attr( $taxonomy->name . '-term-' . $term->slug ) . '">' . esc_html( $term->name ) . '</label><br>';
+							$tax_list .= '<tr class="user-taxonomy-wrap"><th><label for="taxonomy-' . esc_attr( $taxonomy->name ) . '">' . esc_html( $taxonomy->labels->name ) . '</label></th><td id="taxonomy-' . esc_attr( $taxonomy->name ) . '">';
+
+							$tax_names = array();
+							$user_terms = wp_get_object_terms( $profile_user->ID, $taxonomy->name );
+							if ( ! empty( $user_terms ) && ! is_wp_error( $user_terms ) ) {
+								foreach ( $user_terms as $user_term ) {
+									$tax_names[] = $user_term->name;
+								}
 							}
+
+							$terms = get_terms(
+								array(
+									'taxonomy'   => $taxonomy->name,
+									'hide_empty' => false,
+								)
+							);
+							if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+								foreach ( $terms as $term ) {
+									$tax_list .= '<input id="' . esc_attr( $taxonomy->name . '-term-' . $term->slug ) . '" name="' . esc_attr( $taxonomy->name ) . '[]" type="checkbox" value="' . esc_attr( $term->slug ) . '"' . checked( in_array( $term->name, $tax_names, true ), true, false ) . '>&nbsp;';
+									$tax_list .= '<label for="' . esc_attr( $taxonomy->name . '-term-' . $term->slug ) . '">' . esc_html( $term->name ) . '</label><br>';
+								}
+							}
+							$tax_list .= '</td></tr>';
 						}
-						$tax_list .= '</td></tr>';
 					}
 
-					$tax_list .= '</tbody></table>';
+					if ( '' !== $tax_list ) {
+						$tax_list .= '</tbody></table>';
+					}
 
 					/**
 					 * Filters a pre-formatted HTML table list of user taxonomy terms.
