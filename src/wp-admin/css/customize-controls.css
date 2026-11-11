@@ -1675,6 +1675,9 @@ input[type="range"].hue-slider::-moz-range-track {
 
 .customize-section-description-container + #customize-control-custom_css:last-child .CodeMirror {
 	height: calc( 100vh - 185px );
+	border-bottom: 0;
+	border-right: 0;
+	border-left: 0;
 }
 
 .CodeMirror-lint-tooltip,
