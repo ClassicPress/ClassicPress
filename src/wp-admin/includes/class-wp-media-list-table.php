@@ -100,6 +100,7 @@ class WP_Media_List_Table extends WP_List_Table {
 		}
 
 		list( $post_mime_types, $avail_post_mime_types ) = wp_edit_attachments_query( $_REQUEST );
+		cp_prime_attachment_relationship_caches( wp_list_pluck( $wp_query->posts, 'ID' ) );
 
 		$this->is_trash = isset( $_REQUEST['attachment-filter'] ) && 'trash' === $_REQUEST['attachment-filter'];
 
