@@ -1013,11 +1013,15 @@ form#tags-filter {
 
 /* Media queries */
 @media screen and (max-width: 782px) {
-
 	.privacy-settings-body,
 	.health-check-body {
 		margin: 0 12px;
 		width: auto;
+	}
+
+	.privacy-settings-accordion-heading,
+	.health-check-accordion-heading {
+		width: 90%;
 	}
 
 	.privacy-settings .notice,
@@ -1050,7 +1054,6 @@ form#tags-filter {
 }
 
 @media only screen and (max-width: 1004px) {
-
 	.privacy-settings-body,
 	.health-check-body {
 		margin: 0 22px;
