@@ -1105,6 +1105,25 @@ body.folded .theme-browser ~ .theme-overlay .theme-wrap {
 	text-align: center;
 }
 
+.upload-theme .drag-drop #drag-drop-area,
+.upload-plugin .drag-drop #drag-drop-area {
+	height: auto;
+	padding: 1em 0 2em;
+	border: 4px dashed #c3c4c7;
+	background-color: #ecf7e9;
+}
+
+.upload-theme .filepond--drop-label,
+.upload-plugin .filepond--drop-label {
+	background-color: #ecf7e9;
+}
+
+.upload-theme .filepond--drip,
+.upload-plugin .filepond--drip {
+	opacity: 1;
+	background: #ecf7e9;
+}
+
 p.no-themes,
 p.no-themes-local {
 	clear: both;
@@ -1126,13 +1145,15 @@ p.no-themes-local {
 }
 
 @media only screen and (max-width: 1120px) {
-	.upload-theme .wp-upload-form {
+	.upload-theme .wp-upload-form,
+	.upload-plugin .wp-upload-form {
 		margin: 20px 0;
 		max-width: 100%;
 	}
-	.upload-theme .install-help {
+
+	.upload-theme .install-help,
+	.upload-plugin .install-help {
 		font-size: 15px;
-		padding: 20px 0 0;
 	}
 }
 

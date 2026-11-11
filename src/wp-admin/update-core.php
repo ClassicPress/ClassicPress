@@ -207,7 +207,7 @@ function core_upgrade_preamble() {
 		/* translators: 1: Link to Backups documentation page, 2: Link to Updating documentation page */
 		printf(
 			__( '<strong>Important:</strong> before updating, please <a href="%1$s">back up your database and files</a>. For help with updates, visit the <a href="%2$s">Updating ClassicPress</a> documentation page.' ),
-			'https://developer.wordpress.org/advanced-administration/security/backup/',
+			'https://docs.classicpress.net/user-guides/backup-classicpress/',
 			'https://docs.classicpress.net/user-guides/updating-classicpress/'
 		);
 		echo '</p></div>';
@@ -515,7 +515,7 @@ function list_theme_updates() {
 	printf(
 		/* translators: %s: Link to documentation on child themes. */
 		__( '<strong>Please Note:</strong> Any customizations you have made to theme files will be lost. Please consider using <a href="%s">child themes</a> for modifications.' ),
-		__( 'https://developer.wordpress.org/themes/advanced-topics/child-themes/' )
+		__( 'https://docs.classicpress.net/user-guides/advanced-classicpress-guides/creating-a-child-theme/' )
 	);
 	?>
 </p>
@@ -884,7 +884,7 @@ get_current_screen()->add_help_tab(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://wordpress.org/documentation/article/dashboard-updates-screen/">Documentation on Updating ClassicPress</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/dashboard-updates-screen/">Documentation on Updating ClassicPress</a>' ) . '</p>' .
 	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support forums</a>' ) . '</p>'
 );
 
