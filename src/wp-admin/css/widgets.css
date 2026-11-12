@@ -1419,7 +1419,7 @@ ul.CodeMirror-hints {
 	}
 
 	.widget-modal-header-buttons {
-		display: block;
+		flex-direction: column;
 	}
 
 	.widget-modal-pages {
