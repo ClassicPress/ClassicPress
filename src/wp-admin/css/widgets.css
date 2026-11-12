@@ -1461,6 +1461,14 @@ ul.CodeMirror-hints {
 		float: none;
 		margin: 15px 0 0;
 	}
+
+	.media-library-select-div {
+		flex-direction: column;
+	}
+
+	.widget-modal-search-form {
+		padding-top: 1em;
+	}
 }
 
 @media screen and (max-width: 320px) {
