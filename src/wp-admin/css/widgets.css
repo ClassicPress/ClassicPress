@@ -1363,6 +1363,11 @@ ul.CodeMirror-hints {
 .describe {
 	margin-left: -0.5px;
 }
+#widget-modal .widget-modal-pages button {
+	margin: 0;
+	font-size: 13px;
+	vertical-align: inherit;
+}
 
 /* =Media Queries
 -------------------------------------------------------------- */
