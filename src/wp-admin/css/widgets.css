@@ -1393,22 +1393,28 @@ ul.CodeMirror-hints {
 	.editwidget .widget-inside input[type="radio"] {
 		margin: 0.25rem 0.25rem 0.25rem 0;
 	}
+
+	.widget-modal-right-sidebar {
+		width: auto;
+		min-width: 220px;
+	}
 }
 
 @media screen and (max-width: 690px) {
 	.widget-modal-content {
 		display: block;
 	}
-	.media-library-grid,
-	.widget-modal-right-sidebar {
+
+	.media-library-grid {
 		width: 100%;
 	}
+
 	.widget-modal-right-sidebar {
-		width: 99%;
-		margin-left: -1.2em;
-		padding-right: 1em;
-		height: 100%;
-		overflow: hidden;
+		display: none;
+	}
+
+	.widget-modal-pages {
+		display: none;
 	}
 }
 
