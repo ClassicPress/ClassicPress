@@ -1413,8 +1413,13 @@ ul.CodeMirror-hints {
 		display: none;
 	}
 
+	.widget-modal-header-buttons {
+		display: block;
+	}
+
 	.widget-modal-pages {
-		display: none;
+		margin: 0;
+		padding: 1em;
 	}
 }
 
