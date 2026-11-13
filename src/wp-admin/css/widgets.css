@@ -1182,6 +1182,7 @@ ul.CodeMirror-hints {
 .widget-modal-display-settings input,
 .widget-modal-display-settings select {
 	width: 65%;
+	flex: 1;
 }
 .insert-from-url-panel {
 	padding: 1em 1em 0;
@@ -1338,7 +1339,7 @@ ul.CodeMirror-hints {
 	padding-left: 1em;
 }
 #alt-text-description {
-	margin: -0.5em 0 1em 30%;
+	margin: -0.5em 0 1em 20%;
 }
 #image-details-link-target,
 .sep {
