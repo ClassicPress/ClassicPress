@@ -237,7 +237,7 @@ class Custom_Background {
 			$message = sprintf(
 				/* translators: %s: URL to background image configuration in Customizer. */
 				__( 'You can now manage and live-preview Custom Backgrounds in the <a href="%s">Customizer</a>.' ),
-				admin_url( 'customize.php?autofocus[control]=background_image' )
+				admin_url( 'customize.php#sub-accordion-section-background_image' )
 			);
 			wp_admin_notice(
 				$message,
