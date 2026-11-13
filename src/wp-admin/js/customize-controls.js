@@ -2729,6 +2729,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				queryParams.delete( 'customize_autosaved' );
 				queryParams.delete( 'cp_restoring_autosave' );
 
+				queryString = queryParams.toString(); // use updated URL
 				window.history.replaceState( null, '', window.location.pathname + ( queryString ? '?' + queryString : '' ) + window.location.hash );
 			}
 
