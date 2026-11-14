@@ -2063,8 +2063,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					selectButton.focus();
 				} );
 			}
-			if ( settingId === 'background_image' ) {
-				grandparent.querySelector( 'input' ).value = imageUrl;
+			if ( settingId === 'background_image' || li.classList.contains( 'customize-control-image' ) || li.classList.contains( 'customize-control-upload' ) ) {
+				if ( grandparent.querySelector( 'input' ) ) {
+					grandparent.querySelector( 'input' ).value = imageUrl;
+				}
 				_updatedControlsWatcher[ settingId ] = imageUrl;
 			} else {
 				if ( grandparent.querySelector( 'input' ) ) {

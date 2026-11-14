@@ -436,6 +436,10 @@
 			}
 		},
 		background: function() {
+			// Preserve server-rendered background CSS when settings are not available.
+			if ( ! api.has( 'background_color' ) || ! api.has( 'background_image' ) ) {
+				return;
+			}
 			var css = '',
 				props = [ 'color', 'image', 'preset', 'position_x', 'position_y', 'size', 'repeat', 'attachment' ],
 				settings = {},
