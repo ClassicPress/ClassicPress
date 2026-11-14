@@ -508,7 +508,7 @@ class Custom_Image_Header {
 			$message = sprintf(
 				/* translators: %s: URL to header image configuration in Customizer. */
 				__( 'You can now manage and live-preview Custom Header in the <a href="%s">Customizer</a>.' ),
-				admin_url( 'customize.php#sub-accordion-section-header_image' )
+				esc_url( admin_url( 'customize.php#sub-accordion-section-header_image' ) )
 			);
 			wp_admin_notice(
 				$message,
