@@ -373,7 +373,7 @@ if ( is_array( $submenu ) && isset( $submenu['themes.php'] ) ) {
 	foreach ( (array) $submenu['themes.php'] as $item ) {
 		$class = '';
 
-		if ( in_array( $item[2], $forbidden_paths, true ) || str_starts_with( $item[2], 'customize.php' ) ) {
+		if ( in_array( $item[2], $forbidden_paths, true ) || str_starts_with( $item[2], 'customize.php' ) || str_starts_with( $item[2], 'http' ) ) {
 			continue;
 		}
 
@@ -398,9 +398,9 @@ if ( is_array( $submenu ) && isset( $submenu['themes.php'] ) ) {
 
 			if ( current_user_can( 'customize' ) ) {
 				if ( 'custom-header' === $menu_file ) {
-					$current_theme_actions[] = "<a class='button hide-if-no-customize$class' href='customize.php?autofocus[control]=header_image'>{$item[0]}</a>";
+					$current_theme_actions[] = "<a class='button hide-if-no-customize$class' href='customize.php#sub-accordion-section-header_image'>{$item[0]}</a>";
 				} elseif ( 'custom-background' === $menu_file ) {
-					$current_theme_actions[] = "<a class='button hide-if-no-customize$class' href='customize.php?autofocus[control]=background_image'>{$item[0]}</a>";
+					$current_theme_actions[] = "<a class='button hide-if-no-customize$class' href='customize.php#sub-accordion-section-background_image'>{$item[0]}</a>";
 				}
 			}
 
