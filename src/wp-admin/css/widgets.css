@@ -1116,6 +1116,7 @@ ul.CodeMirror-hints {
 	margin-top: -1em;
 	padding: 1em;
 	background: #f6f7f7;
+	color: #646970;
 	border-left: 1px solid #c3c4c7;
 	width: 267px;
 	min-width: 267px;
@@ -1137,12 +1138,16 @@ ul.CodeMirror-hints {
 	width: 38%;
 	overflow: hidden;
 	display: inline-block;
+	vertical-align: top;
 }
 .widget-modal-attachment-info .thumbnail img,
 #media-widget-modal .image img {
 	max-width: 100%;
 	max-height: 500px;
 	margin: auto;
+}
+.widget-modal-attachment-info .mejs-container {
+	margin-bottom: 0.5em;
 }
 .widget-modal-attachment-info .details {
 	width: 50%;
@@ -1181,8 +1186,7 @@ ul.CodeMirror-hints {
 .widget-modal-display-settings textarea,
 .widget-modal-display-settings input,
 .widget-modal-display-settings select {
-	width: 65%;
-	flex: 1;
+	width: 70%;
 }
 .insert-from-url-panel {
 	padding: 1em 1em 0;
@@ -1339,7 +1343,7 @@ ul.CodeMirror-hints {
 	padding-left: 1em;
 }
 #alt-text-description {
-	margin: -0.5em 0 1em 20%;
+	margin: -0.5em 0 1em 30%;
 }
 #image-details-link-target,
 .sep {
@@ -1376,17 +1380,39 @@ ul.CodeMirror-hints {
 	.widget-modal-left-sidebar {
 		display: none;
 	}
+
 	.widget-modal-main {
 		width: 100%;
 	}
+
+	.widget-modal-descriptions .setting,
+	.widget-modal-display-settings .setting,
+	#image-modal-content .column-settings .setting {
+		justify-content: space-between;
+		flex-direction: column;
+	}
+
 	#widget-modal input,
-	#widget-modal textarea,
 	#widget-modal select,
 	#widget-modal button {
 		min-height: 30px;
 		max-height: 30px;
 		line-height: 1;
 	}
+
+	.widget-modal-descriptions textarea,
+	.widget-modal-descriptions input,
+	.widget-modal-display-settings textarea,
+	.widget-modal-display-settings input,
+	.widget-modal-display-settings select {
+		width: 98%;
+		font-size: 13px;
+	}
+
+	#alt-text-description {
+		margin-left: 0;
+	}
+
 	#widget-modal button.widget-modal-close {
 		max-height: 46px;
 	}
@@ -1401,8 +1427,12 @@ ul.CodeMirror-hints {
 	}
 
 	.widget-modal-right-sidebar {
-		width: auto;
+		width: 220px;
 		min-width: 220px;
+	}
+
+	.widget-modal-attachment-info .mejs-container {
+		display: none;
 	}
 }
 
