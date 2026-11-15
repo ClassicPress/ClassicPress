@@ -89,7 +89,7 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 	 * @since CP-2.8.0
 	 */
 	public function render_content() {
-		$value = $this->value(); error_log($value);
+		$value = $this->value();
 		$attachment_id = 0;
 		$image_src = '';
 		$alt_text = '';
