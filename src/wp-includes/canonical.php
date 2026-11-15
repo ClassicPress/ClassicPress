@@ -435,17 +435,43 @@ function redirect_canonical( $requested_url = null, $do_redirect = true ) {
 			$feed  = get_query_var( 'feed' );
 			$cpage = get_query_var( 'cpage' );
 
-			while ( preg_match( "#/$wp_rewrite->pagination_base/?[0-9]+?(/+)?$#", $redirect['path'] )
-				|| preg_match( '#/(comments/?)?(feed|rss2?|rdf|atom)(/+)?$#', $redirect['path'] )
-				|| preg_match( "#/{$wp_rewrite->comments_pagination_base}-[0-9]+(/+)?$#", $redirect['path'] )
+			/*
+			 * Only strip endings from the part of the path after the queried object's own path,
+			 * so that a slug which looks like a feed ending (e.g. a tag called "rss") is kept.
+			 * Post slugs can't clash with feed endings: see wp_unique_post_slug().
+			 */
+			$queried_object = get_queried_object();
+			$object_link    = false;
+
+			if ( ( is_category() || is_tag() || is_tax() ) && ! empty( $queried_object->term_id ) ) {
+				$object_link = get_term_link( $queried_object );
+			} elseif ( is_author() && ! empty( $queried_object->ID ) ) {
+				$object_link = get_author_posts_url( $queried_object->ID, $queried_object->user_nicename );
+			}
+
+			$object_path = ( $object_link && ! is_wp_error( $object_link ) ) ? untrailingslashit( (string) parse_url( $object_link, PHP_URL_PATH ) ) : '';
+
+			if ( '' !== $object_path && str_starts_with( trailingslashit( $redirect['path'] ), trailingslashit( $object_path ) ) ) {
+				$base_path   = $object_path;
+				$ending_path = substr( $redirect['path'], strlen( $object_path ) );
+			} else {
+				$base_path   = '';
+				$ending_path = $redirect['path'];
+			}
+
+			while ( preg_match( "#/$wp_rewrite->pagination_base/?[0-9]+?(/+)?$#", $ending_path )
+				|| preg_match( '#/(comments/?)?(feed|rss2?|rdf|atom)(/+)?$#', $ending_path )
+				|| preg_match( "#/{$wp_rewrite->comments_pagination_base}-[0-9]+(/+)?$#", $ending_path )
 			) {
 				// Strip off any existing paging.
-				$redirect['path'] = preg_replace( "#/$wp_rewrite->pagination_base/?[0-9]+?(/+)?$#", '/', $redirect['path'] );
+				$ending_path = preg_replace( "#/$wp_rewrite->pagination_base/?[0-9]+?(/+)?$#", '/', $ending_path );
 				// Strip off feed endings.
-				$redirect['path'] = preg_replace( '#/(comments/?)?(feed|rss2?|rdf|atom)(/+|$)#', '/', $redirect['path'] );
+				$ending_path = preg_replace( '#/(comments/?)?(feed|rss2?|rdf|atom)(/+|$)#', '/', $ending_path );
 				// Strip off any existing comment paging.
-				$redirect['path'] = preg_replace( "#/{$wp_rewrite->comments_pagination_base}-[0-9]+?(/+)?$#", '/', $redirect['path'] );
+				$ending_path = preg_replace( "#/{$wp_rewrite->comments_pagination_base}-[0-9]+?(/+)?$#", '/', $ending_path );
 			}
+
+			$redirect['path'] = $base_path . $ending_path;
 
 			$addl_path    = '';
 			$default_feed = get_default_feed();

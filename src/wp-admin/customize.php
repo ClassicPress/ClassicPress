@@ -350,6 +350,7 @@ wp_print_scripts();
 			<header id="customize-header-actions" class="wp-full-overlay-header">
 
 				<?php
+				$save_label = $wp_customize->is_theme_active() ? __( 'Publish' ) : __( 'Activate &amp; Publish' );
 				$compatible_wp  = is_wp_version_compatible( $wp_customize->theme()->get( 'RequiresWP' ) );
 				$compatible_php = is_php_version_compatible( $wp_customize->theme()->get( 'RequiresPHP' ) );
 
@@ -377,8 +378,6 @@ wp_print_scripts();
 						$save_label = __( 'Draft Saved' );
 					} elseif ( $changeset_status === 'future' ) {
 						$save_label = __( 'Scheduled' );
-					} elseif ( in_array( $changeset_status, array( 'publish', 'auto-draft' ), true ) ) {
-						$save_label = $wp_customize->is_theme_active() ? __( 'Published' ) : __( 'Activate &amp; Publish' );
 					}
 
 					$settings_btn_style = in_array( $changeset_status, array( 'draft', 'future' ), true ) ? '' : 'display: none;';
@@ -435,7 +434,7 @@ wp_print_scripts();
 			</header><!-- #customize-header-actions -->
 
 			<main id="widgets-right" class="wp-clearfix">
-				<div id="customize-notifications-area" class="customize-control-notifications-container">
+				<div id="customize-notifications-area" class="customize-control-notifications-container" style="display: none;">
 					<ul></ul>
 				</div>
 				<div class="wp-full-overlay-sidebar-content">
@@ -463,7 +462,7 @@ wp_print_scripts();
 								?>
 							</p>
 							<p>
-								<a href="https://wordpress.org/documentation/article/customizer/">
+								<a href="https://docs.classicpress.net/user-guides/using-classicpress/customizer/">
 									<?php esc_html_e( 'Documentation on Customizer' ); ?>
 								</a>
 							</p>
@@ -1260,7 +1259,7 @@ wp_print_scripts();
 											printf(
 												/* translators: 1: Documentation URL, 2: Additional link attributes, 3: Accessibility text. */
 												__( '(If you plan to use a menu <a href="%1$s" %2$s>widget%3$s</a>, skip this step.)' ),
-												__( 'https://wordpress.org/documentation/article/manage-wordpress-widgets/' ),
+												__( 'https://docs.classicpress.net/user-guides/using-classicpress/widgets-screen/' ),
 												' class="external-link" target="_blank"',
 												sprintf(
 													'<span class="screen-reader-text"> %s</span>',
