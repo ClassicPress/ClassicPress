@@ -171,7 +171,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 		} elseif ( $src ) {
 			// A URL-valued control can display a file without an attachment record.
 			$file_type  = wp_check_filetype( $src );
-			$mime_type  = $file_type['type'] ?: $this->mime_type;
+			$mime_type  = $file_type['type'] ? $file_type['type'] : $this->mime_type;
 			$media_type = strtok( (string) $mime_type, '/' );
 			$title      = wp_basename( $src );
 			$icon       = wp_mime_type_icon( $mime_type );
