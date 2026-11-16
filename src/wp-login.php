@@ -480,7 +480,7 @@ $cookie_options = array(
 	'expires' => 0,
 	'path' => COOKIEPATH,
 	'domain' => COOKIE_DOMAIN,
-	'secure' => ( '' === parse_url( wp_login_url(), PHP_URL_SCHEME ) ),
+	'secure' => ( 'https' === parse_url( wp_login_url(), PHP_URL_SCHEME ) ),
 	'httponly' => true,
 	'samesite' => 'Strict',
 );
