@@ -290,12 +290,47 @@ function wp_print_media_templates() {
 						$cat_subfolder = get_option( 'media_cat_upload_folder' );
 						$cat_object = get_term_by( 'slug', trim( $cat_subfolder, '/' ), 'media_category' );
 						if ( ! empty( $cat_object ) ) {
-							printf(
-								/* translators: 1: Name of media category, 2: Link to Media page in admin. */
-								__( '<p class="media-cat-upload-info">Any files you upload here will be associated with the %1$s media category.</p><p class="media-cat-upload-info">If you want to change this to a different media category, you can do so on the main <a href="%2$s">Media</a> page.</p>' ),
-								'<strong>' . esc_html( $cat_object->name ) . '</strong>',
-								esc_url( admin_url( 'upload.php' ) )
-							);
+							?>
+							<p class="media-cat-upload-info">
+								<?php
+								printf(
+									/* translators: Name of media category. */
+									__( 'Any files you upload here will be associated with the %s media category.' ),
+									'<strong>' . esc_html( $cat_object->name ) . '</strong>'
+								);
+								?>
+							</p>
+							<p class="media-cat-upload-info">
+								<?php
+								printf(
+									/* translators: Link to Media page in admin. */
+									__( 'If you want to change this to a different media category, you can do so on the main <a href="%s">Media</a> page.' ),
+									esc_url( admin_url( 'upload.php' ) )
+								);
+								?>
+							</p>
+							<?php	
+						} else {
+							?>
+							<p class="media-cat-upload-info">
+								<?php
+								printf(
+									/* translators: Link to Media Settings page in admin. */
+									__( 'You organize uploads <a href="%s">according to media category</a>.' ),
+									esc_url( admin_url( 'options-media.php' ) )
+								);
+								?>
+							</p>
+							<p class="media-cat-upload-info">
+								<?php
+								printf(
+									/* translators: Link to Media page in admin. */
+									__( 'You did not set a default media category yet, you can do so on the main <a href="%s">Media</a> page.'),
+									esc_url( admin_url( 'upload.php' ) )
+								);
+								?>	
+							</p>
+							<?php
 						}
 					}
 				}
