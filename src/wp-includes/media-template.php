@@ -309,7 +309,7 @@ function wp_print_media_templates() {
 								);
 								?>
 							</p>
-							<?php	
+							<?php
 						} else {
 							?>
 							<p class="media-cat-upload-info">
@@ -325,10 +325,10 @@ function wp_print_media_templates() {
 								<?php
 								printf(
 									/* translators: Link to Media page in admin. */
-									__( 'You did not set a default media category yet, you can do so on the main <a href="%s">Media</a> page.'),
+									__( 'You did not set a default media category yet, you can do so on the main <a href="%s">Media</a> page.' ),
 									esc_url( admin_url( 'upload.php' ) )
 								);
-								?>	
+								?>
 							</p>
 							<?php
 						}
