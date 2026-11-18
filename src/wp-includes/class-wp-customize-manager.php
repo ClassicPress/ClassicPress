@@ -5396,30 +5396,6 @@ final class WP_Customize_Manager {
 		$this->add_control( new WP_Customize_Background_Image_Control( $this ) );
 
 		$this->add_setting(
-			'background_preset',
-			array(
-				'default'           => get_theme_support( 'custom-background', 'default-preset' ),
-				'theme_supports'    => 'custom-background',
-				'sanitize_callback' => array( $this, '_sanitize_background_setting' ),
-			)
-		);
-
-		$this->add_control(
-			'background_preset',
-			array(
-				'label'   => _x( 'Preset', 'Background Preset' ),
-				'section' => 'background_image',
-				'type'    => 'select',
-				'choices' => array(
-					'default' => _x( 'Default', 'Default Preset' ),
-					'fill'    => __( 'Fill Screen' ),
-					'fit'     => __( 'Fit to Screen' ),
-					'repeat'  => _x( 'Repeat', 'Repeat Image' ),
-				),
-			)
-		);
-
-		$this->add_setting(
 			'background_position_x',
 			array(
 				'default'           => get_theme_support( 'custom-background', 'default-position-x' ),
@@ -5514,7 +5490,7 @@ final class WP_Customize_Manager {
 		// If the theme is using the default background callback, we can update
 		// the background CSS using postMessage.
 		if ( get_theme_support( 'custom-background', 'wp-head-callback' ) === '_custom_background_cb' ) {
-			foreach ( array( 'color', 'image', 'preset', 'position_x', 'position_y', 'size', 'repeat', 'attachment' ) as $prop ) {
+			foreach ( array( 'color', 'image', 'position_x', 'position_y', 'size', 'repeat', 'attachment' ) as $prop ) {
 				$this->get_setting( 'background_' . $prop )->transport = 'postMessage';
 			}
 		}
@@ -5939,10 +5915,6 @@ final class WP_Customize_Manager {
 			}
 		} elseif ( 'background_size' === $setting->id ) {
 			if ( ! in_array( $value, array( 'auto', 'contain', 'cover' ), true ) ) {
-				return new WP_Error( 'invalid_value', __( 'Invalid value for background size.' ) );
-			}
-		} elseif ( 'background_preset' === $setting->id ) {
-			if ( ! in_array( $value, array( 'default', 'fill', 'fit', 'repeat', 'custom' ), true ) ) {
 				return new WP_Error( 'invalid_value', __( 'Invalid value for background size.' ) );
 			}
 		} elseif ( 'background_image' === $setting->id || 'background_image_thumb' === $setting->id ) {

@@ -545,42 +545,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		markChangesetDirty();
 	}
 
-	function updateBackgroundPresetFields( preset ) {
-		switch ( preset ) {
-			case 'fill':
-				_updatedControlsWatcher.background_repeat = 'no-repeat';
-				_updatedControlsWatcher.background_position_x = 'left';
-				_updatedControlsWatcher.background_position_y = 'top';
-				_updatedControlsWatcher.background_size = 'cover';
-				_updatedControlsWatcher.background_attachment = 'fixed';
-				break;
-
-			case 'fit':
-				_updatedControlsWatcher.background_repeat = 'no-repeat';
-				_updatedControlsWatcher.background_position_x = 'left';
-				_updatedControlsWatcher.background_position_y = 'top';
-				_updatedControlsWatcher.background_size = 'contain';
-				_updatedControlsWatcher.background_attachment = 'fixed';
-				break;
-
-			case 'repeat':
-				_updatedControlsWatcher.background_repeat = 'repeat';
-				_updatedControlsWatcher.background_position_x = 'left';
-				_updatedControlsWatcher.background_position_y = 'top';
-				_updatedControlsWatcher.background_size = 'auto';
-				_updatedControlsWatcher.background_attachment = 'scroll';
-				break;
-
-			default:
-				_updatedControlsWatcher.background_repeat = 'repeat';
-				_updatedControlsWatcher.background_position_x = 'left';
-				_updatedControlsWatcher.background_position_y = 'top';
-				_updatedControlsWatcher.background_size = 'auto';
-				_updatedControlsWatcher.background_attachment = 'scroll';
-				break;
-		}
-	}
-
 	inputs.forEach( function( input ) {
 		let settingId,
 			li = input.closest( 'li' );
@@ -608,13 +572,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			if ( input.name === 'background-position' ) {
 				backgroundPositionChanged( input );
-				return;
-			}
-
-			if ( settingId === 'background_preset' ) {
-				_updatedControlsWatcher.background_preset = input.value;
-				updateBackgroundPresetFields( input.value );
-				markChangesetDirty();
 				return;
 			}
 

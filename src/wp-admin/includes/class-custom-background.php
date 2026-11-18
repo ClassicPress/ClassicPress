@@ -138,18 +138,6 @@ class Custom_Background {
 			return;
 		}
 
-		if ( isset( $_POST['background-preset'] ) ) {
-			check_admin_referer( 'custom-background' );
-
-			if ( in_array( $_POST['background-preset'], array( 'default', 'fill', 'fit', 'repeat', 'custom' ), true ) ) {
-				$preset = $_POST['background-preset'];
-			} else {
-				$preset = 'default';
-			}
-
-			set_theme_mod( 'background_preset', $preset );
-		}
-
 		if ( isset( $_POST['background-position'] ) ) {
 			check_admin_referer( 'custom-background' );
 
