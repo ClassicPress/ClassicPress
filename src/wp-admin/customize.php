@@ -235,7 +235,6 @@ do_action( 'customize_controls_init' );
  */
 wp_enqueue_style( 'customize-controls' );
 wp_enqueue_style( 'customize-preview' );
-wp_enqueue_script( 'heartbeat' );
 wp_enqueue_script( 'customize-controls' );
 wp_add_inline_script(
 	'customize-controls',
