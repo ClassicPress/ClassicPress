@@ -231,7 +231,7 @@ if ( preg_match( '/\.css$/', $file ) && current_user_can( 'customize' ) ) {
 	$message = '<p><strong>' . __( 'Did you know?' ) . '</strong></p><p>' . sprintf(
 		/* translators: %s: Link to Custom CSS section in the Customizer. */
 		__( 'There is no need to change your CSS here &mdash; you can edit and live preview CSS changes in the <a href="%s">built-in CSS editor</a>.' ),
-		esc_url( add_query_arg( 'autofocus[section]', 'custom_css', admin_url( 'customize.php' ) ) )
+		esc_url( admin_url( 'customize.php#sub-accordion-section-custom_css' ) )
 	) . '</p>';
 	wp_admin_notice(
 		$message,
@@ -410,7 +410,7 @@ if ( ! in_array( 'theme_editor_notice', $dismissed_pointers, true ) ) {
 							printf(
 								/* translators: %s: Link to documentation on child themes. */
 								__( 'If you need to tweak more than your theme&#8217;s CSS, you might want to try <a href="%s">making a child theme</a>.' ),
-								esc_url( __( 'https://developer.wordpress.org/themes/advanced-topics/child-themes/' ) )
+								esc_url( __( 'https://docs.classicpress.net/user-guides/advanced-classicpress-guides/creating-a-child-theme/' ) )
 							);
 							echo '</p>';
 						}
