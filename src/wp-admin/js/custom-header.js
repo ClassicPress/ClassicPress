@@ -2,87 +2,85 @@
  * @output wp-admin/js/custom-header.js
  */
 
-/* global isRtl */
+/* global AdminMediaModal, _cpCustomHeader, cpCropper */
 
-/**
- * Initializes the custom header selection page.
- *
- * @since 3.5.0
- *
- * @deprecated 4.1.0 The page this is used on is never linked to from the UI.
- *             Setting a custom header is completely handled by the Customizer.
- */
-(function($) {
-	var frame;
+document.addEventListener( 'DOMContentLoaded', function() {
+	'use strict';
 
-	$( function() {
-		// Fetch available headers.
-		var $headers = $('.available-headers');
+	/**
+	 * Initializes the header text color picker and text visibility toggle.
+	 *
+	 * @return {void}
+	 */
+	function initHeaderText() {
+		const textColor = document.getElementById( 'text-color' ),
+			displayHeaderText = document.getElementById( 'display-header-text' ),
+			headerTextFields = document.querySelectorAll( '.displaying-header-text' );
 
-		// Apply jQuery.masonry once the images have loaded.
-		$headers.imagesLoaded( function() {
-			$headers.masonry({
-				itemSelector: '.default-header',
-				isRTL: !! ( 'undefined' != typeof isRtl && isRtl )
-			});
-		});
+		if ( ! textColor || ! displayHeaderText ) {
+			return;
+		}
 
-		/**
-		 * Opens the 'choose from library' frame and creates it if it doesn't exist.
-		 *
-		 * @since 3.5.0
-		 * @deprecated 4.1.0
-		 *
-		 * @return {void}
-		 */
-		$('#choose-from-library-link').on( 'click', function( event ) {
-			var $el = $(this);
-			event.preventDefault();
+		function pickColor( color ) {
+			document.getElementById( 'name' ).style.color = color;
+			document.getElementById( 'desc' ).style.color = color;
+			textColor.value = color;
+		}
 
-			// If the media frame already exists, reopen it.
-			if ( frame ) {
-				frame.open();
+		function toggleText() {
+			const checked = displayHeaderText.checked;
+
+			headerTextFields.forEach( function( field ) {
+				field.hidden = ! checked;
+			} );
+
+			if ( ! checked ) {
 				return;
 			}
 
-			// Create the media frame.
-			frame = wp.media.frames.customHeader = wp.media({
-				// Set the title of the modal.
-				title: $el.data('choose'),
+			if ( '' === textColor.value.replace( '#', '' ) ) {
+				pickColor( textColor.dataset.defaultColor || '' );
+			} else {
+				pickColor( textColor.value );
+			}
+		}
 
-				// Tell the modal to show only images.
-				library: {
-					type: 'image'
-				},
+		displayHeaderText.addEventListener( 'change', toggleText );
+		toggleText();
+	}
 
-				// Customize the submit button.
-				button: {
-					// Set the text of the button.
-					text: $el.data('update'),
-					// Tell the button not to close the modal, since we're
-					// going to refresh the page when the image is selected.
-					close: false
+	initHeaderText();
+	AdminMediaModal( 'set-header-image', 'full', 'headerImage' );
+
+	document.addEventListener( 'custom-header-attachment-selected', function() {
+		const attachment = window.CustomHeaderCrop;
+
+		if ( ! attachment ) {
+			return;
+		}
+
+		cpCropper.open( {
+			attachmentId: attachment.id,
+			imageUrl: attachment.url,
+			context: 'custom-header',
+			action: 'custom-header-crop',
+			nonce: attachment.nonce,
+			aspectRatio: _cpCustomHeader.width / _cpCustomHeader.height,
+			minWidth: _cpCustomHeader.width,
+			minHeight: _cpCustomHeader.height,
+			width: _cpCustomHeader.width,
+			height: _cpCustomHeader.height,
+			onSelect: function( croppedAttachment ) {
+				const headerImg = document.querySelector( '#headimg img' );
+
+				if ( headerImg ) {
+					headerImg.src = croppedAttachment.url;
+				} else {
+					const img = document.createElement( 'img' );
+					img.src = croppedAttachment.url;
+					document.getElementById( 'desc' ).after( img );
 				}
-			});
-
-			/**
-			 * Updates the window location to include the selected attachment.
-			 *
-			 * @since 3.5.0
-			 * @deprecated 4.1.0
-			 *
-			 * @return {void}
-			 */
-			frame.on( 'select', function() {
-				// Grab the selected attachment.
-				var attachment = frame.state().get('selection').first(),
-					link = $el.data('updateLink');
-
-				// Tell the browser to navigate to the crop step.
-				window.location = link + '&file=' + attachment.id;
-			});
-
-			frame.open();
-		});
-	});
-}(jQuery));
+			}
+		} );
+	} );
+} );
