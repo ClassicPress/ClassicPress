@@ -1660,7 +1660,6 @@ class WP_REST_Server {
 		$has_error  = false;
 
 		foreach ( $requests as $single_request ) {
-			
 			if ( is_wp_error( $single_request ) ) {
 				$has_error    = true;
 				$matches[]    = $single_request;
@@ -1738,7 +1737,6 @@ class WP_REST_Server {
 		}
 
 		foreach ( $requests as $i => $single_request ) {
-			
 			if ( is_wp_error( $single_request ) ) {
 				$result      = $this->error_to_response( $single_request );
 				$responses[] = $this->envelope_response( $result, false )->get_data();
