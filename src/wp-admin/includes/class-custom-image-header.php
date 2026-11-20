@@ -133,8 +133,8 @@ class Custom_Image_Header {
 
 		get_current_screen()->set_help_sidebar(
 			'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-			'<p>' . __( '<a href="https://codex.wordpress.org/Appearance_Header_Screen">Documentation on Custom Header</a>' ) . '</p>' .
-			'<p>' . __( '<a href="https://wordpress.org/support/forums/">Support forums</a>' ) . '</p>'
+			'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/appearance-header-screen/">Documentation on Custom Header</a>' ) . '</p>' .
+			'<p>' . __( '<a href="https://forums.classicpress.net/c/support/">Support forums</a>' ) . '</p>'
 		);
 	}
 
@@ -346,7 +346,7 @@ class Custom_Image_Header {
 			$message = sprintf(
 				/* translators: %s: URL to header image configuration in Customizer. */
 				__( 'You can now manage and live-preview Custom Header in the <a href="%s">Customizer</a>.' ),
-				admin_url( 'customize.php?autofocus[control]=header_image' )
+				esc_url( admin_url( 'customize.php#sub-accordion-section-header_image' ) )
 			);
 			wp_admin_notice(
 				$message,
@@ -402,7 +402,7 @@ class Custom_Image_Header {
 					$header_image_style .= 'height:' . $custom_header->height . 'px;';
 				}
 				?>
-	<div id="headimg" style="<?php echo $header_image_style; ?>">
+	<div id="headimg" style="<?php echo esc_attr( $header_image_style ); ?>">
 				<?php
 				if ( display_header_text() ) {
 					$style = ' style="color:#' . get_header_textcolor() . ';"';
@@ -690,7 +690,7 @@ flexHeight: <?php echo $flex_height ? 'true' : 'false'; ?>
 			$file          = get_attached_file( $attachment_id, true );
 			$url           = wp_get_attachment_image_src( $attachment_id, 'full' );
 			$url           = $url[0];
-		} elseif ( isset( $_POST ) ) {
+		} else {
 			$data          = $this->step_2_manage_upload();
 			$attachment_id = $data['attachment_id'];
 			$file          = $data['file'];
@@ -1026,12 +1026,27 @@ flexHeight: <?php echo $flex_height ? 'true' : 'false'; ?>
 
 			$choice['url'] = sanitize_url( $choice['url'] );
 
+			if ( empty( $choice['width'] ) || empty( $choice['height'] ) ) {
+				$file = get_attached_file( $choice['attachment_id'] );
+				$image_size = $file ? wp_getimagesize( $file ) : false;
+
+				if ( $image_size ) {
+					if ( empty( $choice['width'] ) ) {
+						$choice['width'] = $image_size[0];
+					}
+
+					if ( empty( $choice['height'] ) ) {
+						$choice['height'] = $image_size[1];
+					}
+				}
+			}
+
 			$header_image_data = (object) array(
 				'attachment_id' => $choice['attachment_id'],
 				'url'           => $choice['url'],
 				'thumbnail_url' => $choice['url'],
-				'height'        => $choice['height'],
-				'width'         => $choice['width'],
+				'height'        => absint( $choice['height'] ),
+				'width'         => absint( $choice['width'] ),
 			);
 
 			update_post_meta( $choice['attachment_id'], '_wp_attachment_is_custom_header', get_stylesheet() );
@@ -1062,7 +1077,13 @@ flexHeight: <?php echo $flex_height ? 'true' : 'false'; ?>
 			}
 		}
 
-		set_theme_mod( 'header_image', sanitize_url( $header_image_data['url'] ) );
+		$header_image_data['url'] = sanitize_url( $header_image_data['url'] );
+
+		if ( isset( $header_image_data['thumbnail_url'] ) ) {
+			$header_image_data['thumbnail_url'] = sanitize_url( $header_image_data['thumbnail_url'] );
+		}
+
+		set_theme_mod( 'header_image', $header_image_data['url'] );
 		set_theme_mod( 'header_image_data', $header_image_data );
 	}
 
@@ -1453,9 +1474,8 @@ flexHeight: <?php echo $flex_height ? 'true' : 'false'; ?>
 		$alt_text_key  = '_wp_attachment_image_alt';
 
 		foreach ( $header_images as &$header_image ) {
-			$header_meta               = get_post_meta( $header_image['attachment_id'] );
-			$header_image['timestamp'] = isset( $header_meta[ $timestamp_key ] ) ? $header_meta[ $timestamp_key ] : '';
-			$header_image['alt_text']  = isset( $header_meta[ $alt_text_key ] ) ? $header_meta[ $alt_text_key ] : '';
+			$header_image['timestamp'] = get_post_meta( $header_image['attachment_id'], $timestamp_key, true );
+			$header_image['alt_text']  = get_post_meta( $header_image['attachment_id'], $alt_text_key, true );
 		}
 
 		return $header_images;

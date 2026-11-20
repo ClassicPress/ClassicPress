@@ -89,12 +89,25 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 	 * @since CP-2.8.0
 	 */
 	public function render_content() {
-		$attachment_id = (int) $this->value();
+		$value = $this->value();
+		$attachment_id = 0;
 		$image_src = '';
 		$alt_text = '';
 
+		// Support both attachment IDs and image URLs.
+		if ( is_numeric( $value ) ) {
+			$attachment_id = absint( $value );
+
+			if ( $attachment_id ) {
+				$image_src = wp_get_attachment_image_url( $attachment_id, 'full' );
+			}
+		} elseif ( is_string( $value ) && '' !== $value ) {
+			$image_src     = $value;
+			$attachment_id = attachment_url_to_postid( $value );
+		}
+
+		// A URL can still be displayed when no attachment ID is found.
 		if ( $attachment_id ) {
-			$image_src = wp_get_attachment_image_url( $attachment_id, 'full' );
 			$alt_text = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
 		}
 
@@ -111,7 +124,7 @@ class WP_Customize_Cropped_Image_Control extends WP_Customize_Image_Control {
 			<ul></ul>
 		</div>
 		<div class="<?php echo esc_attr( $class ); ?>">
-			<input type="hidden" value="<?php echo esc_attr( $attachment_id ); ?>">
+			<input type="hidden" value="<?php echo esc_attr( $value ); ?>">
 
 			<?php
 			if ( empty( $image_src ) ) {

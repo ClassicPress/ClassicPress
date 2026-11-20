@@ -407,6 +407,28 @@
 		custom_logo: function( attachmentId ) {
 			document.body.classList.toggle( 'wp-custom-logo', !! attachmentId );
 		},
+		header_video: function( url ) {
+			var header = document.querySelector( '.custom-header' ),
+				video = header.querySelector( 'video' );
+
+			if ( ! video ) {
+				video = document.createElement( 'video' );
+				header.prepend( video );
+			}
+
+			video.src = url;
+		},
+		external_header_video: function( url ) {
+			var header = document.querySelector( '.custom-header' ),
+				video = header.querySelector( 'video' );
+
+			if ( ! video ) {
+				video = document.createElement( 'video' );
+				header.prepend( video );
+			}
+
+			video.src = url;
+		},
 		custom_css: function( value ) {
 			var el = document.getElementById( 'wp-custom-css' );
 			if ( el ) {
@@ -414,8 +436,12 @@
 			}
 		},
 		background: function() {
+			// Preserve server-rendered background CSS when settings are not available.
+			if ( ! api.has( 'background_color' ) || ! api.has( 'background_image' ) ) {
+				return;
+			}
 			var css = '',
-				props = [ 'color', 'image', 'preset', 'position_x', 'position_y', 'size', 'repeat', 'attachment' ],
+				props = [ 'color', 'image', 'position_x', 'position_y', 'size', 'repeat', 'attachment' ],
 				settings = {},
 				bgCss,
 				validPositionX = [ 'left', 'center', 'right' ],
@@ -639,6 +665,12 @@
 				handledByPartial = false,
 				fullRefreshSettings = [ 'colorscheme', 'colorscheme_hue' ];
 
+			// Header videos use server-rendered markup and player initialization.
+			if ( id === 'header_video' || id === 'external_header_video' ) {
+				api.preview.send( 'refresh' );
+				return;
+			}
+
 			// Settings that require a full page refresh.
 			if ( fullRefreshSettings.indexOf( id ) !== -1 ) {
 				setValue( id, value, true );
@@ -781,7 +813,7 @@
 		} );
 
 		// Background settings
-		[ 'color', 'image', 'preset', 'position_x', 'position_y', 'size', 'repeat', 'attachment' ].forEach( function( prop ) {
+		[ 'color', 'image', 'position_x', 'position_y', 'size', 'repeat', 'attachment' ].forEach( function( prop ) {
 			var setting = api._settings[ 'background_' + prop ];
 			if ( setting ) {
 				setting.bind( api.settingPreviewHandlers.background );

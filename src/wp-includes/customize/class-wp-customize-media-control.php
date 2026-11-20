@@ -126,24 +126,60 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 	 * @since 4.2.0 Moved from WP_Customize_Upload_Control.
 	 */
 	public function render_content() {
-		$attachment_id  = (int) $this->value(); // Media control stores attachment ID
+		$value          = $this->value();
+		$stores_url     = $this instanceof WP_Customize_Upload_Control;
 		$description_id = uniqid( 'customize-media-control-description' );
-		$described_by   = ( ! empty( $this->description ) ) ? ' aria-describedby="' . $description_id . '"' : '';
-		$default_id     = (int) $this->setting->default;
+		$described_by   = ( ! empty( $this->description ) ) ? ' aria-describedby="' . esc_attr( $description_id ) . '"' : '';
+		$default_value  = $this->setting->default;
+
+		// Upload and image controls store URLs; ordinary media controls store IDs.
+		if ( $stores_url ) {
+			$attachment_id = $value ? attachment_url_to_postid( $value ) : 0;
+			$src           = $value;
+		} else {
+			$attachment_id = absint( $value );
+			$src           = $attachment_id ? wp_get_attachment_url( $attachment_id ) : '';
+		}
+
+		$title       = '';
+		$mime_type   = '';
+		$media_type  = '';
+		$icon        = '';
+		$orientation = 'landscape';
+		$alt_text    = '';
+		$album       = '';
+		$artist      = '';
+		$image_src   = '';
 
 		if ( $attachment_id ) {
-			$title       = get_the_title( $attachment_id );
-			$mime_type   = get_post_mime_type( $attachment_id );
-			$icon        = wp_mime_type_icon( $mime_type );
-			$src         = wp_get_attachment_url( $attachment_id );
-			$icon_html   = wp_get_attachment_image( $attachment_id, 'thumbnail', true );
-			$meta        = wp_get_attachment_metadata( $attachment_id );
-			$orientation = ( $meta['height'] > $meta['width'] ) ? 'portrait' : 'landscape';
-			$sizes       = $meta['sizes'] ?? array(); // Array of thumbnail/medium/large
-			$alt_text    = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
-			$album       = get_post_meta( $attachment_id, 'album', true );
-			$artist      = get_post_meta( $attachment_id, 'artist', true );
-			$poster      = $src !== $icon ? ' poster="' . esc_url( $src ) . '"' : '';
+			$title      = get_the_title( $attachment_id );
+			$mime_type  = get_post_mime_type( $attachment_id );
+			$media_type = strtok( (string) $mime_type, '/' );
+			$icon       = wp_mime_type_icon( $mime_type );
+			$meta       = wp_get_attachment_metadata( $attachment_id );
+			$alt_text   = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
+			$album      = get_post_meta( $attachment_id, 'album', true );
+			$artist     = get_post_meta( $attachment_id, 'artist', true );
+
+			if ( ! empty( $meta['height'] ) && ! empty( $meta['width'] ) ) {
+				$orientation = $meta['height'] > $meta['width'] ? 'portrait' : 'landscape';
+			}
+
+			if ( 'image' === $media_type ) {
+				$image_src = wp_get_attachment_image_url( $attachment_id, 'medium' );
+			}
+		} elseif ( $src ) {
+			// A URL-valued control can display a file without an attachment record.
+			$file_type  = wp_check_filetype( $src );
+			$mime_type  = $file_type['type'] ? $file_type['type'] : $this->mime_type;
+			$media_type = strtok( (string) $mime_type, '/' );
+			$title      = wp_basename( $src );
+			$icon       = wp_mime_type_icon( $mime_type );
+		}
+
+		// Fall back to the stored URL when no resized image is available.
+		if ( 'image' === $media_type && ! $image_src ) {
+			$image_src = $src;
 		}
 
 		if ( $this->label ) {
@@ -168,30 +204,20 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 			<?php
 		}
 
-		if ( $attachment_id && $src ) {
+		if ( $src ) {
 			?>
-			<div class="attachment-media-view attachment-media-view-<?php echo esc_attr( $mime_type ); ?> <?php echo esc_attr( $orientation ); ?>">
-				<div class="thumbnail thumbnail-<?php echo esc_attr( $mime_type ); ?>">
+			<div class="attachment-media-view attachment-media-view-<?php echo esc_attr( $media_type ); ?> <?php echo esc_attr( $orientation ); ?>">
+				<div class="thumbnail thumbnail-<?php echo esc_attr( $media_type ); ?>">
 					<?php
-					if ( 'image' === $mime_type && $sizes && $sizes['medium'] ) {
-						$medium_src = wp_get_attachment_image_url( $attachment_id, 'medium' );
+					if ( 'image' === $media_type ) {
 						?>
 						<img class="attachment-thumb"
-							src="<?php echo esc_url( $medium_src ); ?>"
+							src="<?php echo esc_url( $image_src ); ?>"
 							draggable="false"
 							alt="<?php echo esc_attr( $alt_text ); ?>"
 						>
 						<?php
-					} elseif ( 'image' === $mime_type && $sizes && $sizes['full'] ) {
-						$full_src = wp_get_attachment_image_url( $attachment_id, 'full' );
-						?>
-						<img class="attachment-thumb"
-							src="<?php echo esc_url( $full_src ); ?>"
-							draggable="false"
-							alt="<?php echo esc_attr( $alt_text ); ?>"
-						>
-						<?php
-					} elseif ( 'audio' === $mime_type ) {
+					} elseif ( 'audio' === $media_type ) {
 						if ( $src && $src !== $icon ) {
 							?>
 							<img src="<?php echo esc_url( $src ); ?>"
@@ -202,7 +228,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 							<?php
 						} else {
 							?>
-							<img src="<?php echo esc_attr( $icon ); ?>"
+							<img src="<?php echo esc_url( $icon ); ?>"
 								class="attachment-thumb type-icon"
 								draggable="false"
 								alt="<?php echo esc_attr( $alt_text ); ?>"
@@ -221,6 +247,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 							</p>
 							<?php
 						}
+
 						if ( $artist ) {
 							?>
 							<p class="attachment-meta">
@@ -233,18 +260,18 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 							<source type="<?php echo esc_attr( $mime_type ); ?>" src="<?php echo esc_url( $src ); ?>">
 						</audio>
 						<?php
-					} elseif ( 'video' === $mime_type ) {
+					} elseif ( 'video' === $media_type ) {
 						?>
 						<div class="wp-media-wrapper wp-video">
 							<video controls class="wp-video-shortcode" preload="metadata">
-								<source type="<?php echo esc_attr( $mime_type ); ?>" src="<?php echo esc_url( $src ); ?>"<?php echo $poster; ?>>
+								<source type="<?php echo esc_attr( $mime_type ); ?>" src="<?php echo esc_url( $src ); ?>">
 							</video>
 						</div>
 						<?php
 					} else {
 						?>
 						<img class="attachment-thumb type-icon icon"
-							src="<?php echo esc_attr( $icon ); ?>"
+							src="<?php echo esc_url( $icon ); ?>"
 							draggable="false"
 							alt="<?php echo esc_attr( $alt_text ); ?>"
 						>
@@ -255,6 +282,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 					}
 					?>
 				</div>
+
 				<div class="actions"
 					data-required-type="<?php echo esc_attr( $this->mime_type ); ?>"
 					data-empty="<?php echo esc_attr( $this->button_labels['select'] ); ?>"
@@ -266,7 +294,7 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 						<button type="button" class="button remove-button">
 							<?php echo esc_html( $this->button_labels['remove'] ); ?>
 						</button>
-						<button type="button" class="button upload-button control-focus select-button"<?php echo esc_attr( $described_by ); ?>>
+						<button type="button" class="button upload-button control-focus select-button"<?php echo $described_by; ?>>
 							<?php echo esc_html( $this->button_labels['change'] ); ?>
 						</button>
 						<?php
@@ -286,11 +314,11 @@ class WP_Customize_Media_Control extends WP_Customize_Control {
 					<?php
 					if ( current_user_can( 'upload_files' ) ) {
 						?>
-						<button type="button" class="upload-button button-add-media select-button"<?php echo esc_attr( $described_by ); ?>>
+						<button type="button" class="upload-button button-add-media select-button"<?php echo $described_by; ?>>
 							<?php echo esc_html( $this->button_labels['select'] ); ?>
 						</button>
 						<?php
-						if ( $default_id ) {
+						if ( $default_value ) {
 							?>
 							<button type="button" class="button default-button">
 								<?php echo esc_html( $this->button_labels['change'] ); ?>

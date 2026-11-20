@@ -150,8 +150,8 @@ if ( 'grid' === $mode ) {
 
 	get_current_screen()->set_help_sidebar(
 		'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-		'<p>' . __( '<a href="https://wordpress.org/documentation/article/media-library-screen/">Documentation on Media Library</a>' ) . '</p>' .
-		'<p>' . __( '<a href="https://wordpress.org/support/forums/">Support forums</a>' ) . '</p>'
+		'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/media-library-screen-grid-view/">Documentation on Media Library</a>' ) . '</p>' .
+		'<p>' . __( '<a href="https://forums.classicpress.net/c/support/">Support forums</a>' ) . '</p>'
 	);
 
 	// Used in the HTML title tag.
@@ -188,6 +188,24 @@ if ( 'grid' === $mode ) {
 	$total_pages = ( $attachments->max_num_pages ) ? (int) $attachments->max_num_pages : 1;
 	$prev_page   = ( $paged === 1 ) ? $paged : $paged - 1;
 	$next_page   = ( $paged === $total_pages ) ? $paged : $paged + 1;
+
+	$media_categories = get_terms(
+		array(
+			'taxonomy'   => 'media_category',
+			'hide_empty' => false,
+			'orderby'    => 'name',
+			'order'      => 'ASC',
+		)
+	);
+
+	$media_post_tags = get_terms(
+		array(
+			'taxonomy'   => 'media_post_tag',
+			'hide_empty' => false,
+			'orderby'    => 'name',
+			'order'      => 'ASC',
+		)
+	);
 
 	require_once ABSPATH . 'wp-admin/admin-header.php';
 
@@ -624,6 +642,32 @@ if ( 'grid' === $mode ) {
 								?>
 
 								<div class="attachment-compat"></div>
+								<datalist id="media-grid-media-categories">
+
+									<?php
+									if ( ! empty( $media_categories ) ) {
+										foreach ( $media_categories as $media_category ) {
+											?>
+											<option value="<?php echo esc_attr( $media_category->name ); ?>"></option>
+											<?php
+										}
+									}
+									?>
+
+								</datalist>
+								<datalist id="media-grid-media-tags">
+
+									<?php
+									if ( ! empty( $media_post_tags ) ) {
+										foreach ( $media_post_tags as $media_tag ) {
+											?>
+											<option value="<?php echo esc_attr( $media_tag->name ); ?>"></option>
+											<?php
+										}
+									}
+									?>
+
+								</datalist>
 								<span class="setting settings-save-status" role="status">
 									<span id="tax-saved" class="success hidden" aria-hidden="true"><?php esc_html_e( 'Taxonomy updated successfully!' ); ?></span>
 								</span>
@@ -822,8 +866,8 @@ get_current_screen()->add_help_tab(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://wordpress.org/documentation/article/media-library-screen/">Documentation on Media Library</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://wordpress.org/support/forums/">Support forums</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/media-library-screen/">Documentation on Media Library</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://forums.classicpress.net/c/support/">Support forums</a>' ) . '</p>'
 );
 
 get_current_screen()->set_screen_reader_content(

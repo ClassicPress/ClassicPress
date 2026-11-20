@@ -3020,8 +3020,11 @@ function wp_match_mime_types( $wildcard_mime_types, $real_mime_types ) {
 	foreach ( $patternses as $patterns ) {
 		foreach ( $patterns as $type => $pattern ) {
 			foreach ( (array) $real_mime_types as $real ) {
+				if ( ! is_string( $real ) ) {
+					continue;
+				}
 				if ( preg_match( "#$pattern#", $real )
-					&& ( empty( $matches[ $type ] ) || false === array_search( $real, $matches[ $type ], true ) )
+					&& ( empty( $matches[ $type ] ) || ! in_array( $real, $matches[ $type ], true ) )
 				) {
 					$matches[ $type ][] = $real;
 				}
@@ -3971,7 +3974,10 @@ function wp_insert_post( $postarr, $wp_error = false, $fire_after_hooks = true )
 		// On updates, we need to check to see if it's using the old, fixed sanitization context.
 		$check_name = sanitize_title( $post_name, '', 'old-save' );
 
-		if ( $update && strtolower( urlencode( $post_name ) ) == $check_name && get_post_field( 'post_name', $post_id ) == $check_name ) {
+		if ( $update
+			&& strtolower( urlencode( $post_name ) ) === $check_name
+			&& get_post_field( 'post_name', $post_id ) === $check_name
+		) {
 			$post_name = $check_name;
 		} else { // New post, or slug has changed.
 			$post_name = sanitize_title( $post_name );
@@ -5172,63 +5178,71 @@ function wp_transition_post_status( $new_status, $old_status, $post ) {
 	 */
 	do_action( 'transition_post_status', $new_status, $old_status, $post );
 
-	/**
-	 * Fires when a post is transitioned from one status to another.
-	 *
-	 * The dynamic portions of the hook name, `$new_status` and `$old_status`,
-	 * refer to the old and new post statuses, respectively.
-	 *
-	 * Possible hook names include:
-	 *
-	 *  - `draft_to_publish`
-	 *  - `publish_to_trash`
-	 *  - `pending_to_draft`
-	 *
-	 * @since 2.3.0
-	 *
-	 * @param WP_Post $post Post object.
-	 */
-	do_action( "{$old_status}_to_{$new_status}", $post );
+	$new_status_object = get_post_status_object( $new_status );
+	$old_status_valid  = get_post_status_object( $old_status ) || 'new' === $old_status;
+	$post_type_object  = get_post_type_object( $post->post_type );
 
-	/**
-	 * Fires when a post is transitioned from one status to another.
-	 *
-	 * The dynamic portions of the hook name, `$new_status` and `$post->post_type`,
-	 * refer to the new post status and post type, respectively.
-	 *
-	 * Possible hook names include:
-	 *
-	 *  - `draft_post`
-	 *  - `future_post`
-	 *  - `pending_post`
-	 *  - `private_post`
-	 *  - `publish_post`
-	 *  - `trash_post`
-	 *  - `draft_page`
-	 *  - `future_page`
-	 *  - `pending_page`
-	 *  - `private_page`
-	 *  - `publish_page`
-	 *  - `trash_page`
-	 *  - `publish_attachment`
-	 *  - `trash_attachment`
-	 *
-	 * Please note: When this action is hooked using a particular post status (like
-	 * 'publish', as `publish_{$post->post_type}`), it will fire both when a post is
-	 * first transitioned to that status from something else, as well as upon
-	 * subsequent post updates (old and new status are both the same).
-	 *
-	 * Therefore, if you are looking to only fire a callback when a post is first
-	 * transitioned to a status, use the {@see 'transition_post_status'} hook instead.
-	 *
-	 * @since 2.3.0
-	 * @since 5.9.0 Added `$old_status` parameter.
-	 *
-	 * @param int     $post_id    Post ID.
-	 * @param WP_Post $post       Post object.
-	 * @param string  $old_status Old post status.
-	 */
-	do_action( "{$new_status}_{$post->post_type}", $post->ID, $post, $old_status );
+	if ( $new_status_object && $old_status_valid ) {
+		/**
+		 * Fires when a post is transitioned from one status to another.
+		 *
+		 * The dynamic portions of the hook name, `$new_status` and `$old_status`,
+		 * refer to the old and new post statuses, respectively.
+		 *
+		 * Possible hook names include:
+		 *
+		 *  - `draft_to_publish`
+		 *  - `publish_to_trash`
+		 *  - `pending_to_draft`
+		 *
+		 * @since 2.3.0
+		 *
+		 * @param WP_Post $post Post object.
+		 */
+		do_action( "{$old_status}_to_{$new_status}", $post );
+	}
+
+	if ( $new_status_object && $post_type_object ) {
+		/**
+		 * Fires when a post is transitioned from one status to another.
+		 *
+		 * The dynamic portions of the hook name, `$new_status` and `$post->post_type`,
+		 * refer to the new post status and post type, respectively.
+		 *
+		 * Possible hook names include:
+		 *
+		 *  - `draft_post`
+		 *  - `future_post`
+		 *  - `pending_post`
+		 *  - `private_post`
+		 *  - `publish_post`
+		 *  - `trash_post`
+		 *  - `draft_page`
+		 *  - `future_page`
+		 *  - `pending_page`
+		 *  - `private_page`
+		 *  - `publish_page`
+		 *  - `trash_page`
+		 *  - `publish_attachment`
+		 *  - `trash_attachment`
+		 *
+		 * Please note: When this action is hooked using a particular post status (like
+		 * 'publish', as `publish_{$post->post_type}`), it will fire both when a post is
+		 * first transitioned to that status from something else, as well as upon
+		 * subsequent post updates (old and new status are both the same).
+		 *
+		 * Therefore, if you are looking to only fire a callback when a post is first
+		 * transitioned to a status, use the {@see 'transition_post_status'} hook instead.
+		 *
+		 * @since 2.3.0
+		 * @since 5.9.0 Added `$old_status` parameter.
+		 *
+		 * @param int     $post_id    Post ID.
+		 * @param WP_Post $post       Post object.
+		 * @param string  $old_status Old post status.
+		 */
+		do_action( "{$new_status}_{$post->post_type}", $post->ID, $post, $old_status );
+	}
 }
 
 /**
@@ -5560,7 +5574,7 @@ function get_page_by_path( $page_path, $output = OBJECT, $post_type = 'page' ) {
 				$p = $parent;
 			}
 
-			if ( 0 == $p->post_parent && count( $revparts ) == $count + 1 && $p->post_name == $revparts[ $count ] ) {
+			if ( 0 == $p->post_parent && count( $revparts ) === $count + 1 && $p->post_name == $revparts[ $count ] ) {
 				$foundid = $page->ID;
 				if ( $page->post_type == $post_type ) {
 					break;

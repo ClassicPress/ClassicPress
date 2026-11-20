@@ -29,7 +29,7 @@ get_current_screen()->add_help_tab(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://wordpress.org/documentation/article/tools-import-screen/">Documentation on Import</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/tools-screen/">Documentation on Import</a>' ) . '</p>' .
 	'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support forums</a>' ) . '</p>'
 );
 

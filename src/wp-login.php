@@ -653,7 +653,7 @@ switch ( $action ) {
 				<?php
 
 				/* translators: URL to the WordPress help section about admin email. */
-				$admin_email_help_url = __( 'https://wordpress.org/documentation/article/settings-general-screen/#email-address' );
+				$admin_email_help_url = __( 'https://docs.classicpress.net/user-guides/using-classicpress/settings-general-screen/#administration-email-address' );
 
 				$accessibility_text = sprintf(
 					'<span class="screen-reader-text"> %s</span>',
@@ -1313,7 +1313,7 @@ switch ( $action ) {
 					sprintf(
 						/* translators: 1: Browser cookie documentation URL, 2: Support forums URL. */
 						__( '<strong>Error:</strong> Cookies are blocked due to unexpected output. For help, please see <a href="%1$s">this documentation</a> or try the <a href="%2$s">support forums</a>.' ),
-						__( 'https://wordpress.org/documentation/article/cookies/' ),
+						__( 'https://docs.classicpress.net/user-guides/advanced-classicpress-guides/cookies/' ),
 						__( 'https://forums.classicpress.net/c/support' )
 					)
 				);
@@ -1324,7 +1324,7 @@ switch ( $action ) {
 					sprintf(
 						/* translators: %s: Browser cookie documentation URL. */
 						__( '<strong>Error:</strong> Cookies are blocked or not supported by your browser. You must <a href="%s">enable cookies</a> to use ClassicPress.' ),
-						__( 'https://wordpress.org/documentation/article/cookies/#enable-cookies-in-your-browser' )
+						__( 'https://docs.classicpress.net/user-guides/advanced-classicpress-guides/cookies/' )
 					)
 				);
 			}

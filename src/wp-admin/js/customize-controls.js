@@ -9,50 +9,54 @@
 _updatedControlsWatcher, Coloris, ajaxurl, IMAGE_WIDGET, _cpCustomLogo,
 FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
 FilePondPluginFileRename, FilePondPluginImagePreview, cpCropper, console,
-_wpUpdatesSettings, _wpThemeSettings */
+_wpUpdatesSettings, _wpThemeSettings, _cpFilepondLabels */
 
 document.addEventListener( 'DOMContentLoaded', function() {
 	window.newMenuItemIDs = window.newMenuItemIDs || [];
-	var addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
-		intersectionObserver,
-		i = 1,
+
+	const dialog = document.getElementById( 'widget-modal' ),
 		customizerControls = [...document.getElementById( 'customize-theme-controls' ).children],
+		form = document.querySelector( 'form' ),
+		saveButton = document.getElementById( 'save' ),
+		publishSettings = document.getElementById( 'publish-settings' ),
+		publishSettingsPanel = document.getElementById( 'sub-accordion-section-publish_settings' ),
+		menuToEdit = document.getElementById( 'menu-to-edit' ),
+		availableMenuItems = document.getElementById( 'available-menu-items' ),
+		previewFrame = document.getElementById( 'customize-preview' ),
+		availableWidgets = document.getElementById( 'widgets-left' ),
+		devicesWrapper = document.querySelector( '.devices' ),
+		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
+		section = document.getElementById( 'sub-accordion-section-custom_css' ),
+		colorSchemeInputs = form.querySelectorAll( 'input[name="_customize-radio-colorscheme"]' ),
+		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' ),
+		notificationsContainer = document.querySelector( '#customize-notifications-area ul' );
+
+	let addButton, pond, leftSidebar, customizeButton, orgThemes, newUrl,
+		intersectionObserver, queryString,
+		i = 1,
 		{ FilePond } = window, // import FilePond
 		cropContext = false,
 		newFrontPageIds = [],
 		newPostsPageIds = [],
-		dialog = document.getElementById( 'widget-modal' ),
 		installedThemesHTML = document.querySelector( '.themes')?.innerHTML,
 		reducedMotionMediaQuery = window.matchMedia( '(prefers-reduced-motion: reduce)' ),
 		isReducedMotion = reducedMotionMediaQuery.matches,
-		form = document.querySelector( 'form' ),
 		inputs = form.querySelectorAll( 'input, select, textarea' ),
 		lockableControls = form.querySelectorAll( 'input, select, textarea, button' ),
 		hyperlinks = document.querySelectorAll( 'a' ),
-		saveButton = form.querySelector( '#save' ),
-		publishSettings = form.querySelector( '#publish-settings' ),
-		publishSettingsPanel = document.getElementById( 'sub-accordion-section-publish_settings' ),
 		lockSettings = window._wpCustomizeSettings || {},
-		lockNotice = document.getElementById( 'customize-lock-notice' ),
 		lockRefreshTimer = null,
-		devicesWrapper = document.querySelector( '.devices' ),
-		buttons = devicesWrapper?.querySelectorAll( 'button[data-device]' ),
-		previewFrame = document.getElementById( 'customize-preview' ),
 		queryParams = new URLSearchParams( window.location.search ),
 		addMenuButtons = document.querySelectorAll( '.add-new-menu-item' ),
-		availableMenuItems = document.getElementById( 'available-menu-items' ),
 		addWidgetButtons = document.querySelectorAll( '.add-new-widget' ),
 		newMenuItemIDs = window.newMenuItemIDs,
-		availableWidgets = document.getElementById( 'widgets-left' ),
-		menuToEdit = document.getElementById( 'menu-to-edit' ),
 		hash = window.location.hash.replace( '#', '' ),
 		targetEl = document.getElementById( hash ),
-		section = document.getElementById( 'sub-accordion-section-custom_css' ),
 		discardingChangeset = false,
-		changesetStatus = window._wpCustomizeChangesetStatus || 'publish';
-
-	const colorSchemeInputs = form.querySelectorAll( 'input[name="_customize-radio-colorscheme"]' ),
-		hueControl = form.querySelector( 'li[data-setting-id="colorscheme_hue"]' );
+		changesetStatus = window.wpCustomizeChangesetStatus === 'auto-draft' ? 'publish' : window.wpCustomizeChangesetStatus || 'publish',
+		autosaveTimer = null,
+		autosaveInProgress = false,
+		autosavePending = false;
 
 	// Go direct to appropriate Customizer panel if its hash is specified in the URL
 	if ( hash === 'menu-to-edit' ) {
@@ -168,8 +172,9 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	// Delete redundant query args from browser URL
 	if ( queryParams.get( 'url' ) ) {
 		queryParams.delete( 'url' );
-		newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
-		history.replaceState( null, '', newUrl );
+		queryString = queryParams.toString(); // use updated URL
+		newUrl = window.location.pathname + ( queryString ? '?' + queryString : '' ) + ( hash ? '#' + hash : '' );
+		history.replaceState( null, '', encodeURI( newUrl ) );
 	}
 
 	if ( queryParams.get( 'discarded' ) ) {
@@ -178,11 +183,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	if ( queryParams.get( 'theme' ) ) {
 		if ( queryParams.get( 'theme' ) === _wpCustomizeControlsL10n.activeTheme ) { // active theme
-			history.replaceState( null, '', window.location.pathname );
+			history.replaceState( null, '', encodeURI( window.location.pathname ) );
 		} else {
 			queryParams.delete( 'return' );
-			newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
-			history.replaceState( null, '', newUrl );
+			queryString = queryParams.toString(); // use updated URL
+			newUrl = window.location.pathname + ( queryString ? '?' + queryString : '' ) + ( hash ? '#' + hash : '' );
+			history.replaceState( null, '', encodeURI( newUrl ) );
 			saveButton.disabled = false;
 			saveButton.textContent = _wpCustomizeControlsL10n.activate;
 		}
@@ -191,8 +197,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}, 0 );
 	} else {
 		queryParams.delete( 'return' );
-		newUrl = window.location.pathname + ( queryParams.toString() ? '?' + queryParams.toString() : '' ) + ( hash ? '#' + hash : '' );
-		history.replaceState( null, '', newUrl );
+		queryString = queryParams.toString(); // use updated URL
+		newUrl = window.location.pathname + ( queryString ? '?' + queryString : '' ) + ( hash ? '#' + hash : '' );
+		history.replaceState( null, '', encodeURI( newUrl ) );
+	}
+
+	if ( lockSettings?.changeset.loadedFromChangesetUrl ) {
+		publishSettings.disabled = false;
+		activatePublishButton();
 	}
 
 	document.getElementById( 'customize-preview-loading' ).classList.add( 'hidden' );
@@ -277,44 +289,40 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function applyLockState() {
 		const lockUser = lockSettings?.lock?.lockUser;
-		let nameNode;
-		let avatarNode;
-		let takeOverButton;
-
-		if ( ! lockNotice ) {
-			return;
-		}
-
-		nameNode = lockNotice.querySelector( '.customize-lock-notice-name' );
-		avatarNode = lockNotice.querySelector( '.customize-lock-notice-avatar' );
-		takeOverButton = lockNotice.querySelector( '.button-primary' );
+		let avatarNode, takeOverButton;
 
 		if ( lockUser && lockUser.id && lockUser.id !== lockSettings?.user?.id ) {
-			if ( nameNode ) {
-				nameNode.textContent = lockUser.name || '';
+			if ( ! notificationsContainer.querySelector( '.customize-lock-notice' ) ) {
+				notificationsContainer.prepend( document.getElementById( 'customize-lock-notice-template' ).content.cloneNode( true ) );
+			}
+			notificationsContainer.querySelector( '.customize-lock-notice-name' ).textContent = lockUser.name || '';
+
+			avatarNode = notificationsContainer.querySelector( '.customize-lock-notice-avatar' );
+			if ( typeof lockUser.avatar === 'string' && /<img/i.test( lockUser.avatar ) ) {
+				avatarNode.setHTML( lockUser.avatar );
+				avatarNode.hidden = false;
+			} else {
+				avatarNode.replaceChildren();
+				avatarNode.hidden = true;
 			}
 
-			if ( avatarNode ) {
-				if ( typeof lockUser.avatar === 'string' && /<img/i.test( lockUser.avatar ) ) {
-					avatarNode.innerHTML = lockUser.avatar;
-					avatarNode.hidden = false;
-				} else {
-					avatarNode.innerHTML = '';
-					avatarNode.hidden = true;
-				}
-			}
-
-			lockNotice.hidden = false;
+			notificationsContainer.parentNode.style.display = 'block';
 			disableCustomizerEditing();
 
-			if ( takeOverButton ) {
-				takeOverButton.disabled = false;
-			}
+			takeOverButton = notificationsContainer.querySelector( '.button-primary' );
+			takeOverButton.disabled = false;
+			takeOverButton.addEventListener( 'click', function( e ) {
+				e.preventDefault();
+				handleTakeOverLock();
+			} );
 
 			return;
 		}
 
-		lockNotice.hidden = true;
+		notificationsContainer.querySelector( '.customize-lock-notice' )?.remove();
+		if ( notificationsContainer.children.length === 0 ) {
+			notificationsContainer.parentNode.style.display = 'none';
+		}
 		enableCustomizerEditing();
 	}
 
@@ -366,7 +374,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 */
 	function handleTakeOverLock() {
 		const data = new URLSearchParams(),
-			takeOverButton = lockNotice?.querySelector( '.button-primary' );
+			takeOverButton = notificationsContainer.querySelector( '.button-primary' );
 
 		if ( ! lockSettings?.nonce?.takeOverLock ) {
 			return;
@@ -405,15 +413,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				takeOverButton.disabled = false;
 			}
 			console.error( 'Customizer lock takeover failed.', error );
-		} );
-	}
-
-	if ( lockNotice ) {
-		lockNotice.addEventListener( 'click', function( e ) {
-			if ( e.target.closest( '.button-primary' ) ) {
-				e.preventDefault();
-				handleTakeOverLock();
-			}
 		} );
 	}
 
@@ -470,11 +469,45 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Schedule an autosave after a Customizer setting has changed.
+	 *
+	 * @return {void}
+	 */
+	function scheduleAutosave() {
+		window.clearTimeout( autosaveTimer );
+
+		autosaveTimer = window.setTimeout( function() {
+			autosaveChangeset();
+		}, 1000 );
+	}
+
+	/**
+	 * Mark the current changeset as changed.
+	 *
+	 * @return {void}
+	 */
+	function markChangesetDirty() {
+		activatePublishButton();
+		scheduleAutosave();
+	}
+
+	/**
 	 * Prepare changed object for publication.
 	 */
 	function inputChanged( input, settingId ) {
+		if ( settingId === 'external_header_video' && input.value.trim() ) {
+			var headerImageRemove = document.querySelector( '#customize-control-header_image .remove' );
+
+			if ( headerImageRemove ) {
+				headerImageRemove.click();
+			}
+
+			_updatedControlsWatcher.header_image = 'remove-header';
+			_updatedControlsWatcher.header_image_data = '';
+		}
+
 		_updatedControlsWatcher[ settingId ] = input.value.trim();
-		activatePublishButton();
+		markChangesetDirty();
 	}
 
 	function backgroundPositionChanged( input ) {
@@ -484,7 +517,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		_updatedControlsWatcher.background_position_x = x;
 		_updatedControlsWatcher.background_position_y = y;
-		activatePublishButton();
+		markChangesetDirty();
 	}
 
 	function backgroundCheckboxChanged( input, settingId ) {
@@ -497,7 +530,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			 * unchecked = "blank"
 			 */
 			_updatedControlsWatcher[ settingId ] = input.checked ? input.value : 'blank';
-			activatePublishButton();
+			markChangesetDirty();
 			return;
 		}
 
@@ -509,43 +542,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			_updatedControlsWatcher[ settingId ] = input.checked ? input.value : '';
 		}
 
-		activatePublishButton();
-	}
-
-	function updateBackgroundPresetFields( preset ) {
-		switch ( preset ) {
-			case 'fill':
-				_updatedControlsWatcher.background_repeat = 'no-repeat';
-				_updatedControlsWatcher.background_position_x = 'left';
-				_updatedControlsWatcher.background_position_y = 'top';
-				_updatedControlsWatcher.background_size = 'cover';
-				_updatedControlsWatcher.background_attachment = 'fixed';
-				break;
-
-			case 'fit':
-				_updatedControlsWatcher.background_repeat = 'no-repeat';
-				_updatedControlsWatcher.background_position_x = 'left';
-				_updatedControlsWatcher.background_position_y = 'top';
-				_updatedControlsWatcher.background_size = 'contain';
-				_updatedControlsWatcher.background_attachment = 'fixed';
-				break;
-
-			case 'repeat':
-				_updatedControlsWatcher.background_repeat = 'repeat';
-				_updatedControlsWatcher.background_position_x = 'left';
-				_updatedControlsWatcher.background_position_y = 'top';
-				_updatedControlsWatcher.background_size = 'auto';
-				_updatedControlsWatcher.background_attachment = 'scroll';
-				break;
-
-			default:
-				_updatedControlsWatcher.background_repeat = 'repeat';
-				_updatedControlsWatcher.background_position_x = 'left';
-				_updatedControlsWatcher.background_position_y = 'top';
-				_updatedControlsWatcher.background_size = 'auto';
-				_updatedControlsWatcher.background_attachment = 'scroll';
-				break;
-		}
+		markChangesetDirty();
 	}
 
 	inputs.forEach( function( input ) {
@@ -575,13 +572,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 			if ( input.name === 'background-position' ) {
 				backgroundPositionChanged( input );
-				return;
-			}
-
-			if ( settingId === 'background_preset' ) {
-				_updatedControlsWatcher.background_preset = input.value;
-				updateBackgroundPresetFields( input.value );
-				activatePublishButton();
 				return;
 			}
 
@@ -855,11 +845,11 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		} )
 		.then( function( result ) {
 			if ( i === 1 ) {
-				themesGrid.innerHTML = ''; // clear the current grid
+				themesGrid.replaceChildren(); // clear the current grid
 			}
 
 			// Populate grid with new items
-			themesGrid.insertAdjacentHTML( 'beforeend', convertThemeLinksToButtons( result.data.html ) );
+			themesGrid.append( convertThemeLinksToButtons( result.data.html ) );
 			orgThemes = document.querySelectorAll( '.wp-org .themes li' );
 			orgThemes.forEach( function( theme ) {
 				theme.style.marginRight = '2%';
@@ -881,9 +871,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 	function convertThemeLinksToButtons( html ) {
 		const template = document.createElement( 'template' );
-		template.innerHTML = html;
 
-		template.content.querySelectorAll( '.theme-install' ).forEach( function( link ) {
+		template.setHTML( html, {
+			sanitizer: {}
+		} );
+
+		template.content.querySelectorAll( 'a.theme-install' ).forEach( function( link ) {
 			const button = document.createElement( 'button' );
 
 			// Copy all attributes except href.
@@ -897,13 +890,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			button.type = 'button';
 
 			// Preserve contents.
-			button.innerHTML = link.innerHTML;
+			for ( const child of link.childNodes ) {
+				button.append( child.cloneNode( true ) );
+			}
 
 			// Replace <a> with <button>.
 			link.replaceWith( button );
 		} );
 
-		return template.innerHTML;
+		return template.content.cloneNode( true );
 	}
 
 	/**
@@ -940,14 +935,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			// Keep installation within Customizer
 			const customizeUrl = result.data?.customizeUrl || themeUrl;
 			if ( customizeUrl ) {
-				window.location = customizeUrl;
+				window.location = encodeURI( customizeUrl );
 				return;
 			}
 
 			// Fallback to installing within regular themes page in admin
 			const activateUrl = result.data?.activateUrl;
 			if ( activateUrl ) {
-				window.location = activateUrl;
+				window.location = encodeURI( activateUrl );
 				return;
 			}
 		} )
@@ -964,23 +959,62 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @abstract
 	 * @return {void}
 	 */
-	function setAddedMediaFields( id ) {
-		var form = document.createElement( 'form' );
+	function setAddedMediaFields( item ) {
+		const id = item.dataset.id,
+			form = document.createElement( 'form' ),
+			input = document.createElement( 'input' ),
+			para = document.createElement( 'p' ),
+			message = document.createElement( 'span' ),
+			required = document.createElement( 'span' ),
+			span1 = document.createElement( 'span' ),
+			label1 = document.createElement( 'label' ),
+			input1 = document.createElement( 'input' ),
+			innerSpan1 = document.createElement( 'span' ),
+			span2 = document.createElement( 'span' ),
+			label2 = document.createElement( 'label' ),
+			input2 = document.createElement( 'input' ),
+			innerSpan2 = document.createElement( 'span' );
+
 		form.className = 'compat-item';
-		form.innerHTML = '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
-			'<p class="media-types media-types-required-info"><span class="required-field-message">Required fields are marked <span class="required">*</span></span></p>' +
-			'<div class="setting" data-setting="media_category">' +
-				'<label for="attachments-' + id + '-media_category" style="width:30%;">' +
-					'<span class="alignleft">Media Categories</span>' +
-				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="">' +
-			'</div>' +
-			'<div class="setting" data-setting="media_post_tag">' +
-				'<label for="attachments-' + id + '-media_post_tag">' +
-					'<span class="alignleft">Media Tags</span>' +
-				'</label>' +
-				'<input type="text" class="text" id="attachments-' + id + '-media_post_tag" name="attachments[' + id + '][media_post_tag]" value="">' +
-			'</div>';
+		input.type = 'hidden';
+		input.id = 'menu-order';
+		input.name = 'attachments[' + id + '][menu_order]';
+		input.value = '0';
+		para.className = 'media-types media-types-required-info';
+		message.className = 'required-field-message';
+		message.textContent = 'Required fields are marked ';
+		required.className = 'required';
+		required.textContent = '*';
+
+		span1.className = 'setting';
+		span1.dataset.setting = 'media_category';
+		label1.htmlFor = 'attachments-' + id + '-media_category';
+		innerSpan1.className = 'alignleft';
+		innerSpan1.textContent = 'Media Categories';
+		input1.type = 'text';
+		input1.className = 'text';
+		input1.id = 'attachments-' + id + '-media_category';
+		input1.name = 'attachments[' + id + '][media_category]';
+		input1.value = item.dataset.taxes;
+
+		span2.className = 'setting';
+		span2.dataset.setting = 'media_post_tag';
+		label2.htmlFor = 'attachments-' + id + '-media_post_tag';
+		innerSpan2.className = 'alignleft';
+		innerSpan2.textContent = 'Media Tags';
+		input2.type = 'text';
+		input2.className = 'text';
+		input2.id = 'attachments-' + id + '-media_post_tag';
+		input2.name = 'attachments[' + id + '][media_post_tag]';
+		input2.value = item.dataset.tags;
+
+		message.append( required );
+		para.append( message );
+		label1.append( innerSpan1 );
+		span1.append( label1, input1 );
+		label2.append( innerSpan2 );
+		span2.append( label2, input2 );
+		form.append( input, para, span1, span2 );
 
 		if ( document.querySelector( '.compat-item' ) != null ) {
 			document.querySelector( '.compat-item' ).remove();
@@ -1229,7 +1263,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					_updatedControlsWatcher.page_for_posts = response.data.post_id;
 				}
 
-				activatePublishButton();
+				markChangesetDirty();
 			} else {
 				errorItem.textContent = response.data && response.data.message ? response.data.message : _wpCustomizeControlsL10n.pageCreationFailure;
 				errorItem.style.display = '';
@@ -1282,12 +1316,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			height = item.dataset.height,
 			caption = item.dataset.caption,
 			description = item.dataset.description,
-			taxes = item.dataset.taxes,
-			tags = item.dataset.tags,
 			url = item.dataset.url,
 			sizes = item.dataset.sizes,
 			sizeOptions = '',
-			sizesObject = JSON.parse( sizes ),
+			sizesObject = sizes ? JSON.parse( sizes ) : '',
 			alt = item.querySelector( 'img' ).getAttribute( 'alt' ),
 			updateNonce = item.dataset.updateNonce,
 			deleteNonce = item.dataset.deleteNonce,
@@ -1300,7 +1332,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		// Set menu_order, media_category, and media_post_tag field IDs correctly
-		setAddedMediaFields( id );
+		setAddedMediaFields( item );
 
 		// Populate modal with attachment details
 		dialog.querySelector( '.attachment-date' ).textContent = date;
@@ -1346,10 +1378,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			dialog.querySelector( '.delete-attachment' ).parentNode.setAttribute( 'hidden', true );
 		}
 
-		dialog.querySelector( '#attachments-' + id + '-media_category').value = taxes;
-		dialog.querySelector( '#attachments-' + id + '-media_post_tag').value = tags;
 		dialog.querySelector( '#attachment-display-settings-size' ).innerHTML = sizeOptions;
-
 		dialog.querySelector( '.widget-modal-right-sidebar-info' ).removeAttribute( 'hidden' );
 
 		// Update media attachment details
@@ -1405,15 +1434,53 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function populateGridItem( attachment ) {
-		var selected = '',
-			gridItem = document.createElement( 'li' ),
-			image = '<img src="' + attachment.url + '" alt="' + attachment.alt + '">';
+		const gridItem = document.createElement( 'li' ),
+			wrapper = document.createElement( 'div' ),
+			thumbnail = document.createElement( 'div' ),
+			button = document.createElement( 'button' ),
+			spanIcon = document.createElement( 'span' ),
+			spanSRT = document.createElement( 'span' ),
+			centered = document.createElement( 'div' ),
+			filename = document.createElement( 'div' ),
+			title = document.createElement( 'div' ),
+			img = new Image();
 
-		gridItem.className = 'media-item' + selected;
+		let image;
+		if ( attachment.type === 'image' ) {
+			image = new Image();
+			image.src = attachment.url;
+			image.alt = attachment.alt;
+		} else {
+			if ( attachment.type === 'application' ) {
+				if ( attachment.subtype === 'vnd.openxmlformats-officedocument.spreadsheetml.sheet' ) {
+					img.src = _wpCustomizeControlsL10n.includes_url + 'images/media/spreadsheet.png';
+				} else if ( attachment.subtype === 'zip' ) {
+					img.src = _wpCustomizeControlsL10n.includes_url + 'images/media/archive.png';
+				} else {
+					img.src = _wpCustomizeControlsL10n.includes_url + 'images/media/document.png';
+				}
+			} else if ( attachment.type === 'audio' ) {
+				img.src = _wpCustomizeControlsL10n.includes_url + 'images/media/audio.png';
+			} else if ( attachment.type === 'video' ) {
+				img.src = _wpCustomizeControlsL10n.includes_url + 'images/media/video.png';
+			}
+
+			centered.className = 'centered';
+			img.alt = '';
+			img.setAttribute( 'draggable', 'false' );
+			centered.append( img );
+			title.textContent = attachment.title;
+			filename.append( title );
+			image = document.createElement( 'div' );
+			image.className = 'icon';
+			image.append( centered, filename );
+		}
+
+		gridItem.className = 'media-item';
 		gridItem.id = 'media-' + attachment.id;
 		gridItem.setAttribute( 'tabindex', 0 );
 		gridItem.setAttribute( 'role', 'checkbox' );
-		gridItem.setAttribute( 'aria-checked', selected ? true : false );
+		gridItem.setAttribute( 'aria-checked', 'false' );
 		gridItem.setAttribute( 'aria-label', attachment.title );
 		gridItem.setAttribute( 'data-id', attachment.id );
 		gridItem.setAttribute( 'data-date', attachment.dateFormatted );
@@ -1431,18 +1498,24 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		gridItem.setAttribute( 'data-menu-order', attachment.menuOrder );
 		gridItem.setAttribute( 'data-taxes', attachment.media_cats );
 		gridItem.setAttribute( 'data-tags', attachment.media_tags );
-		gridItem.setAttribute( 'data-sizes', JSON.stringify( attachment.sizes ) );
+		gridItem.setAttribute( 'data-sizes', attachment.sizes ? JSON.stringify( attachment.sizes ) : '' );
 		gridItem.setAttribute( 'data-update-nonce', attachment.nonces.update );
 		gridItem.setAttribute( 'data-delete-nonce', attachment.nonces.delete );
 		gridItem.setAttribute( 'data-edit-nonce', attachment.nonces.edit );
 
-		gridItem.innerHTML = '<div class="select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype + '">' +
-			'<div class="media-thumbnail">' + image + '</div>' +
-			'</div>' +
-			'<button type="button" class="check" tabindex="-1">' +
-			'<span class="media-modal-icon"></span>' +
-			'<span class="screen-reader-text">' + IMAGE_WIDGET.deselect + '></span>' +
-			'</button>';
+		wrapper.className = 'select-attachment-preview type-' + attachment.type + ' subtype-' + attachment.subtype;
+		thumbnail.className = 'media-thumbnail';
+		button.type = 'button';
+		button.className = 'check';
+		button.tabIndex = -1;
+		spanIcon.className = 'media-modal-icon';
+		spanSRT.className =  'screen-reader-text';
+		spanSRT.textContent = _wpCustomizeControlsL10n.deselect;
+
+		thumbnail.append( image );
+		wrapper.append( thumbnail );
+		button.append( spanIcon, spanSRT );
+		gridItem.append( wrapper, button );
 
 		return gridItem;
 	}
@@ -1483,7 +1556,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Remove left sidebar
 				leftSidebar = dialog.querySelector( '.widget-modal-left-sidebar' );
-				dialog.querySelector( '.widget-modal-left-sidebar' ).remove();
+				dialog.querySelector( '.widget-modal-left-sidebar' )?.remove();
 
 				// Append cloned template and show relevant elements
 				header.append( dialogButtons );
@@ -1621,7 +1694,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				'query[post_mime_type]': customizeButton.parentNode.dataset.requiredType,
 				'query[s]': search.value ? search.value : '',
 				'query[paged]': paged ? paged : 1,
-				'query[media_category_name]': mediaCatSelect.value ? mediaCatSelect.value : ''
+				'query[media_category_name]': mediaCatSelect?.value ? mediaCatSelect.value : ''
 			} );
 
 		// Make AJAX request
@@ -1641,7 +1714,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				// Show relevant button and clear grid
 				addButton = dialog.querySelector( '#media-button-insert' );
-				dialog.querySelector( '.widget-modal-grid' ).innerHTML = '';
+				dialog.querySelector( '.widget-modal-grid' ).replaceChildren();
 
 				if ( result.data.length === 0 ) {
 
@@ -1768,17 +1841,21 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function addItemToCustomizer( selectedItem, attachmentId, imageElement, imageUrl, attachment ) {
-		var headerData, headerUrl,
+		var headerData, headerUrl, videoElement,
 			parent = selectedItem.classList.contains( 'choice' ) ? selectedItem.closest( '.choices' ) : customizeButton.parentNode,
 			grandparent = parent.parentNode,
 			li = parent.closest( 'li' ),
 			settingId = li.dataset.settingId,
 			removeButton = document.createElement( 'button' ),
-			selectButton = document.createElement( 'button' );
+			selectButton = document.createElement( 'button' ),
+			headerVideoControl = document.getElementById( 'customize-control-header_video' ),
+			externalVideoInput = document.getElementById( '_customize-input-external_header_video' );
 
 		if ( ! parent ) {
 			return;
 		}
+
+		attachmentId = parseInt( attachmentId );
 
 		removeButton.className = 'button remove-button';
 		removeButton.type = 'button';
@@ -1790,9 +1867,18 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Update header image
 		if ( settingId === 'header_image_data' ) {
+
+			if ( headerVideoControl ) {
+				_updatedControlsWatcher.header_video = '';
+			}
+
+			if ( externalVideoInput ) {
+				externalVideoInput.value = '';
+				_updatedControlsWatcher.external_header_video = '';
+			}
+
 			if ( selectedItem.className === 'choice' ) {
-				li.querySelector( '.container' ).innerHTML = '';
-				li.querySelector( '.container' ).append( imageElement.cloneNode() );
+				li.querySelector( '.container' ).replaceChildren( imageElement.cloneNode() );
 
 				// Find the matching entry from the localized data
 				headerData = Object.values( _wpCustomizeHeader.uploads || {} ).find(
@@ -1821,8 +1907,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				forcePreviewRefresh( 'header_image', headerData.url );
 				document.getElementById( 'sub-accordion-section-header_image' ).querySelector( 'a' ).focus();
 			} else {
-				parent.previousElementSibling.querySelector( '.container' ).innerHTML = '';
-				parent.previousElementSibling.querySelector( '.container' ).append( imageElement );
+				parent.previousElementSibling.querySelector( '.container' ).replaceChildren( imageElement );
 				customizeButton.previousElementSibling.style.display = '';
 				customizeButton.classList.remove( 'upload-button' );
 				parent.previousElementSibling.querySelector( 'input' ).value = attachmentId;
@@ -1832,13 +1917,83 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 				_updatedControlsWatcher.header_image = headerUrl;
 				_updatedControlsWatcher[ settingId ] = {
-					attachment_id: parseInt( attachmentId ),
+					attachment_id: attachmentId,
 					url:           attachment ? attachment.url : imageUrl,
 					thumbnail_url: attachment ? ( attachment.sizes?.thumbnail?.url || attachment.url ) : ( selectedItem.dataset.sizes?.thumbnail?.url || imageUrl ),
 					width:         attachment ? attachment.width  : selectedItem.dataset.width,
 					height:        attachment ? attachment.height : selectedItem.dataset.height
 				};
 			}
+
+			setTimeout( function() {
+				if ( headerVideoControl && headerVideoControl.querySelector( 'video' ) ) {
+					headerVideoControl.querySelector( '.remove-button' )?.click();
+				}
+				selectButton.focus();
+			}, 0 );
+
+		// Update header video
+		} else if ( settingId === 'header_video' ) {
+			if ( ! selectedItem.dataset.url ) {
+				return;
+			}
+
+			videoElement = document.createElement( 'video' );
+			videoElement.src = selectedItem.dataset.url;
+
+			if ( li.querySelector( '.mejs-video' ) ) {
+				li.querySelector( '.mejs-offscreen' ).remove();
+				li.querySelector( '.mejs-video' ).replaceWith( videoElement );
+			} else {
+				grandparent.before( videoElement );
+				parent.prepend( removeButton );
+				customizeButton.replaceWith( selectButton );
+			}
+
+			if ( externalVideoInput ) {
+				externalVideoInput.value = '';
+				_updatedControlsWatcher.external_header_video = '';
+			}
+
+			_updatedControlsWatcher.header_image = 'remove-header';
+			_updatedControlsWatcher.header_image_data = '';
+			_updatedControlsWatcher.header_video = attachmentId;
+
+			setTimeout( function() {
+				if ( document.getElementById( 'customize-control-header_image' ).querySelector( 'img' ) ) {
+					document.getElementById( 'customize-control-header_image' ).querySelector( '.remove' ).click();
+				}
+				selectButton.focus();
+			}, 0 );
+
+		// Update external header video
+		} else if ( settingId === 'external_header_video' ) {
+			if ( ! selectedItem.dataset.url ) {
+				return;
+			}
+
+			videoElement = document.createElement( 'video' );
+			videoElement.src = selectedItem.dataset.url;
+
+			document.getElementById( 'customize-control-header_video' )?.click();
+
+			if ( headerVideoControl ) {
+				_updatedControlsWatcher.header_video = '';
+			}
+
+			_updatedControlsWatcher.header_image = 'remove-header';
+			_updatedControlsWatcher.header_image_data = '';
+			_updatedControlsWatcher.external_header_video = selectedItem.dataset.url;
+
+			setTimeout( function() {
+				if ( document.getElementById( 'customize-control-header_image' ).querySelector( 'img' ) ) {
+					document.getElementById( 'customize-control-header_image' ).querySelector( '.remove' ).click();
+				}
+				if ( document.getElementById( 'customize-control-header_video' ).querySelector( 'video' ) ) {
+					document.getElementById( 'customize-control-header_video' ).querySelector( '.remove-button' ).click();
+				}
+				selectButton.focus();
+			}, 0 );
 
 		// Update site icon
 		} else if ( settingId === 'site_icon' ) {
@@ -1867,8 +2022,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 					selectButton.focus();
 				} );
 			}
-			if ( settingId === 'background_image' ) {
-				grandparent.querySelector( 'input' ).value = imageUrl;
+			if ( settingId === 'background_image' || li.classList.contains( 'customize-control-image' ) || li.classList.contains( 'customize-control-upload' ) ) {
+				if ( grandparent.querySelector( 'input' ) ) {
+					grandparent.querySelector( 'input' ).value = imageUrl;
+				}
 				_updatedControlsWatcher[ settingId ] = imageUrl;
 			} else {
 				if ( grandparent.querySelector( 'input' ) ) {
@@ -1878,7 +2035,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		}
 		closeModal();
-		activatePublishButton();
+		markChangesetDirty();
 	}
 
 	/**
@@ -1888,7 +2045,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	 * @return {void}
 	 */
 	function setRandomHeaderChoice( choice ) {
-		const div = document.createElement( 'div' );
+		const div = document.createElement( 'div' ),
+			innerDiv = document.createElement( 'div' ),
+			span = document.createElement( 'span' );
+
 		if ( ! choice ) {
 			return;
 		}
@@ -1898,16 +2058,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			choice: choice
 		};
 
-		activatePublishButton();
+		markChangesetDirty();
 		forcePreviewRefresh( 'header_image', choice );
 
 		if ( ! document.querySelector( '.randomizing-header' ) ) {
+			innerDiv.className = 'button display-options random random-default-header';
+			span.className = 'dashicons dashicons-randomize dice';
+			innerDiv.textContent = _wpCustomizeHeader.random;
+			innerDiv.prepend( span );
 			div.className = 'randomizing-header';
-			div.innerHTML = '<div class="button display-options random random-default-header">' +
-				'<span class="dashicons dashicons-randomize dice"></span>' +
-				_wpCustomizeHeader.random +
-				'</div>' +
-				'</div>';
+			div.append( innerDiv );
 			document.querySelector( '#customize-control-header_image label' ).after( div );
 		}
 	}
@@ -1947,16 +2107,19 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			} else {
 				grandparent.querySelector( 'img' )?.remove();
 				grandparent.querySelector( 'video' )?.remove();
-				grandparent.querySelector( 'input' ).value = '';
+				grandparent.closest( 'li' ).querySelector( '.mejs-offscreen' )?.remove();
+				grandparent.closest( 'li' ).querySelector( '.mejs-video' )?.remove();
+				if ( grandparent.querySelector( 'input' ) ) {
+					grandparent.querySelector( 'input' ).value = '';
+				}
 			}
-			parent.innerHTML = '';
-			parent.append( button );
+			parent.replaceChildren( button );
 			setTimeout( function() {
 				button.focus();
 			} );
 			_updatedControlsWatcher[ parent.closest( 'li' ).dataset.settingId ] = '';
 		}
-		activatePublishButton();
+		markChangesetDirty();
 	}
 
 	/* Enable choosing of panel on narrow screen */
@@ -2039,6 +2202,251 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	}
 
 	/**
+	 * Build a changeset.
+	 *
+	 * This function is used both by regular saves/publishing and autosaves.
+	 */
+	function buildChangesetData( controls, dirtySettings, menuItemIDs, frontPageIDs, postsPageIDs ) {
+		const submittedChanges = {};
+		let postsToPublish = [];
+
+		// Prepare changeset object
+		Object.keys( controls ).forEach( function( settingId ) {
+			const item = controls[ settingId ];
+
+			if ( settingId.startsWith( 'nav_menu[' ) && item === 'delete-menu' ) {
+				submittedChanges[ settingId ] = {
+					value: false // deletes menu
+				};
+			} else if ( settingId.startsWith( 'nav_menu[' ) ) {
+				submittedChanges[ settingId ] = {
+					value: {
+						name: ( typeof item === 'string' ) ? item : item.name || '',
+						description: item.description || '',
+						parent: item.parent ? parseInt( item.parent, 10 ) : 0,
+						auto_add: !! item.auto_add // default false
+					}
+				};
+			} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
+				if ( item === false ) {
+					submittedChanges[ settingId ] = {
+						value: false
+					};
+				} else {
+					submittedChanges[ settingId ] = {
+						value: {
+							nav_menu_term_id: parseInt( item.nav_menu_term_id, 10 ),
+							position: parseInt( item.position, 10 ),
+							title: item.title || '',
+							url: item.url || '',
+							original_title: item.original_title || '',
+							menu_item_parent: parseInt( item.menu_item_parent, 10 ) || 0,
+							object_id: item.object_id || 0,
+							object: item.object || '',
+							type: item.type || 'custom',
+							type_label: item.type_label || '',
+							classes: item.classes || [],
+							xfn: item.xfn || '',
+							target: item.target || '',
+							attr_title: item.attr_title || '',
+							description: item.description || '',
+							status: item.status || 'publish',
+							display_mode: item.display_mode || '',
+							roles: item.roles || ''
+						}
+					};
+				}
+			} else if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
+				submittedChanges[ settingId ] = {
+					value: item || ''
+				};
+			} else { // All other settings
+				submittedChanges[ settingId ] = {
+					value: item || ''
+				};
+			}
+		} );
+
+		if ( menuItemIDs.length > 0 ) {
+			postsToPublish = postsToPublish.concat( menuItemIDs );
+		}
+
+		frontPageIDs.forEach( function( item ) {
+			postsToPublish.push( item.id );
+		} );
+
+		postsPageIDs.forEach( function( item ) {
+			postsToPublish.push( item.id );
+		} );
+
+		if ( postsToPublish.length > 0 ) {
+			submittedChanges.nav_menus_created_posts = {
+				value: postsToPublish
+			};
+		}
+
+		// Add advanced menu-item changes directly to the outgoing
+		// publish payload without touching updatedControls.
+		// This avoids crashing the live preview.
+		Object.entries( dirtySettings ).forEach( function( [ settingId, item ] ) {
+			if ( settingId.startsWith( 'nav_menu_item[' ) ) {
+				submittedChanges[ settingId ] = {
+					value: item
+				};
+			}
+		} );
+
+		return submittedChanges;
+	}
+
+	/**
+	 * Clone values for an autosave request.
+	 *
+	 * @param {*} value - Value to clone.
+	 * @return {*} Cloned value.
+	 */
+	function cloneAutosaveValue( value ) {
+		return JSON.parse( JSON.stringify( value ) );
+	}
+
+	/**
+	 * Autosave the current changeset.
+	 *
+	 * @return {void}
+	 */
+	async function autosaveChangeset() {
+		const formData = new FormData();
+		let autosaveData,
+			snapshotControls,
+			snapshotDirtySettings,
+			snapshotMenuItemIDs,
+			snapshotFrontPageIDs,
+			snapshotPostsPageIDs,
+			response,
+			result;
+
+		if ( autosaveInProgress ) {
+			autosavePending = true;
+			return;
+		}
+
+		if ( Object.keys( updatedControls ).length < 1 ) {
+			return;
+		}
+
+		autosaveInProgress = true;
+		autosavePending = false;
+
+		/*
+		 * Take snapshots before building the outgoing payload. The user may
+		 * continue editing while fetch() is in progress.
+		 */
+		snapshotControls = cloneAutosaveValue( updatedControls );
+		snapshotDirtySettings = cloneAutosaveValue( window._cpDirtySettings || {} );
+		snapshotMenuItemIDs = cloneAutosaveValue( newMenuItemIDs );
+		snapshotFrontPageIDs = cloneAutosaveValue( newFrontPageIds );
+		snapshotPostsPageIDs = cloneAutosaveValue( newPostsPageIds );
+
+		// Build the autosave data without modifying the live source objects.
+		autosaveData = buildChangesetData( snapshotControls, snapshotDirtySettings, snapshotMenuItemIDs, snapshotFrontPageIDs, snapshotPostsPageIDs );
+
+		try {
+			formData.append( 'action', 'customize_save' );
+			formData.append( 'nonce', document.getElementById( 'customizer_nonce' ).value );
+			formData.append( 'customize_theme', document.getElementById( 'theme_stylesheet' ).value );
+			formData.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
+			formData.append( 'customize_changeset_data', JSON.stringify( autosaveData ) );
+			formData.append( 'customize_changeset_autosave', '1' );
+
+			response = await fetch( ajaxurl, {
+				method: 'POST',
+				body: formData,
+				credentials: 'same-origin'
+			} );
+
+			if ( ! response.ok ) {
+				throw new Error( response.status );
+			}
+
+			result = await response.json();
+
+			if ( ! result.success && result.data?.code === 'changeset_already_published' && result.data?.next_changeset_uuid ) {
+				document.getElementById( 'customize_changeset_uuid' ).value = result.data.next_changeset_uuid;
+
+				/*
+				 * Retry after finally releases the in-progress flag.
+				 * Keep the live buffers intact.
+				 */
+				autosavePending = true;
+				return;
+			}
+
+			if ( ! result.success ) {
+				throw new Error( typeof result.data === 'string' ? result.data : JSON.stringify( result.data ) || 'No error details returned.' );
+			}
+
+			/*
+			 * The autosave has saved only the values represented by this
+			 * snapshot. Do not clear the live buffers here: they may now
+			 * include changes made while this request was in progress.
+			 */
+			if ( result.data?.next_changeset_uuid ) {
+				document.getElementById( 'customize_changeset_uuid' ).value = result.data.next_changeset_uuid;
+			}
+		} catch ( error ) {
+			console.error( 'Customizer autosave failed.', error );
+		} finally {
+			autosaveInProgress = false;
+
+			if ( autosavePending ) {
+				autosavePending = false;
+				scheduleAutosave();
+			}
+		}
+	}
+
+	function dismissAutosave( li ) {
+		const data = new URLSearchParams();
+
+		data.append( 'action', 'customize_dismiss_autosave_or_lock' );
+		data.append( 'nonce', lockSettings.nonce.dismissAutosaveOrLock );
+		data.append( 'wp_customize', 'on' );
+		data.append( 'dismiss_autosave', 'true' );
+		data.append( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
+
+		fetch( ajaxurl, {
+			method: 'POST',
+			body: data,
+			credentials: 'same-origin'
+		} )
+		.then( function( response ) {
+			if ( response.ok ) {
+				return response.json();
+			}
+			throw new Error( response.status );
+		} )
+		.then( function( result ) {
+			if ( ! result.success ) {
+				console.error( 'Autosave dismissal response:', result.data );
+				throw new Error( 'Autosave dismissal failed.' );
+			}
+
+			li.remove();
+			if ( notificationsContainer.children.length === 0 ) {
+				notificationsContainer.parentNode.style.display = 'none';
+			}
+			saveButton.disabled = true;
+			saveButton.textContent = _wpCustomizeControlsL10n.publish;
+			publishSettings.style.display = 'none';
+			publishSettings.disabled = true;
+		} )
+		.catch( function( error ) {
+			console.error( 'Customizer autosave dismissal failed.', error );
+			throw error;
+		} );
+	}
+
+	/**
 	 * Publish updates by clicking Publish button.
 	 *
 	 * @abstract
@@ -2052,7 +2460,6 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			navMenuNegatives = [], // an array because we need it to be iterable
 			navMenuLocations = [],
 			navMenuItems = [],
-			postsToPublish = [],
 			formData = new FormData(),
 			updateData = new FormData(),
 			previewLink = document.getElementById( 'preview-link' ),
@@ -2061,12 +2468,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		// Prevent form submission via PHP
 		e.preventDefault();
 
-		window._customizePublishing = true;
-
 		// Prevent accidental form submissions
 		if ( e.submitter !== saveButton ) {
 			return;
 		}
+
+		window._customizePublishing = true;
+
+		// Prevent a pending autosave from starting during this save.
+		window.clearTimeout( autosaveTimer );
+		autosaveTimer = null;
 
 		document.body.classList.add( 'saving' );
 
@@ -2082,9 +2493,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		// Clear stale notifications
-		document.querySelectorAll( '.customize-control-notifications-container' ).forEach( function( container ) {
-			container.innerHTML = '';
-		} );
+		notificationsContainer.replaceChildren();
+		notificationsContainer.parentNode.style.display = 'none';
 
 		// Populate arrays if a new menu is being added
 		for ( const [key, value] of entries ) {
@@ -2179,90 +2589,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		}
 
 		// Prepare changeset object
-		Object.keys( updatedControls ).forEach( function( settingId ) {
-			const item = updatedControls[ settingId ];
-
-			if ( settingId.startsWith( 'nav_menu[' ) && item === 'delete-menu' ) {
-				submittedChanges[ settingId ] = {
-					value: false // deletes menu
-				};
-			} else if ( settingId.startsWith( 'nav_menu[' ) ) {
-				submittedChanges[ settingId ] = {
-					value: {
-						name: ( typeof item === 'string' ) ? item : item.name || '',
-						description: item.description || '',
-						parent: item.parent ? parseInt( item.parent, 10 ) : 0,
-						auto_add: !! item.auto_add // default false
-					}
-				};
-			} else if ( settingId.startsWith( 'nav_menu_item[' ) ) {
-				if ( item === false ) {
-					submittedChanges[ settingId ] = {
-						value: false
-					};
-				} else {
-					submittedChanges[ settingId ] = {
-						value: {
-							nav_menu_term_id: parseInt( item.nav_menu_term_id, 10 ),
-							position: parseInt( item.position, 10 ),
-							title: item.title || '',
-							url: item.url || '',
-							original_title: item.original_title || '',
-							menu_item_parent: parseInt( item.menu_item_parent, 10 ) || 0,
-							object_id: item.object_id || 0,
-							object: item.object || '',
-							type: item.type || 'custom',
-							type_label: item.type_label || '',
-							classes: item.classes || [],
-							xfn: item.xfn || '',
-							target: item.target || '',
-							attr_title: item.attr_title || '',
-							description: item.description || '',
-							status: item.status || 'publish',
-							display_mode: item.display_mode || '',
-							roles: item.roles || ''
-						}
-					};
-				}
-			} else if ( settingId.startsWith( 'nav_menu_locations[' ) ) {
-				submittedChanges[ settingId ] = {
-					value: item || ''
-				};
-			} else { // All other settings
-				submittedChanges[ settingId ] = {
-					value: item || ''
-				};
-			}
-		} );
-
-		if ( newMenuItemIDs.length > 0 ) {
-			postsToPublish = postsToPublish.concat( newMenuItemIDs );
-		}
-
-		newFrontPageIds.forEach( function( item ) {
-			postsToPublish.push( item.id );
-		} );
-
-		newPostsPageIds.forEach( function( item ) {
-			postsToPublish.push( item.id );
-		} );
-
-		if ( postsToPublish.length > 0 ) {
-			submittedChanges.nav_menus_created_posts = {
-				value: postsToPublish
-			};
-		}
-
-		// Add advanced menu-item changes directly to the outgoing
-		// publish payload without touching updatedControls.
-		// This avoids crashing the live preview.
-		Object.entries( window._cpDirtySettings || {} ).forEach( function( [ settingId, item ] ) {
-			if ( settingId.startsWith( 'nav_menu_item[' ) ) {
-				submittedChanges[ settingId ] = {
-					value: item
-				};
-			}
-		} );
+		submittedChanges = buildChangesetData( updatedControls, window._cpDirtySettings || {}, newMenuItemIDs, newFrontPageIds, newPostsPageIds );
 
 		// Append new data for POSTing to PHP back-end handler
 		updateData.append( 'action', 'customize_save' );
@@ -2274,6 +2601,10 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		if ( changesetStatus === 'future' ) {
 			updateData.append( 'customize_changeset_date', d[0] + '-' + d[1] + '-' + d[2] + ' ' + timeStr );
+		}
+
+		if ( queryParams.get( 'cp_restoring_autosave' ) === '1' ) {
+			updateData.set( 'customize_restore_autosave', '1' );
 		}
 
 		try {
@@ -2295,6 +2626,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		// Update HTML
 		if ( newResult && newResult.success ) {
+
+			// Prevent re-appearance of restore flag once an autosave has been restored
+			if ( queryParams.get( 'cp_restoring_autosave' ) === '1' ) {
+				queryParams.delete( 'cp_restoring_autosave' );
+				queryParams.delete( 'customize_autosaved' );
+
+				queryString = queryParams.toString(); // use updated URL
+				window.history.replaceState( null, '', window.location.pathname + '?' + queryString + window.location.hash );
+			}
 
 			// Update the in-memory date so the Schedule radio restores correctly
 			if ( changesetStatus === 'future' ) {
@@ -2345,6 +2685,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				document.getElementById( 'customize_changeset_uuid' ).value = newResult.data.next_changeset_uuid;
 			}
 
+			// Do not reopen the published changeset when the page is refreshed.
+			if ( changesetStatus === 'publish' ) {
+				queryParams.delete( 'customize_changeset_uuid' );
+				queryParams.delete( 'customize_autosaved' );
+				queryParams.delete( 'cp_restoring_autosave' );
+
+				queryString = queryParams.toString(); // use updated URL
+				window.history.replaceState( null, '', window.location.pathname + ( queryString ? '?' + queryString : '' ) + window.location.hash );
+			}
+
 			saveButton.disabled = true;
 			window._customizePublishing = false;
 		} else if ( newResult && ! newResult.success ) {
@@ -2352,18 +2702,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				Object.entries( newResult.data.setting_validities ).forEach( function( [settingId, validity] ) {
 					if ( validity !== true ) {
 						Object.entries( validity ).forEach( function( [code, error] ) {
-							var setting = document.querySelector( '[data-setting-id="' + settingId + '"]' );
-							if ( setting ) {
-								var container = setting.querySelector( '.customize-control-notifications-container' );
-								if ( container ) {
-									container.appendChild( buildNotification( {
-										type: 'error',
-										code: code,
-										message: error.message
-									} ) );
-								}
-							}
+							notificationsContainer.append( buildNotification( {
+								type: 'error',
+								code: code,
+								message: error.message
+							} ) );
 						} );
+						notificationsContainer.parentNode.style.display = 'block';
 					}
 				} );
 			}
@@ -2380,7 +2725,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function buildNotification( data ) {
 		var btn = document.createElement( 'button' ),
 			msg = document.createElement( 'div' ),
-			li = document.createElement( 'li' );
+			li = document.createElement( 'li' ),
+			span = document.createElement( 'span' );
 
 		li.className = [
 			'notice',
@@ -2393,21 +2739,98 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		li.dataset.type = data.type || '';
 
 		msg.className = 'notification-message';
-		msg.innerHTML = data.message || data.code || '';
-		li.appendChild( msg );
+		msg.setHTML( data.message || data.code || '', {
+			sanitizer: {}
+		} );
+		li.append( msg );
 
 		if ( data.dismissible ) {
+			span.className = 'screen-reader-text';
+			span.textContent = _wpCustomizeControlsL10n.dismiss;
 			btn.type = 'button';
 			btn.className = 'notice-dismiss';
-			btn.innerHTML = '<span class="screen-reader-text">' + _wpCustomizeControlsL10n.dismiss + '</span>';
+			btn.append( span );
 			btn.addEventListener( 'click', function() {
-				li.remove();
+				if ( data.onDismiss ) {
+					data.onDismiss( li );
+				} else {
+					li.remove();
+				}
+				if ( notificationsContainer.children.length === 0 ) {
+					notificationsContainer.parentNode.style.display = 'none';
+				}
 			} );
-			li.appendChild( btn );
+			li.append( btn );
 		}
 
 		return li;
 	}
+
+	/**
+	 * Get the URL for restoring available autosaved changes.
+	 *
+	 * @return {string} Restoration URL.
+	 */
+	function getAutosaveRestoreUrl() {
+		const url = new URL( window.location.href ),
+			changeset = lockSettings.changeset;
+
+		if ( changeset.latestAutoDraftUuid ) {
+			url.searchParams.set( 'customize_changeset_uuid', changeset.latestAutoDraftUuid );
+			url.searchParams.delete( 'customize_autosaved' );
+		} else {
+			url.searchParams.set( 'customize_changeset_uuid', document.getElementById( 'customize_changeset_uuid' ).value );
+			url.searchParams.set( 'customize_autosaved', 'on' );
+			url.searchParams.set( 'cp_restoring_autosave', '1' );
+		}
+
+		return url.toString();
+	}
+
+	/**
+	 * Show information when a more recent autosave exists.
+	 *
+	 * @return {void}
+	 */
+	function showAutosaveNotification() {
+		const changeset = lockSettings.changeset,
+			autosaveMessage = document.createElement( 'span' );
+
+		let notice, message;
+
+		if ( changeset?.loadedFromChangesetUrl ) {
+			return;
+		}
+
+		if ( ! ( changeset?.latestAutoDraftUuid || changeset?.hasAutosaveRevision ) ) {
+			return;
+		}
+
+		if ( notificationsContainer.querySelector( '[data-code="autosave_available"]' ) ) {
+			return;
+		}
+
+		notice = buildNotification( {
+			type: 'info',
+			code: 'autosave_available',
+			message: autosaveMessage.outerHTML,
+			dismissible: true,
+			onDismiss: dismissAutosave
+		} );
+
+		message = notice.querySelector( '.notification-message' );
+		message.setHTML( _wpCustomizeControlsL10n.autosaveNotice, {
+			sanitizer: {
+				allowAttributes: ['href']
+			}
+		} );
+
+		message.querySelector( 'a' ).href = getAutosaveRestoreUrl();
+		notificationsContainer.append( notice );
+		notificationsContainer.parentNode.style.display = 'block';
+	}
+
+	showAutosaveNotification();
 
 	/**
 	 * Replaces the substring 'brand-new' in new menu attributes with negative integer.
@@ -2535,7 +2958,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			editor.codemirror.on( 'change', function( cm ) {
 				textarea.value = cm.getValue();
 				_updatedControlsWatcher[ settingId ] = textarea.value.trim();
-				activatePublishButton();
+				markChangesetDirty();
 			} );
 
 			observer = new MutationObserver( function( mutations ) {
@@ -2598,7 +3021,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			_updatedControlsWatcher[inputEl.closest( 'li' ).dataset.settingId] = effectiveColor;
 
 			// Enable Publish.
-			activatePublishButton();
+			markChangesetDirty();
 		}
 	} );
 
@@ -2658,7 +3081,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	document.addEventListener( 'click', function( e ) {
 		var id, page, itemBrowse, itemUpload, gridPanel, uploadPanel,
 			modalButtons, rightSidebar, modalPages, description,
-			selectedItem, image,
+			selectedItem, image, settingId,
 			ul = e.target.closest( 'ul' );
 
 		// Abort if this comes from a middle section heading or a widget
@@ -2809,7 +3232,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			if ( e.target.className === 'preview' ) {
 				e.target.style.display = 'none';
 				e.target.previousElementSibling.style.display = 'block';
-				if ( window.location.hash === '#sub-accordion-section-themes' ) {
+				if ( hash === 'sub-accordion-section-themes' ) {
 					document.querySelector( '.customize-themes-full-container' ).style.display = 'block';
 				} else {
 					previewFrame.style.zIndex = '10';
@@ -2882,21 +3305,27 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			e.preventDefault();
 			sidebarCollapseExpand( e.target.parentNode );
 
-		// Remove media file
-		} else if ( e.target.tagName === 'BUTTON' && ( e.target.classList.contains( 'remove' ) || e.target.classList.contains( 'remove-button' ) ) ) {
-			customizeButton = e.target;
-			removeMedia();
+		} else if ( ! dialog.querySelector( '#widget-modal-media-content' ) && e.target.tagName === 'BUTTON' ) {
 
-		// Add media file
-		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'select-button' ) ) {
-			customizeButton = e.target;
-			cropContext = e.target.closest( 'li' ).dataset.settingId;
-			selectMedia();
-		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'random-default-header' ) ) {
-			setRandomHeaderChoice( e.target.dataset.customizeImageValue );
-		} else if ( e.target.tagName === 'BUTTON' && e.target.classList.contains( 'choice' ) ) {
-			image = e.target.previousElementSibling;
-			addItemToCustomizer( e.target, 0, image, image.src );
+			// Remove media file
+			if ( e.target.classList.contains( 'remove' ) || e.target.classList.contains( 'remove-button' ) ) {
+				customizeButton = e.target;
+				removeMedia();
+
+			// Add media file
+			} else if ( e.target.classList.contains( 'select-button' ) ) {
+				customizeButton = e.target;
+				settingId = e.target.closest( 'li' ).dataset.settingId;
+				if ( e.target.parentNode.dataset.requiredType === 'image' && settingId !== 'background_image' ) {
+					cropContext = settingId;
+				}
+				selectMedia();
+			} else if ( e.target.classList.contains( 'random-default-header' ) ) {
+				setRandomHeaderChoice( e.target.dataset.customizeImageValue );
+			} else if ( e.target.classList.contains( 'choice' ) ) {
+				image = e.target.previousElementSibling;
+				addItemToCustomizer( e.target, 0, image, image.src );
+			}
 
 		// Close the modal
 		} else if ( e.target.id === 'widget-modal-close' ) {
@@ -3159,11 +3588,15 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			labelTapToUndo: IMAGE_WIDGET.tap_close,
 			fileRenameFunction: ( file ) =>
 				new Promise( function( resolve ) {
-					const newName = window.prompt(
-						_wpCustomizeControlsL10n.new_filename,
-						file.name
-					);
-					resolve( newName === null ? file.name : newName );
+					if ( parseInt( _cpFilepondLabels.renameFiles ) === 1 ) {
+						const newName = window.prompt(
+							_wpCustomizeControlsL10n.new_filename,
+							file.name
+						);
+						resolve( newName === null ? file.name : newName );
+					} else {
+						resolve( file.name );
+					}
 				}
 			),
 			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),

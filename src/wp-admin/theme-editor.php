@@ -41,7 +41,7 @@ get_current_screen()->add_help_tab(
 				'<p>' . sprintf(
 					/* translators: %s: Link to documentation on child themes. */
 					__( 'Upgrading to a newer version of the same theme will override changes made here. To avoid this, consider creating a <a href="%s">child theme</a> instead.' ),
-					__( 'https://developer.wordpress.org/themes/advanced-topics/child-themes/' )
+					__( 'https://docs.classicpress.net/user-guides/advanced-classicpress-guides/creating-a-child-theme/' )
 				) . '</p>' .
 				( is_network_admin() ? '<p>' . __( 'Any edits to files from this screen will be reflected on all sites in the network.' ) . '</p>' : '' ),
 	)
@@ -49,11 +49,9 @@ get_current_screen()->add_help_tab(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://developer.wordpress.org/themes/">Documentation on Theme Development</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://wordpress.org/documentation/article/appearance-theme-file-editor-screen/">Documentation on Editing Themes</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://wordpress.org/documentation/article/editing-files/">Documentation on Editing Files</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://developer.wordpress.org/themes/basics/template-tags/">Documentation on Template Tags</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://wordpress.org/support/forums/">Support forums</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://developer.wordpress.org/themes/classic-themes/">Documentation on Theme Development</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/advanced-classicpress-guides/editing-files/">Documentation on Editing Files</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://forums.classicpress.net/c/support/">Support forums</a>' ) . '</p>'
 );
 
 wp_reset_vars( array( 'action', 'error', 'file', 'theme' ) );
@@ -233,7 +231,7 @@ if ( preg_match( '/\.css$/', $file ) && current_user_can( 'customize' ) ) {
 	$message = '<p><strong>' . __( 'Did you know?' ) . '</strong></p><p>' . sprintf(
 		/* translators: %s: Link to Custom CSS section in the Customizer. */
 		__( 'There is no need to change your CSS here &mdash; you can edit and live preview CSS changes in the <a href="%s">built-in CSS editor</a>.' ),
-		esc_url( add_query_arg( 'autofocus[section]', 'custom_css', admin_url( 'customize.php' ) ) )
+		esc_url( admin_url( 'customize.php#sub-accordion-section-custom_css' ) )
 	) . '</p>';
 	wp_admin_notice(
 		$message,
@@ -412,7 +410,7 @@ if ( ! in_array( 'theme_editor_notice', $dismissed_pointers, true ) ) {
 							printf(
 								/* translators: %s: Link to documentation on child themes. */
 								__( 'If you need to tweak more than your theme&#8217;s CSS, you might want to try <a href="%s">making a child theme</a>.' ),
-								esc_url( __( 'https://developer.wordpress.org/themes/advanced-topics/child-themes/' ) )
+								esc_url( __( 'https://docs.classicpress.net/user-guides/advanced-classicpress-guides/creating-a-child-theme/' ) )
 							);
 							echo '</p>';
 						}

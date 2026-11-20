@@ -1389,7 +1389,7 @@ class WP_Site_Health {
 			),
 			'description' => sprintf(
 				'<p>%s</p>',
-				__( 'Database repair mode is temporarily enabled in <code>wp-config.php</code> to repair and optimize database tables. The setting allows unauthenicated access so should be disbaled again at the earliest opportunity.' )
+				__( 'Database repair mode is temporarily enabled in <code>wp-config.php</code> to repair and optimize database tables. The setting allows unauthenicated access so should be disabled again at the earliest opportunity.' )
 			),
 			'actions'     => sprintf(
 				'<p><a href="%s" target="_blank" rel="noopener">%s <span class="screen-reader-text">%s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a></p>',
@@ -3568,13 +3568,7 @@ class WP_Site_Health {
 			'users_count'    => $wpdb->users,
 		);
 
-		foreach ( $threshold_map as $threshold => $table ) {
-			if ( $thresholds[ $threshold ] <= $results[ $table ]->rows ) {
-				return true;
-			}
-		}
-
-		return false;
+		return array_any( $threshold_map, fn( $table, $threshold ) => $thresholds[ $threshold ] <= $results[ $table ]->rows );
 	}
 
 	/**

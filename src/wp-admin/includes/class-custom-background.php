@@ -97,7 +97,7 @@ class Custom_Background {
 
 		get_current_screen()->set_help_sidebar(
 			'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-			'<p>' . __( '<a href="https://codex.wordpress.org/Appearance_Background_Screen">Documentation on Custom Background</a>' ) . '</p>' .
+			'<p>' . __( '<a href="https://docs.classicpress.net/user-guides/using-classicpress/appearance-background-screen/">Documentation on Custom Background</a>' ) . '</p>' .
 			'<p>' . __( '<a href="https://forums.classicpress.net/c/support">Support forums</a>' ) . '</p>'
 		);
 
@@ -136,18 +136,6 @@ class Custom_Background {
 			$this->updated = true;
 			wp_safe_redirect( $_POST['_wp_http_referer'] );
 			return;
-		}
-
-		if ( isset( $_POST['background-preset'] ) ) {
-			check_admin_referer( 'custom-background' );
-
-			if ( in_array( $_POST['background-preset'], array( 'default', 'fill', 'fit', 'repeat', 'custom' ), true ) ) {
-				$preset = $_POST['background-preset'];
-			} else {
-				$preset = 'default';
-			}
-
-			set_theme_mod( 'background_preset', $preset );
 		}
 
 		if ( isset( $_POST['background-position'] ) ) {
@@ -237,7 +225,7 @@ class Custom_Background {
 			$message = sprintf(
 				/* translators: %s: URL to background image configuration in Customizer. */
 				__( 'You can now manage and live-preview Custom Backgrounds in the <a href="%s">Customizer</a>.' ),
-				admin_url( 'customize.php?autofocus[control]=background_image' )
+				esc_url( admin_url( 'customize.php#sub-accordion-section-background_image' ) )
 			);
 			wp_admin_notice(
 				$message,

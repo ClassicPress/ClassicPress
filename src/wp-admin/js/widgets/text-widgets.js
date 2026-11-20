@@ -2,7 +2,9 @@
  * @output wp-admin/js/widgets/text-widgets.js
  */
 
-/* global wp, tinymce, ajaxurl, TEXT_WIDGET, Sortable, console, prompt, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
+/* global wp, tinymce, ajaxurl, TEXT_WIDGET, Sortable, console, prompt,
+FilePondPluginFileValidateSize, FilePondPluginFileValidateType,
+FilePondPluginFileRename, FilePondPluginImagePreview, _cpFilepondLabels */
 /* eslint consistent-this: [ "error", "control" ] */
 
 /**
@@ -176,7 +178,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		form.innerHTML = '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
 			'<p class="media-types media-types-required-info"><span class="required-field-message">Required fields are marked <span class="required">*</span></span></p>' +
 			'<div class="setting" data-setting="media_category">' +
-				'<label for="attachments-' + id + '-media_category" style="width:30%;">' +
+				'<label for="attachments-' + id + '-media_category">' +
 					'<span class="alignleft">Media Categories</span>' +
 				'</label>' +
 				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" data-id="' + id + '" value="">' +
@@ -2932,8 +2934,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			labelTapToUndo: TEXT_WIDGET.tap_close,
 			fileRenameFunction: ( file ) =>
 				new Promise( function( resolve ) {
-					resolve( window.prompt( TEXT_WIDGET.new_filename, file.name ) );
-				} ),
+					if ( parseInt( _cpFilepondLabels.renameFiles ) === 1 ) {
+						resolve( window.prompt( TEXT_WIDGET.new_filename, file.name ) );
+					} else {
+						resolve( file.name );
+					}
+				}
+			),
 			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 			labelFileTypeNotAllowed: TEXT_WIDGET.invalid_type,
 			fileValidateTypeLabelExpectedTypes: TEXT_WIDGET.check_types

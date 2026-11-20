@@ -500,8 +500,23 @@ class WP_Customize_Control {
 
 		switch ( $this->type ) {
 			case 'checkbox':
-				$input_value = $is_header_text_checkbox ? $this->settings['default']->default : $this->value();
+				$setting_id  = isset( $this->settings['default'] ) ? $this->settings['default']->id : '';
+				$value       = $this->value();
+				$input_value = $is_header_text_checkbox ? $this->settings['default']->default : $value;
+
+				// These checkboxes represent string-valued settings, not Booleans.
+				if ( $is_header_text_checkbox ) {
+					$is_checked = 'blank' !== $value;
+				} elseif ( 'background_repeat' === $setting_id ) {
+					$is_checked = 'repeat' === $value;
+				} elseif ( 'background_attachment' === $setting_id ) {
+					$is_checked = 'scroll' === $value;
+				} else {
+					// Preserve the existing comparison for ordinary checkboxes.
+					$is_checked = $value;
+				}
 				?>
+
 				<span class="customize-inside-control-row">
 					<input
 						id="<?php echo esc_attr( $input_id ); ?>"
@@ -509,13 +524,7 @@ class WP_Customize_Control {
 						type="checkbox"
 						value="<?php echo esc_attr( $input_value ); ?>"
 						<?php $this->link(); ?>
-						<?php
-						if ( $is_header_text_checkbox ) {
-							checked( 'blank' !== $this->value(), true );
-						} else {
-							checked( $this->value() );
-						}
-						?>
+						<?php checked( $is_checked ); ?>
 					>
 					<label for="<?php echo esc_attr( $input_id ); ?>">
 						<?php echo esc_html( $this->label ); ?>
@@ -528,6 +537,7 @@ class WP_Customize_Control {
 				</span>
 				<?php
 				break;
+
 			case 'radio':
 				if ( empty( $this->choices ) ) {
 					return;
@@ -564,6 +574,7 @@ class WP_Customize_Control {
 				<?php endforeach; ?>
 				<?php
 				break;
+
 			case 'select':
 				if ( empty( $this->choices ) ) {
 					return;
@@ -590,6 +601,7 @@ class WP_Customize_Control {
 				</select>
 				<?php
 				break;
+
 			case 'textarea':
 				?>
 				<?php if ( ! empty( $this->label ) ) : ?>
@@ -605,6 +617,7 @@ class WP_Customize_Control {
 				<textarea id="<?php echo esc_attr( $input_id ); ?>" rows="5" <?php echo $describedby_attr; ?> <?php $this->input_attrs(); ?> <?php $this->link(); ?>><?php echo esc_textarea( $this->value() ); ?></textarea>
 				<?php
 				break;
+
 			case 'dropdown-pages':
 				?>
 				<?php if ( ! empty( $this->label ) ) : ?>
@@ -693,6 +706,7 @@ class WP_Customize_Control {
 				<?php endif; ?>
 				<?php
 				break;
+
 			default:
 				?>
 				<?php if ( ! empty( $this->label ) ) : ?>

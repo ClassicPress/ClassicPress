@@ -1520,6 +1520,7 @@ function get_uploaded_header_images() {
  * Gets the header image data.
  *
  * @since 3.4.0
+ * @since 7.1.1 The `width` and `height` are cast to non-negative integers.
  *
  * @global array $_wp_default_headers
  *
@@ -1558,7 +1559,14 @@ function get_custom_header() {
 		'height'        => get_theme_support( 'custom-header', 'height' ),
 		'video'         => get_theme_support( 'custom-header', 'video' ),
 	);
-	return (object) wp_parse_args( $data, $default );
+
+	if ( ! is_array( $data ) && ! is_object( $data ) ) {
+		$data = array();
+	}
+	$header         = (object) wp_parse_args( $data, $default );
+	$header->width  = absint( $header->width );
+	$header->height = absint( $header->height );
+	return $header;
 }
 
 /**
@@ -3653,7 +3661,7 @@ function _wp_customize_changeset_filter_insert_post_data( $post_data, $supplied_
 function _wp_customize_loader_settings() {
 	$admin_origin = parse_url( admin_url() );
 	$home_origin  = parse_url( home_url() );
-	$cross_domain = ( strtolower( $admin_origin['host'] ) != strtolower( $home_origin['host'] ) );
+	$cross_domain = ( strtolower( $admin_origin['host'] ) !== strtolower( $home_origin['host'] ) );
 
 	$browser = array(
 		'mobile' => wp_is_mobile(),
@@ -3719,7 +3727,7 @@ function wp_customize_url( $stylesheet = '' ) {
 function wp_customize_support_script() {
 	$admin_origin = parse_url( admin_url() );
 	$home_origin  = parse_url( home_url() );
-	$cross_domain = ( strtolower( $admin_origin['host'] ) != strtolower( $home_origin['host'] ) );
+	$cross_domain = ( strtolower( $admin_origin['host'] ) !== strtolower( $home_origin['host'] ) );
 	?>
 	<script>
 		(function() {

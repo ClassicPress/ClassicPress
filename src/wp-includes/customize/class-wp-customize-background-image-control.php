@@ -70,8 +70,7 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 	 * @since CP-2.8.0
 	 */
 	public function render_content() {
-		$background_img = get_theme_mod( 'background_image' ); //get_background_image();
-		$attachment_id  = $background_img ? attachment_url_to_postid( $background_img ) : '';
+		$background_img = $this->value();
 
 		if ( $this->label ) {
 			?>
@@ -96,7 +95,7 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 				<div class="thumbnail thumbnail-image">
 					<img class="attachment-thumb" src="<?php echo esc_url( $background_img ); ?>" draggable="false" alt="">					
 				</div>
-				<input type="hidden" value="<?php echo esc_attr( $attachment_id ); ?>">
+				<input type="hidden" value="<?php echo esc_attr( $background_img ); ?>">
 
 				<?php
 				if ( current_user_can( 'upload_files' ) ) {
@@ -125,7 +124,7 @@ class WP_Customize_Background_Image_Control extends WP_Customize_Image_Control {
 			?>
 
 			<div class="attachment-media-view">
-				<input type="hidden" value="<?php echo esc_attr( $attachment_id ); ?>">
+				<input type="hidden" value="<?php echo esc_attr( $background_img ); ?>">
 
 				<?php
 				if ( current_user_can( 'upload_files' ) ) {

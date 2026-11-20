@@ -31,18 +31,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": function() { return /* binding */ domReady; }
 /* harmony export */ });
 // packages/dom-ready/src/index.ts
+/**
+* Specify a function to execute when the DOM is fully loaded.
+*
+* @param callback A function to execute after the DOM is ready.
+*
+* @example
+* ```js
+* import domReady from '@wordpress/dom-ready';
+*
+* domReady( function() {
+* 	//do something after DOM loads.
+* } );
+* ```
+*/
 function domReady(callback) {
-  if (typeof document === "undefined") {
-    return;
-  }
-  if (document.readyState === "complete" || // DOMContentLoaded + Images/Styles/etc loaded, so we call directly.
-  document.readyState === "interactive") {
-    return void callback();
-  }
-  document.addEventListener("DOMContentLoaded", callback);
+	if (typeof document === "undefined") return;
+	if (document.readyState === "complete" || document.readyState === "interactive") {
+		callback();
+		return;
+	}
+	document.addEventListener("DOMContentLoaded", callback);
 }
 
 
+//# sourceMappingURL=index.mjs.map
 (window.wp = window.wp || {}).domReady = __webpack_exports__;
 /******/ })()
 ;

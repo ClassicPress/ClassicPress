@@ -1,5 +1,7 @@
 /* eslint consistent-this: [ "error", "control" ] */
-/* global ajaxurl, GALLERY_WIDGET, Sortable, console, FilePondPluginFileValidateSize, FilePondPluginFileValidateType, FilePondPluginFileRename, FilePondPluginImagePreview */
+/* global ajaxurl, GALLERY_WIDGET, Sortable, console, FilePondPluginFileValidateSize,
+FilePondPluginFileValidateType, FilePondPluginFileRename,
+FilePondPluginImagePreview, _cpFilepondLabels */
 
 /**
  * @since CP 2.5.0
@@ -22,7 +24,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		form.innerHTML = '<input type="hidden" id="menu-order" name="attachments[' + id + '][menu_order]" value="0">' +
 			'<p class="media-types media-types-required-info"><span class="required-field-message">Required fields are marked <span class="required">*</span></span></p>' +
 			'<div class="setting" data-setting="media_category">' +
-				'<label for="attachments-' + id + '-media_category" style="width:30%;">' +
+				'<label for="attachments-' + id + '-media_category">' +
 					'<span class="alignleft">Media Categories</span>' +
 				'</label>' +
 				'<input type="text" class="text" id="attachments-' + id + '-media_category" name="attachments[' + id + '][media_category]" value="">' +
@@ -640,7 +642,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				'query[post_mime_type]': 'image',
 				'query[s]': search.value ? search.value : '',
 				'query[paged]': paged ? paged : 1,
-				'query[media_category_name]': mediaCatSelect.value ? mediaCatSelect.value : ''
+				'query[media_category_name]': mediaCatSelect?.value ? mediaCatSelect.value : ''
 			} );
 
 		// Make AJAX request
@@ -1588,8 +1590,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			labelTapToUndo: GALLERY_WIDGET.tap_close,
 			fileRenameFunction: ( file ) =>
 				new Promise( function( resolve ) {
-					resolve( window.prompt( GALLERY_WIDGET.new_filename, file.name ) );
-				} ),
+					if ( parseInt( _cpFilepondLabels.renameFiles ) === 1 ) {
+						resolve( window.prompt( GALLERY_WIDGET.new_filename, file.name ) );
+					} else {
+						resolve( file.name );
+					}
+				}
+			),
 			acceptedFileTypes: document.querySelector( '.uploader-inline' ).dataset.allowedMimes.split( ',' ),
 			labelFileTypeNotAllowed: GALLERY_WIDGET.invalid_type,
 			fileValidateTypeLabelExpectedTypes: GALLERY_WIDGET.check_types

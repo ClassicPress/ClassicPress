@@ -30,6 +30,9 @@ class WP_Customize_Background_Position_Control extends WP_Customize_Control {
 	 * @since CP-2.8.0
 	 */
 	public function render_content() {
+		// Combine the current setting values to identify the selected radio.
+		$position = $this->value( 'x' ) . ' ' . $this->value( 'y' );
+
 		$options = array(
 			array(
 				'left top'   => array(
@@ -74,6 +77,7 @@ class WP_Customize_Background_Position_Control extends WP_Customize_Control {
 				),
 			),
 		);
+
 		if ( $this->label ) {
 			?>
 			<span class="customize-control-title">
@@ -101,22 +105,29 @@ class WP_Customize_Background_Position_Control extends WP_Customize_Control {
 						?>
 					</span>
 				</legend>
+
 				<div class="background-position-control">
-				<?php foreach ( $options as $group ) : ?>
-					<div class="button-group">
-					<?php foreach ( $group as $value => $input ) : ?>
-						<label>
-							<input class="ui-helper-hidden-accessible" name="background-position" type="radio" value="<?php echo esc_attr( $value ); ?>">
-							<span class="button display-options position">
-								<span class="<?php echo esc_attr( $input['icon'] ); ?>" aria-hidden="true"></span>
-							</span>
-							<span class="screen-reader-text">
-								<?php echo $input['label']; ?>
-							</span>
-						</label>
+					<?php foreach ( $options as $group ) : ?>
+						<div class="button-group">
+							<?php foreach ( $group as $value => $input ) : ?>
+								<label>
+									<input
+										class="ui-helper-hidden-accessible"
+										name="background-position"
+										type="radio"
+										value="<?php echo esc_attr( $value ); ?>"
+										<?php checked( $position, $value ); ?>
+									>
+									<span class="button display-options position">
+										<span class="<?php echo esc_attr( $input['icon'] ); ?>" aria-hidden="true"></span>
+									</span>
+									<span class="screen-reader-text">
+										<?php echo $input['label']; ?>
+									</span>
+								</label>
+							<?php endforeach; ?>
+						</div>
 					<?php endforeach; ?>
-					</div>
-				<?php endforeach; ?>
 				</div>
 			</fieldset>
 		</div>

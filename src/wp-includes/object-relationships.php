@@ -35,6 +35,95 @@ add_action( 'init', 'cp_recognized_relationship_objects' );
 
 
 /**
+ * Prime the object_relationships cache for a list of attachments with
+ * at most one query, so later cp_get_object_relationship_ids() calls
+ * for them are served from the cache. Pairs with no relationship are
+ * cached as empty arrays.
+ *
+ * @since CP-2.8.0
+ *
+ * @param int[] $attachment_ids Attachment IDs, e.g. the current page of the Media list.
+ */
+function cp_prime_attachment_relationship_caches( $attachment_ids ) {
+	global $wpdb;
+
+	$attachment_ids = array_values(
+		array_unique(
+			array_filter(
+				array_map( 'intval', $attachment_ids ),
+				static function ( $id ) {
+					return $id > 0;
+				}
+			)
+		)
+	);
+
+	if ( empty( $attachment_ids ) ) {
+		return;
+	}
+
+	$table_name = $wpdb->prefix . 'object_relationships';
+	$types      = array( 'thumbnail', 'attachment' );
+	$recognized_relationship_objects = cp_recognized_relationship_objects();
+
+	// Query only attachments with at least one missing cache entry.
+	$uncached_ids = array();
+
+	foreach ( $attachment_ids as $id ) {
+		foreach ( $types as $type ) {
+			foreach ( $recognized_relationship_objects as $object_type ) {
+				$key = $id . ':' . $type . ':' . $object_type;
+
+				if ( false === wp_cache_get( $key, 'object_relationships' ) ) {
+					$uncached_ids[] = $id;
+					continue 3;
+				}
+			}
+		}
+	}
+
+	if ( empty( $uncached_ids ) ) {
+		return;
+	}
+
+	$attachment_ids = $uncached_ids;
+
+	$id_holders = implode( ', ', array_fill( 0, count( $attachment_ids ), '%d' ) );
+
+	// Every relationship these attachments have, in either direction.
+	$rows = $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT left_object_id AS id, left_object_type AS type, right_object_type AS other_type, right_object_id AS other_id
+			FROM $table_name WHERE left_object_id IN ($id_holders) AND left_object_type IN (%s, %s)
+			UNION ALL
+			SELECT right_object_id, right_object_type, left_object_type, left_object_id
+			FROM $table_name WHERE right_object_id IN ($id_holders) AND right_object_type IN (%s, %s)",
+			array_merge( $attachment_ids, $types, $attachment_ids, $types )
+		)
+	);
+
+	if ( $wpdb->last_error ) {
+		return;
+	}
+
+	$found = array();
+
+	foreach ( $rows as $row ) {
+		$found[ $row->id . ':' . $row->type . ':' . $row->other_type ][] = (int) $row->other_id;
+	}
+
+	// Same keys that cp_get_object_relationship_ids() reads.
+	foreach ( $attachment_ids as $id ) {
+		foreach ( $types as $type ) {
+			foreach ( $recognized_relationship_objects as $object_type ) {
+				$key = $id . ':' . $type . ':' . $object_type;
+				wp_cache_set( $key, array_values( array_unique( $found[ $key ] ?? array() ) ), 'object_relationships' );
+			}
+		}
+	}
+}
+
+/**
  * Check if a relationship exists between two recognized objects.
  * Relationship is bi-directional so the objects may be given in either order.
  *
@@ -53,7 +142,7 @@ add_action( 'init', 'cp_recognized_relationship_objects' );
 function cp_object_relationship_exists( $left_object_id, $left_object_type, $right_object_type, $right_object_id ) {
 
 	// Error if $left_object_id is not a positive integer.
-	if ( filter_var( $left_object_id, FILTER_VALIDATE_INT ) === false ) {
+	if ( filter_var( $left_object_id, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) ) === false ) {
 
 		$item = 'string';
 		if ( $left_object_id === 0 ) {
@@ -71,7 +160,7 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 	}
 
 	// Error if $right_object_id is not a positive integer.
-	if ( filter_var( $right_object_id, FILTER_VALIDATE_INT ) === false ) {
+	if ( filter_var( $right_object_id, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) ) === false ) {
 
 		$item = 'string';
 		if ( $right_object_id === 0 ) {
@@ -93,7 +182,7 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 	$object_list = implode( ', ', $recognized_relationship_objects );
 
 	// Error if $left_object_type is not a non-null string of an appropriate value.
-	if ( ! in_array( $left_object_type, $recognized_relationship_objects ) ) {
+	if ( ! in_array( $left_object_type, $recognized_relationship_objects, true ) ) {
 
 		$item = $left_object_type;
 		if ( is_int( $left_object_type ) ) {
@@ -111,7 +200,7 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 	}
 
 	// Error if $right_object_type is not a non-null string of an appropriate value
-	if ( ! in_array( $right_object_type, $recognized_relationship_objects ) ) {
+	if ( ! in_array( $right_object_type, $recognized_relationship_objects, true ) ) {
 
 		$item = $right_object_type;
 		if ( is_int( $right_object_type ) ) {
@@ -128,38 +217,43 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
 		return new WP_Error( 'right_object_type', $message );
 	}
 
+	// Return cached relationship ID if available.
+	$cache_key = (int) $left_object_id . ':' . $left_object_type . ':' . $right_object_type . ':' . (int) $right_object_id;
+	$relationship_id = wp_cache_get( $cache_key, 'object_relationship_exists' );
+
+	if ( false !== $relationship_id ) {
+		// Preserve the hook on cache hits.
+		do_action( 'existing_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
+
+		return $relationship_id;
+	}
+
 	// Good to go, so query database table.
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'object_relationships';
 	$relationship_id = 0;
 
-	$relationship_array = array(
-		'left_object_id'    => $left_object_id,
-		'left_object_type'  => $left_object_type,
-		'right_object_type' => $right_object_type,
-		'right_object_id'   => $right_object_id,
+	// Check if this relationship exists in either direction.
+	$sql = $wpdb->prepare(
+		"SELECT relationship_id FROM $table_name
+		WHERE ( left_object_id = %d AND left_object_type = %s AND right_object_type = %s AND right_object_id = %d )
+		OR ( right_object_id = %d AND right_object_type = %s AND left_object_type = %s AND left_object_id = %d )
+		LIMIT 1",
+		$left_object_id,
+		$left_object_type,
+		$right_object_type,
+		$right_object_id,
+		$left_object_id,
+		$left_object_type,
+		$right_object_type,
+		$right_object_id
 	);
 
-	// Check if this relationship already exists.
-	$sql1 = $wpdb->prepare( "SELECT relationship_id FROM $table_name WHERE left_object_id = %d AND left_object_type = %s AND right_object_type = %s AND right_object_id = %d", $left_object_id, $left_object_type, $right_object_type, $right_object_id );
+	$relationship_id = (int) $wpdb->get_var( $sql );
 
-	// If so, return the relationship ID as an integer.
-	$row = $wpdb->get_row( $sql1 );
-	if ( is_object( $row ) ) {
-		$relationship_id = (int) $row->relationship_id;
-	}
-
-	if ( empty( $relationship_id ) ) {
-
-		// Also query database table right to left if no match so far.
-		$sql2 = $wpdb->prepare( "SELECT relationship_id FROM $table_name WHERE right_object_id = %d AND right_object_type = %s AND left_object_type = %s AND left_object_id = %d", $left_object_id, $left_object_type, $right_object_type, $right_object_id );
-
-		// If this relationship exists, return the relationship ID as an integer.
-		$row = $wpdb->get_row( $sql2 );
-		if ( is_object( $row ) ) {
-			$relationship_id = (int) $row->relationship_id;
-		}
-	}
+	// Cache the relationship ID in both directions, including 0 if none exists.
+	wp_cache_set( $cache_key, $relationship_id, 'object_relationship_exists' );
+	wp_cache_set( (int) $right_object_id . ':' . $right_object_type . ':' . $left_object_type . ':' . (int) $left_object_id, $relationship_id, 'object_relationship_exists' );
 
 	// Hook when search for pre-existing relationship completed.
 	do_action( 'existing_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
@@ -176,20 +270,23 @@ function cp_object_relationship_exists( $left_object_id, $left_object_type, $rig
  *
  * @since CP-2.2.0
  *
- * @param  int      $left_object_id     ID of first object.
- * @param  string   $left_object_type   Name of type of first object.
- * @param  string   $right_object_type  Name of type of second object.
- * @param  int      $right_object_id    ID of second object.
+ * @param  int          $left_object_id     ID of first object.
+ * @param  string       $left_object_type   Name of type of first object.
+ * @param  string       $right_object_type  Name of type of second object.
+ * @param  int          $right_object_id    ID of second object.
  *
- * @return int      $relationship_id    Relationship ID of a relationship if it already exists.
- *                                      Otherwise relationship ID of newly-created relationship.
+ * @return int|WP_Error $relationship_id    Relationship ID of an existing or newly-created relationship.
+ *                                          WP_Error when a param of an incorrect type is specified.
  */
 function cp_add_object_relationship( $left_object_id, $left_object_type, $right_object_type, $right_object_id ) {
 
 	// Check if relationship already exists: if so return relationship ID.
 	$relationship_id = cp_object_relationship_exists( $left_object_id, $left_object_type, $right_object_type, $right_object_id );
+	if ( is_wp_error( $relationship_id ) ) {
+		return $relationship_id;
+	}
 
-	if ( absint( $relationship_id ) === 0 ) {
+	if ( 0 === $relationship_id ) {
 
 		// Relationship does not exist, so insert it now.
 		global $wpdb;
@@ -203,11 +300,19 @@ function cp_add_object_relationship( $left_object_id, $left_object_type, $right_
 		);
 
 		// $wpdb->insert sanitizes data.
-		$added = $wpdb->insert( $table_name, $relationship_array );
+		$added = $wpdb->insert( $table_name, $relationship_array, array( '%d', '%s', '%s', '%d' ) );
 		$relationship_id = $wpdb->insert_id;
 
-		// Hook after relationship added.
-		do_action( 'added_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
+		// Clear cached IDs for both objects after a successful insert.
+		if ( $added ) {
+			wp_cache_delete( (int) $left_object_id . ':' . $left_object_type . ':' . $right_object_type, 'object_relationships' );
+			wp_cache_delete( (int) $right_object_id . ':' . $right_object_type . ':' . $left_object_type, 'object_relationships' );
+			wp_cache_set( (int) $left_object_id . ':' . $left_object_type . ':' . $right_object_type . ':' . (int) $right_object_id, (int) $relationship_id, 'object_relationship_exists' );
+			wp_cache_set( (int) $right_object_id . ':' . $right_object_type . ':' . $left_object_type . ':' . (int) $left_object_id, (int) $relationship_id, 'object_relationship_exists' );
+
+			// Hook after relationship added.
+			do_action( 'added_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
+		}
 	}
 
 	// Return relationship ID of newly-inserted relationship.
@@ -232,7 +337,7 @@ function cp_add_object_relationship( $left_object_id, $left_object_type, $right_
 function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $right_object_type ) {
 
 	// Error if $left_object_id is not a positive integer
-	if ( filter_var( $left_object_id, FILTER_VALIDATE_INT ) === false ) {
+	if ( filter_var( $left_object_id, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) ) === false ) {
 
 		$item = 'string';
 		if ( $left_object_id === 0 ) {
@@ -254,7 +359,7 @@ function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $ri
 	$object_list = implode( ', ', $recognized_relationship_objects );
 
 	// Error if $left_object_type is not a non-null string of an appropriate value.
-	if ( ! in_array( $left_object_type, $recognized_relationship_objects ) ) {
+	if ( ! in_array( $left_object_type, $recognized_relationship_objects, true ) ) {
 
 		$item = $left_object_type;
 		if ( is_int( $left_object_type ) ) {
@@ -272,7 +377,7 @@ function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $ri
 	}
 
 	// Error if $right_object_type is not a non-null string of an appropriate value
-	if ( ! in_array( $right_object_type, $recognized_relationship_objects ) ) {
+	if ( ! in_array( $right_object_type, $recognized_relationship_objects, true ) ) {
 
 		$item = $right_object_type;
 		if ( is_int( $right_object_type ) ) {
@@ -289,33 +394,35 @@ function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $ri
 		return new WP_Error( 'left_object_type', $message );
 	}
 
+	// Return cached IDs if available.
+	$cache_key = (int) $left_object_id . ':' . $left_object_type . ':' . $right_object_type;
+	$target_ids = wp_cache_get( $cache_key, 'object_relationships' );
+
+	if ( false !== $target_ids ) {
+		return $target_ids;
+	}
+
 	// Good to go, so query database table.
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'object_relationships';
 
-	// Query database table from left to right.
-	$sql1 = $wpdb->prepare( "SELECT right_object_id FROM $table_name WHERE left_object_id = %d AND left_object_type = %s AND right_object_type = %s", $left_object_id, $left_object_type, $right_object_type );
+	// Query database table in both directions.
+	$sql = $wpdb->prepare(
+		"SELECT right_object_id FROM $table_name WHERE left_object_id = %d AND left_object_type = %s AND right_object_type = %s
+		UNION
+		SELECT left_object_id FROM $table_name WHERE right_object_id = %d AND right_object_type = %s AND left_object_type = %s",
+		$left_object_id,
+		$left_object_type,
+		$right_object_type,
+		$left_object_id,
+		$left_object_type,
+		$right_object_type
+	);
 
-	// Query database table from right to left.
-	$sql2 = $wpdb->prepare( "SELECT left_object_id FROM $table_name WHERE right_object_id = %d AND right_object_type = %s AND left_object_type = %s", $left_object_id, $left_object_type, $right_object_type );
+	$target_ids = array_map( 'intval', $wpdb->get_col( $sql ) );
 
-	// Results are in the form of two objects.
-	$rows1 = $wpdb->get_results( $sql1 );
-	$rows2 = $wpdb->get_results( $sql2 );
-
-	// Create array of target object IDs, starting with an empty array.
-	$target_ids = array();
-	if ( ! empty( $rows1 ) ) {
-		foreach ( $rows1 as $row ) {
-			$target_ids[] = (int) $row->right_object_id; // cast each one as an integer
-		}
-	}
-
-	if ( ! empty( $rows2 ) ) {
-		foreach ( $rows2 as $row ) {
-			$target_ids[] = (int) $row->left_object_id; // cast each one as an integer
-		}
-	}
+	// Cache the array, including an empty result.
+	wp_cache_set( $cache_key, $target_ids, 'object_relationships' );
 
 	// Return the array of integers or an empty array.
 	return $target_ids;
@@ -340,7 +447,7 @@ function cp_get_object_relationship_ids( $left_object_id, $left_object_type, $ri
 function cp_delete_object_relationship( $left_object_id, $left_object_type, $right_object_type, $right_object_id ) {
 
 	// Error if $left_object_id is not a positive integer.
-	if ( filter_var( $left_object_id, FILTER_VALIDATE_INT ) === false ) {
+	if ( filter_var( $left_object_id, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) ) === false ) {
 
 		$item = 'string';
 		if ( $left_object_id === 0 ) {
@@ -358,7 +465,7 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 	}
 
 	// Error if $right_object_id is not a positive integer
-	if ( filter_var( $right_object_id, FILTER_VALIDATE_INT ) === false ) {
+	if ( filter_var( $right_object_id, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) ) === false ) {
 
 		$item = 'string';
 		if ( $right_object_id === 0 ) {
@@ -380,7 +487,7 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 	$object_list = implode( ', ', $recognized_relationship_objects );
 
 	// Error if $left_object_type is not a non-null string of an appropriate value
-	if ( ! in_array( $left_object_type, $recognized_relationship_objects ) ) {
+	if ( ! in_array( $left_object_type, $recognized_relationship_objects, true ) ) {
 
 		$item = $left_object_type;
 		if ( is_int( $left_object_type ) ) {
@@ -398,7 +505,7 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 	}
 
 	// Error if $right_object_type is not a non-null string of an appropriate value.
-	if ( ! in_array( $right_object_type, $recognized_relationship_objects ) ) {
+	if ( ! in_array( $right_object_type, $recognized_relationship_objects, true ) ) {
 
 		$item = $right_object_type;
 		if ( is_int( $right_object_type ) ) {
@@ -420,24 +527,11 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 	$table_name = $wpdb->prefix . 'object_relationships';
 	$relationship_id = 0;
 
-	// $wpdb->query does not sanitize data, so use $wpdb->prepare.
-	$sql1 = $wpdb->prepare( "SELECT relationship_id FROM $table_name WHERE left_object_id = %d AND left_object_type = %s AND right_object_type = %s AND right_object_id = %d", $left_object_id, $left_object_type, $right_object_type, $right_object_id );
+	// Get the relationship ID, using the cache if available.
+	$relationship_id = cp_object_relationship_exists( $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
-	// Get the relationship ID as an integer.
-	$row = $wpdb->get_row( $sql1 );
-	if ( is_object( $row ) ) {
-		$relationship_id = (int) $row->relationship_id;
-	}
-
-	if ( empty( $relationship_id ) ) {
-
-		$sql2 = $wpdb->prepare( "SELECT relationship_id FROM $table_name WHERE right_object_id = %d AND right_object_type = %s AND left_object_type = %s AND left_object_id = %d", $left_object_id, $left_object_type, $right_object_type, $right_object_id );
-
-		// Get the relationship ID as an integer.
-		$row = $wpdb->get_row( $sql2 );
-		if ( is_object( $row ) ) {
-			$relationship_id = (int) $row->relationship_id;
-		}
+	if ( is_wp_error( $relationship_id ) ) {
+		return $relationship_id;
 	}
 
 	// If relationship found.
@@ -447,13 +541,21 @@ function cp_delete_object_relationship( $left_object_id, $left_object_type, $rig
 		do_action( 'pre_delete_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
 
 		// Delete relationship.
-		$wpdb->delete( $table_name, array( 'relationship_id' => $relationship_id ), array( '%d' ) );
+		$deleted = $wpdb->delete( $table_name, array( 'relationship_id' => $relationship_id ), array( '%d' ) );
 
-		// Delete relationship meta.
-		cp_delete_relationship_meta_when_relationship_deleted( $relationship_id );
+		// Clear cached IDs for both objects after a successful deletion.
+		if ( $deleted ) {
+			wp_cache_delete( (int) $left_object_id . ':' . $left_object_type . ':' . $right_object_type, 'object_relationships' );
+			wp_cache_delete( (int) $right_object_id . ':' . $right_object_type . ':' . $left_object_type, 'object_relationships' );
+			wp_cache_delete( (int) $left_object_id . ':' . $left_object_type . ':' . $right_object_type . ':' . (int) $right_object_id, 'object_relationship_exists' );
+			wp_cache_delete( (int) $right_object_id . ':' . $right_object_type . ':' . $left_object_type . ':' . (int) $left_object_id, 'object_relationship_exists' );
 
-		// Hook after relationship is deleted.
-		do_action( 'deleted_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
+			// Delete relationship meta.
+			cp_delete_relationship_meta_when_relationship_deleted( $relationship_id );
+
+			// Hook after relationship is deleted.
+			do_action( 'deleted_object_relationship', $relationship_id, $left_object_id, $left_object_type, $right_object_type, $right_object_id );
+		}
 	}
 
 	// Return ID of deleted relationship or 0 if no relationship found.

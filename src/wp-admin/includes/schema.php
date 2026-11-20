@@ -70,6 +70,7 @@ CREATE TABLE $wpdb->object_relationships (
 	right_object_id bigint(20) unsigned NOT NULL default 0,
 	PRIMARY KEY (relationship_id),
 	KEY left_object_id (left_object_id),
+	KEY right_object_id (right_object_id),
 	KEY left_object_type (left_object_type($max_index_length)),
 	KEY right_object_type (right_object_type($max_index_length))
 ) $charset_collate;
@@ -490,6 +491,7 @@ function populate_options( array $options = array() ) {
 
 		// 2.0.1
 		'uploads_use_yearmonth_folders'   => 1,
+		'uploads_rename_files'            => 1,
 		'upload_path'                     => '',
 
 		// 2.1.0
