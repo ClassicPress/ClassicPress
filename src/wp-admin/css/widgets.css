@@ -1116,6 +1116,7 @@ ul.CodeMirror-hints {
 	margin-top: -1em;
 	padding: 1em;
 	background: #f6f7f7;
+	color: #646970;
 	border-left: 1px solid #c3c4c7;
 	width: 267px;
 	min-width: 267px;
@@ -1137,12 +1138,16 @@ ul.CodeMirror-hints {
 	width: 38%;
 	overflow: hidden;
 	display: inline-block;
+	vertical-align: top;
 }
 .widget-modal-attachment-info .thumbnail img,
 #media-widget-modal .image img {
 	max-width: 100%;
 	max-height: 500px;
 	margin: auto;
+}
+.widget-modal-attachment-info .mejs-container {
+	margin-bottom: 0.5em;
 }
 .widget-modal-attachment-info .details {
 	width: 50%;
@@ -1181,7 +1186,7 @@ ul.CodeMirror-hints {
 .widget-modal-display-settings textarea,
 .widget-modal-display-settings input,
 .widget-modal-display-settings select {
-	width: 65%;
+	width: 70%;
 }
 .insert-from-url-panel {
 	padding: 1em 1em 0;
@@ -1363,6 +1368,11 @@ ul.CodeMirror-hints {
 .describe {
 	margin-left: -0.5px;
 }
+#widget-modal .widget-modal-pages button {
+	margin: 0;
+	font-size: 13px;
+	vertical-align: inherit;
+}
 
 /* =Media Queries
 -------------------------------------------------------------- */
@@ -1370,17 +1380,39 @@ ul.CodeMirror-hints {
 	.widget-modal-left-sidebar {
 		display: none;
 	}
+
 	.widget-modal-main {
 		width: 100%;
 	}
+
+	.widget-modal-descriptions .setting,
+	.widget-modal-display-settings .setting,
+	#image-modal-content .column-settings .setting {
+		justify-content: space-between;
+		flex-direction: column;
+	}
+
 	#widget-modal input,
-	#widget-modal textarea,
 	#widget-modal select,
 	#widget-modal button {
 		min-height: 30px;
 		max-height: 30px;
 		line-height: 1;
 	}
+
+	.widget-modal-descriptions textarea,
+	.widget-modal-descriptions input,
+	.widget-modal-display-settings textarea,
+	.widget-modal-display-settings input,
+	.widget-modal-display-settings select {
+		width: 98%;
+		font-size: 13px;
+	}
+
+	#alt-text-description {
+		margin-left: 0;
+	}
+
 	#widget-modal button.widget-modal-close {
 		max-height: 46px;
 	}
@@ -1393,22 +1425,37 @@ ul.CodeMirror-hints {
 	.editwidget .widget-inside input[type="radio"] {
 		margin: 0.25rem 0.25rem 0.25rem 0;
 	}
+
+	.widget-modal-right-sidebar {
+		width: 220px;
+		min-width: 220px;
+	}
+
+	.widget-modal-attachment-info .mejs-container {
+		display: none;
+	}
 }
 
 @media screen and (max-width: 690px) {
 	.widget-modal-content {
 		display: block;
 	}
-	.media-library-grid,
-	.widget-modal-right-sidebar {
+
+	.media-library-grid {
 		width: 100%;
 	}
+
 	.widget-modal-right-sidebar {
-		width: 99%;
-		margin-left: -1.2em;
-		padding-right: 1em;
-		height: 100%;
-		overflow: hidden;
+		display: none;
+	}
+
+	.widget-modal-header-buttons {
+		flex-direction: column;
+	}
+
+	.widget-modal-pages {
+		margin: 0;
+		padding: 1em;
 	}
 }
 
@@ -1444,6 +1491,14 @@ ul.CodeMirror-hints {
 	.widget-access-link {
 		float: none;
 		margin: 15px 0 0;
+	}
+
+	.media-library-select-div {
+		flex-direction: column;
+	}
+
+	.widget-modal-search-form {
+		padding-top: 1em;
 	}
 }
 
