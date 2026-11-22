@@ -1660,6 +1660,13 @@ class WP_REST_Server {
 		$has_error  = false;
 
 		foreach ( $requests as $single_request ) {
+			if ( is_wp_error( $single_request ) ) {
+				$has_error    = true;
+				$matches[]    = $single_request;
+				$validation[] = $single_request;
+				continue;
+			}
+
 			$match     = $this->match_request_to_handler( $single_request );
 			$matches[] = $match;
 			$error     = null;
@@ -1730,6 +1737,12 @@ class WP_REST_Server {
 		}
 
 		foreach ( $requests as $i => $single_request ) {
+			if ( is_wp_error( $single_request ) ) {
+				$result      = $this->error_to_response( $single_request );
+				$responses[] = $this->envelope_response( $result, false )->get_data();
+				continue;
+			}
+
 			$clean_request = clone $single_request;
 			$clean_request->set_url_params( array() );
 			$clean_request->set_attributes( array() );
