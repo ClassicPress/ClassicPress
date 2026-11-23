@@ -353,7 +353,7 @@
 					id:     partialId,
 					type:   partialType,
 					place:  context.theme_location || null,
-					menuId: context.menu_id || null
+					menuId: context.nav_menu_term_id || null
 				} );
 			} else if ( partialType === 'widget' ) {
 				// Use getAttribute instead of dataset to avoid potential problems with parsing escaped values
@@ -728,7 +728,7 @@
 				menuId = String( value.nav_menu_term_id );
 				wp.customize.selectiveRefresh.partial.each( function( partial ) {
 					partial.placements().forEach( function( placement ) {
-						if ( placement.context && String( placement.context.menu_id ) === menuId ) {
+						if ( placement.context && String( placement.context.nav_menu_term_id ) === menuId ) {
 							partial.refresh();
 						}
 					} );

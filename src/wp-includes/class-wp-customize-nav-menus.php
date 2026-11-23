@@ -1528,6 +1528,22 @@ final class WP_Customize_Nav_Menus {
 			$exported_args['menu'] = $exported_args['menu']->term_id;
 		}
 
+		$menu_id = 0;
+		if ( $can_partial_refresh ) {
+			$location = ! empty( $exported_args['theme_location'] ) ? $exported_args['theme_location'] : '';
+			if ( $location ) {
+				$locations = get_nav_menu_locations();
+				$menu_id   = isset( $locations[ $location ] ) ? (int) $locations[ $location ] : 0;
+			} else {
+				$menu_id = (int) $exported_args['menu'];
+			}
+
+			if ( $menu_id ) {
+				// Keep the term ID separate from the native HTML menu_id argument.
+				$exported_args['nav_menu_term_id'] = $menu_id;
+			}
+		}
+
 		ksort( $exported_args );
 		$exported_args['args_hmac'] = $this->hash_nav_menu_args( $exported_args );
 
@@ -1548,17 +1564,7 @@ final class WP_Customize_Nav_Menus {
 			// Build full settings list including all menu items for this menu
 			$settings = array( $setting_id );
 
-			if ( $location ) {
-				$locations = get_nav_menu_locations();
-				$menu_id   = isset( $locations[ $location ] ) ? (int) $locations[ $location ] : 0;
-			} else {
-				$menu_id = (int) $exported_args['menu'];
-			}
-
 			if ( $menu_id ) {
-				$exported_args['menu_id'] = $menu_id;
-				$args['customize_preview_nav_menus_args']['menu_id'] = $menu_id;
-
 				// Include the nav_menu setting itself
 				$settings[] = 'nav_menu[' . $menu_id . ']';
 
@@ -1691,6 +1697,9 @@ final class WP_Customize_Nav_Menus {
 			// Error: args_hmac_mismatch.
 			return false;
 		}
+
+		// This signed value identifies the menu in the preview, not a wp_nav_menu() argument.
+		unset( $nav_menu_args['nav_menu_term_id'] );
 
 		ob_start();
 		wp_nav_menu( $nav_menu_args );
