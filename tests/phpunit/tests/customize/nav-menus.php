@@ -1063,6 +1063,85 @@ class Test_WP_Customize_Nav_Menus extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Menu partial settings must remain a JSON array after deduplication.
+	 *
+	 * @dataProvider data_filter_wp_nav_menu_args_settings
+	 * @covers WP_Customize_Nav_Menus::filter_wp_nav_menu_args
+	 * @covers WP_Customize_Partial::json
+	 *
+	 * @param string $menu_type How the menu is selected.
+	 */
+	public function test_filter_wp_nav_menu_args_settings( $menu_type ) {
+		$menu_id  = wp_create_nav_menu( 'Partial settings' );
+		$item_ids = array();
+		for ( $position = 1; $position <= 2; $position++ ) {
+			$item_ids[] = wp_update_nav_menu_item(
+				$menu_id,
+				0,
+				array(
+					'menu-item-type'     => 'custom',
+					'menu-item-title'    => 'Item ' . $position,
+					'menu-item-url'      => home_url( '/item-' . $position . '/' ),
+					'menu-item-status'   => 'publish',
+					'menu-item-position' => $position,
+				)
+			);
+		}
+
+		$location  = 'test-menu-json';
+		$locations = get_theme_mod( 'nav_menu_locations', array() );
+		register_nav_menu( $location, 'Partial settings test' );
+		set_theme_mod( 'nav_menu_locations', array_merge( $locations, array( $location => $menu_id ) ) );
+
+		try {
+			$args = $this->wp_customize->nav_menus->filter_wp_nav_menu_args(
+				array(
+					'echo'           => true,
+					'fallback_cb'    => false,
+					'container'      => 'nav',
+					'menu'           => 'object' === $menu_type ? wp_get_nav_menu_object( $menu_id ) : $menu_id,
+					'theme_location' => 'location' === $menu_type ? $location : '',
+				)
+			);
+			$this->assertTrue( $args['can_partial_refresh'] );
+
+			$partial_id = 'nav_menu_instance[' . $args['customize_preview_nav_menus_args']['args_hmac'] . ']';
+			$partial    = $this->wp_customize->selective_refresh->get_partial( $partial_id );
+			$this->assertInstanceOf( 'WP_Customize_Partial', $partial );
+
+			$expected = array( 'nav_menu[' . $menu_id . ']' );
+			if ( 'location' === $menu_type ) {
+				array_unshift( $expected, 'nav_menu_locations[' . $location . ']' );
+			}
+			foreach ( $item_ids as $item_id ) {
+				$expected[] = 'nav_menu_item[' . $item_id . ']';
+			}
+
+			$export = $partial->json();
+			$this->assertSame( range( 0, count( $expected ) - 1 ), array_keys( $export['settings'] ) );
+			$this->assertSame( $expected, $export['settings'] );
+			$this->assertSame( $expected[0], $export['primarySetting'] );
+			$this->assertTrue( $export['fallbackRefresh'] );
+			$this->assertTrue( $export['containerInclusive'] );
+			$this->assertSame( $expected, json_decode( wp_json_encode( $export ) )->settings );
+		} finally {
+			set_theme_mod( 'nav_menu_locations', $locations );
+			unregister_nav_menu( $location );
+		}
+	}
+
+	/**
+	 * @return array Menu selection types.
+	 */
+	public static function data_filter_wp_nav_menu_args_settings() {
+		return array(
+			'menu ID'       => array( 'id' ),
+			'menu object'   => array( 'object' ),
+			'theme location' => array( 'location' ),
+		);
+	}
+
+	/**
 	 * Test the filter_wp_nav_menu method.
 	 *
 	 * @covers WP_Customize_Nav_Menus::filter_wp_nav_menu
