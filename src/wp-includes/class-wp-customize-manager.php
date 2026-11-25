@@ -2057,7 +2057,18 @@ final class WP_Customize_Manager {
 			if ( $this->messenger_channel ) {
 				$query_params['customize_messenger_channel'] = $this->messenger_channel;
 			}
-			$url = add_query_arg( $query_params, $url );
+			// Preserve query encoding when the required state is already present.
+			$existing_query_params = array();
+			if ( isset( $parsed_original_url['query'] ) ) {
+				parse_str( $parsed_original_url['query'], $existing_query_params );
+			}
+
+			foreach ( $query_params as $key => $value ) {
+				if ( ! isset( $existing_query_params[ $key ] ) || $existing_query_params[ $key ] !== $value ) {
+					$url = add_query_arg( $query_params, $url );
+					break;
+				}
+			}
 		}
 
 		return $url;
