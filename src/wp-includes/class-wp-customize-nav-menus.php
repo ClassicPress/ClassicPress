@@ -1571,7 +1571,7 @@ final class WP_Customize_Nav_Menus {
 				}
 			}
 
-			$settings = array_unique( $settings );
+			$settings = array_values( array_unique( $settings ) );
 
 			$this->manager->selective_refresh->add_partial(
 				$partial_id,
