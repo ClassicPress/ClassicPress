@@ -446,7 +446,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} else if ( widget.querySelector( '[data-property="ids"]' ) ) {
 			idsArray = widget.querySelector( '[data-property="ids"]' ).value.split( ',' );
-			if ( idsArray.indexOf( attachment.id ).value ) {
+			if ( idsArray.includes( String( attachment.id ) ) ) {
 				selected = ' selected';
 			}
 		}
@@ -831,10 +831,14 @@ document.addEventListener( 'DOMContentLoaded', function() {
 
 		formData = new FormData();
 		formData.append( 'action', 'query-attachments' );
-		formData.append( 'query[post__in]', galleryIds );
 		formData.append( 'query[orderby]', 'post__in' );
 		formData.append( 'query[post_mime_type]', 'image' );
+		formData.append( 'query[posts_per_page]', -1 );
 		formData.append( 'query[paged]', 1 );
+
+		galleryIds.forEach( function( id ) {
+			formData.append( 'query[post__in][]', id );
+		} );
 
 		// Make AJAX request
 		fetch( ajaxurl, {
@@ -965,9 +969,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			formData = new FormData();
 
 		formData.append( 'action', 'query-attachments' );
-		formData.append( 'query[post__not_in]', selectedIds );
 		formData.append( 'query[post_mime_type]', 'image' );
+		formData.append( 'query[posts_per_page]', GALLERY_WIDGET.per_page );
 		formData.append( 'query[paged]', 1 );
+
+		selectedIds.forEach( function( id ) {
+			formData.append( 'query[post__not_in][]', id );
+		} );
 
 		// Make AJAX request
 		fetch( ajaxurl, {
