@@ -79,10 +79,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	document.querySelectorAll( '.menu-location-menus select' ).forEach( function( select ) {
 		select.addEventListener( 'change', function() {
 			var editLink = select.closest( 'tr' ).querySelector( '.locations-edit-menu-link' );
-			if ( select.querySelector( 'option:selected' ).dataset.orig ) {
-				editLink.style.display = '';
-			} else {
-				editLink.style.display = 'none';
+			if ( editLink ) {
+				if ( select.querySelector( 'option:checked' ).dataset.orig ) {
+					editLink.style.display = '';
+				} else {
+					editLink.style.display = 'none';
+				}
 			}
 		} );
 	} );
