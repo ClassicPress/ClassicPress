@@ -736,6 +736,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			image = '<div class="icon"><div class="centered"><img src="' + TEXT_WIDGET.includes_url + 'images/media/audio.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
 		} else if ( attachment.type === 'video' ) {
 			image = '<div class="icon"><div class="centered"><img src="' + TEXT_WIDGET.includes_url + 'images/media/video.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
+		} else if ( attachment.type === 'text' ) {
+			image = '<div class="icon"><div class="centered"><img src="' + TEXT_WIDGET.includes_url + 'images/media/text.png' + '" draggable="false" alt=""></div><div class="filename"><div>' + attachment.title + '</div></div></div>';
 		}
 
 		gridItem.className = 'media-item' + selected;
