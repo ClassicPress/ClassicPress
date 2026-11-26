@@ -857,7 +857,7 @@ ul.CodeMirror-hints {
 #widget-modal .uploader-inline {
 	width: 100%;
 	padding: 4em 0;
-	margin: 2em 0;
+	margin: 2em 1em 2em 0;
 	border: 4px dashed #c3c4c7;
 	background-color: #ecf7e9;
 	box-sizing: border-box;
