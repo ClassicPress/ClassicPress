@@ -19,7 +19,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	/*
 	 * Set variables for the whole file
 	 */
-	var column, originalDepth, originalClientX, originalLabel, newClientX, baseClientX, lastInput, lastSelect,
+	var column, originalDepth, originalClientX, originalLabel, newClientX,
+		baseClientX, lastInput, lastSelect, columnInputs, columnSelects,
 		lastPointerClient = { x: 0, y: 0 },
 		indentDuringDrag = null,
 		postboxTogs = document.querySelectorAll( '.hide-postbox-tog' ),
@@ -54,15 +55,17 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		column = document.getElementById( 'menu-settings-column' );
 
 		// Make the post boxes read-only, as they can't be used yet.
-		lastInput = column.querySelectorAll( 'input' ).pop();
-		lastInput.querySelector( 'a' ).setAttribute( 'href', '' );
-		lastInput.addEventListener( 'click', function( e ) {
+		columnInputs = column.querySelectorAll( 'input' );
+		lastInput = columnInputs[ columnInputs.length - 1 ];
+		lastInput?.querySelector( 'a' )?.setAttribute( 'href', '' );
+		lastInput?.addEventListener( 'click', function( e ) {
 			e.preventDefault();
 		} );
 
-		lastSelect = column.querySelectorAll( 'select' ).pop();
-		lastSelect.querySelector( 'a' ).setAttribute( 'href', '' );
-		lastSelect.addEventListener( 'click', function( e ) {
+		columnSelects = column.querySelectorAll( 'select' );
+		lastSelect = columnSelects[ columnSelects.length - 1 ];
+		lastSelect?.querySelector( 'a' )?.setAttribute( 'href', '' );
+		lastSelect?.addEventListener( 'click', function( e ) {
 			e.preventDefault();
 		} );
 	}
@@ -76,10 +79,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	document.querySelectorAll( '.menu-location-menus select' ).forEach( function( select ) {
 		select.addEventListener( 'change', function() {
 			var editLink = select.closest( 'tr' ).querySelector( '.locations-edit-menu-link' );
-			if ( select.querySelector( 'option:selected' ).dataset.orig ) {
-				editLink.style.display = '';
-			} else {
-				editLink.style.display = 'none';
+			if ( editLink ) {
+				if ( select.querySelector( 'option:checked' ).dataset.orig ) {
+					editLink.style.display = '';
+				} else {
+					editLink.style.display = 'none';
+				}
 			}
 		} );
 	} );
@@ -1238,7 +1243,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 	function getOffset( element ) {
 		var rect, win;
 
-		if ( ! element.getClientRects().length ) {
+		if ( ! element || ! element.getClientRects().length ) {
 			return { top: 0, left: 0 };
 		}
 

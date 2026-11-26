@@ -1005,6 +1005,90 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Matching preview state must not re-encode unrelated query arguments.
+	 *
+	 * @covers WP_Customize_Manager::add_state_query_params
+	 */
+	public function test_add_state_query_params_preserves_matching_url() {
+		$manager = new WP_Customize_Manager(
+			array(
+				'changeset_uuid'    => wp_generate_uuid4(),
+				'messenger_channel' => 'preview-0',
+				'theme'             => $this->get_inactive_core_theme(),
+			)
+		);
+		$base = add_query_arg(
+			array(
+				'customize_changeset_uuid'    => $manager->changeset_uuid(),
+				'customize_messenger_channel' => 'preview-0',
+				'customize_theme'             => $manager->get_stylesheet(),
+			),
+			home_url( '/' )
+		);
+
+		foreach ( array( 'First+item', 'First%20item' ) as $title ) {
+			$url = $base . '&customized=%7B%22title%22%3A%22' . $title . '%22%7D&literal=%2B#section';
+			$this->assertSame( $url, $manager->add_state_query_params( $url ) );
+		}
+	}
+
+	/**
+	 * Missing, stale, and malformed state must still be replaced.
+	 *
+	 * @covers WP_Customize_Manager::add_state_query_params
+	 */
+	public function test_add_state_query_params_updates_required_state() {
+		$manager = new WP_Customize_Manager(
+			array(
+				'changeset_uuid'    => wp_generate_uuid4(),
+				'messenger_channel' => 'preview-0',
+				'theme'             => $this->get_inactive_core_theme(),
+			)
+		);
+
+		foreach ( array( '', '&customize_changeset_uuid=old&customize_theme=old&customize_messenger_channel=old', '&customize_changeset_uuid[]=old' ) as $state ) {
+			$url = home_url( '/' ) . '?unrelated=First%20item&literal=%2B' . $state;
+			parse_str( wp_parse_url( $manager->add_state_query_params( $url ), PHP_URL_QUERY ), $query );
+			$this->assertSame( $manager->changeset_uuid(), $query['customize_changeset_uuid'] );
+			$this->assertSame( 'preview-0', $query['customize_messenger_channel'] );
+			$this->assertSame( $manager->get_stylesheet(), $query['customize_theme'] );
+			$this->assertSame( 'First item', $query['unrelated'] );
+			$this->assertSame( '+', $query['literal'] );
+		}
+
+		$url = 'https://not-allowed.example.com/?unrelated=First%20item';
+		$this->assertSame( $url, $manager->add_state_query_params( $url ) );
+	}
+
+	/**
+	 * Canonical normalization must not become a redirect to the original request.
+	 *
+	 * @covers WP_Customize_Manager::add_state_query_params
+	 */
+	public function test_add_state_query_params_preserves_canonical_destination() {
+		$page_id = self::factory()->post->create( array( 'post_type' => 'page' ) );
+		update_option( 'show_on_front', 'page' );
+		update_option( 'page_on_front', $page_id );
+		$this->set_permalink_structure( '/%postname%/' );
+		$manager = new WP_Customize_Manager( array( 'messenger_channel' => 'preview-0' ) );
+		$request = add_query_arg(
+			array(
+				'customize_changeset_uuid'    => $manager->changeset_uuid(),
+				'customize_messenger_channel' => 'preview-0',
+				'customized'                  => '{"nav_menu_item[11]":{"title":"First item"}}',
+			),
+			home_url( '/' )
+		);
+		$this->go_to( home_url( '/' ) );
+		$canonical = redirect_canonical( $request, false );
+		$this->assertIsString( $canonical );
+		$this->assertNotSame( $request, $canonical );
+		$this->assertStringContainsString( 'First%20item', $canonical );
+		$this->assertSame( $canonical, $manager->add_state_query_params( $canonical ) );
+		$this->assertNull( redirect_canonical( $manager->add_state_query_params( $canonical ), false ) );
+	}
+
+	/**
 	 * Test WP_Customize_Manager::save_changeset_post().
 	 *
 	 * @ticket 30937
