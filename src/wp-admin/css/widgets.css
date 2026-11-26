@@ -853,11 +853,12 @@ ul.CodeMirror-hints {
 #widget-modal {
 	width: 95%;
 	height: 90%;
+	padding: 0;
 }
 #widget-modal .uploader-inline {
 	width: 100%;
 	padding: 4em 0;
-	margin: 2em 0;
+	margin: 2em 1em 2em 0;
 	border: 4px dashed #c3c4c7;
 	background-color: #ecf7e9;
 	box-sizing: border-box;
@@ -891,7 +892,6 @@ ul.CodeMirror-hints {
 .widget-modal-left-sidebar {
 	width: 200px;
 	min-width: 200px;
-	margin: -1em 0 -1em -1em;
 	background: #f6f7f7;
 	border-right: 1px solid #c3c4c7;
 	-webkit-user-select: none;
@@ -933,7 +933,7 @@ ul.CodeMirror-hints {
 }
 .widget-modal-header {
 	position: sticky;
-	top: -1em;
+	top: 0;
 	z-index: 999;
 	background: #fff;
 	border-bottom: 1px solid #dcdcde;
@@ -941,7 +941,7 @@ ul.CodeMirror-hints {
 .widget-modal-headings {
 	display: flex;
 	justify-content: space-between;
-	margin: 0 1em;
+	padding: 1em 1em 0;
 }
 .widget-modal-title {
 	margin-top: 1em;
@@ -1234,7 +1234,7 @@ ul.CodeMirror-hints {
 	position: sticky;
 	display: flex;
 	justify-content: space-between;
-	bottom: -1em;
+	bottom: 0;
 	height: 60px;
 	z-index: 999;
 	background: #fff;
@@ -1255,17 +1255,35 @@ ul.CodeMirror-hints {
 	color: #d63638;
 }
 .widget-modal-footer-selection-view ul {
-	display: flex;
+	display: inline-block;
+	height: 40px;
+	width: 40px;
+	margin: 10px;
+	padding: 0;
 }
+.widget-modal-footer-selection-view li {
+	margin: 0;
+	padding: 0;
+	box-shadow:
+		0 0 0 1px #fff,
+		0 0 0 3px #2271b1;
+	line-height: 1;
+}	
 .widget-modal-footer-selection .icon {
 	box-shadow: none;
 }
+.widget-modal-footer-selection .media-thumbnail .centered {
+	text-align: center;
+}
 .widget-modal-footer-selection .media-thumbnail img {
-	width: 45px;
-	height: 45px;
-	margin-right: 0.5em;
-	margin-top: -5px;
+	height: 36px;
+	width: 36px;
 	object-fit: cover;
+	margin: 2px;
+}
+.widget-modal-footer-selection .media-thumbnail .icon img {
+	height: 36px;
+	width: auto;
 }
 .widget-modal-footer-selection .media-thumbnail .filename {
 	display: none;
@@ -1376,13 +1394,49 @@ ul.CodeMirror-hints {
 
 /* =Media Queries
 -------------------------------------------------------------- */
-@media only screen and (max-width: 900px) {
-	.widget-modal-left-sidebar {
+@media only screen and (max-width: 1000px) {
+	.widget-modal-right-sidebar {
+		width: 220px;
+		min-width: 220px;
+	}
+
+	.widget-modal-attachment-info .mejs-container,
+	.widget-modal-attachment-info .thumbnail {
 		display: none;
 	}
 
-	.widget-modal-main {
+	.widget-modal-attachment-info .details {
 		width: 100%;
+		display: block;
+	}
+}
+
+@media only screen and (max-width: 900px) {
+	.widget-modal-content {
+		flex-direction: column;
+	}
+
+	#widget-modal .uploader-inline {
+		width: calc(100% - 1em);
+	}
+
+	.media-library-grid {
+		width: 100%;
+	}
+
+	.widget-modal-right-sidebar {
+		width: calc(100% - 1px);
+		min-width: auto;
+		margin: 0;
+		padding: 0;
+	}
+
+	.widget-modal-right-sidebar-info {
+		padding: 1em;
+	}
+
+	.media-uploader-status {
+		padding: 0 1em 1em;
 	}
 
 	.widget-modal-descriptions .setting,
@@ -1390,14 +1444,6 @@ ul.CodeMirror-hints {
 	#image-modal-content .column-settings .setting {
 		justify-content: space-between;
 		flex-direction: column;
-	}
-
-	#widget-modal input,
-	#widget-modal select,
-	#widget-modal button {
-		min-height: 30px;
-		max-height: 30px;
-		line-height: 1;
 	}
 
 	.widget-modal-descriptions textarea,
@@ -1426,34 +1472,45 @@ ul.CodeMirror-hints {
 		margin: 0.25rem 0.25rem 0.25rem 0;
 	}
 
-	.widget-modal-right-sidebar {
-		width: 220px;
-		min-width: 220px;
+	#widget-modal input,
+	#widget-modal select,
+	#widget-modal button {
+		min-height: 40px;
 	}
 
-	.widget-modal-attachment-info .mejs-container {
-		display: none;
+	#widget-modal button.clear-selection	{
+		min-height: auto;
+	}
+
+	/* Pagination in widget media upload modal. */
+	.wp-admin .widget-modal-header-buttons {
+		flex-direction: column;
+	}
+
+	.wp-admin .widget-modal-pages {
+		margin: 0;
+		padding: 1em;
 	}
 }
 
 @media screen and (max-width: 690px) {
-	.widget-modal-content {
+	.widget-modal-container {
 		display: block;
 	}
 
-	.media-library-grid {
+	.widget-modal-left-sidebar {
 		width: 100%;
+		min-width: auto;
+		padding: 1em 0;
+		border: 0;
 	}
 
-	.widget-modal-right-sidebar {
-		display: none;
-	}
-
-	.widget-modal-header-buttons {
+	/* Pagination in Customizer media upload modal. */
+	.wp-customizer .widget-modal-header-buttons {
 		flex-direction: column;
 	}
 
-	.widget-modal-pages {
+	.wp-customizer .widget-modal-pages {
 		margin: 0;
 		padding: 1em;
 	}
