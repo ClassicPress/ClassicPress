@@ -1463,9 +1463,12 @@ document.addEventListener( 'DOMContentLoaded', function() {
 				img.src = _wpCustomizeControlsL10n.includes_url + 'images/media/audio.png';
 			} else if ( attachment.type === 'video' ) {
 				img.src = _wpCustomizeControlsL10n.includes_url + 'images/media/video.png';
+			} else if ( attachment.type === 'text' ) {
+				img.src = _wpCustomizeControlsL10n.includes_url + 'images/media/text.png';
 			}
 
 			centered.className = 'centered';
+			filename.className = 'filename';
 			img.alt = '';
 			img.setAttribute( 'draggable', 'false' );
 			centered.append( img );
