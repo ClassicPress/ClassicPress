@@ -446,7 +446,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			}
 		} else if ( widget.querySelector( '[data-property="ids"]' ) ) {
 			idsArray = widget.querySelector( '[data-property="ids"]' ).value.split( ',' );
-			if ( idsArray.indexOf( attachment.id ).value ) {
+			if ( idsArray.includes( String( attachment.id ) ) ) {
 				selected = ' selected';
 			}
 		}
@@ -784,7 +784,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			galleryTemplate = document.getElementById( 'tmpl-edit-gallery-modal' ),
 			galleryClone    = galleryTemplate.content.cloneNode( true ),
 			galleryItems    = [],
-			galleryIds      = mode === 'update' ? selectedIds : widget.querySelector( '[data-property="ids"]').value.split( ',' );
+			galleryIds      = ( mode === 'update' ? selectedIds : widget.querySelector( '[data-property="ids"]' ).value.split( ',' ) ).filter( Boolean );
 
 		// Append cloned template and show relevant elements
 		header.append( dialogButtons );
@@ -829,12 +829,26 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		galleryAdd.textContent = GALLERY_WIDGET.cancel_gallery;
 		galleryAdd.removeAttribute( 'hidden' );
 
+		// Nothing to fetch: show an empty gallery rather than querying the whole library
+		if ( galleryIds.length === 0 ) {
+			dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId = widget.id;
+			selectedIds = [];
+			enableGallerySorting( [], widget, 'edit' );
+			dialog.querySelector( '#gallery-button-insert' ).disabled = true;
+			dialog.showModal();
+			return;
+		}
+
 		formData = new FormData();
 		formData.append( 'action', 'query-attachments' );
-		formData.append( 'query[post__in]', galleryIds );
 		formData.append( 'query[orderby]', 'post__in' );
 		formData.append( 'query[post_mime_type]', 'image' );
+		formData.append( 'query[posts_per_page]', -1 );
 		formData.append( 'query[paged]', 1 );
+
+		galleryIds.forEach( function( id ) {
+			formData.append( 'query[post__in][]', id );
+		} );
 
 		// Make AJAX request
 		fetch( ajaxurl, {
@@ -965,9 +979,13 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			formData = new FormData();
 
 		formData.append( 'action', 'query-attachments' );
-		formData.append( 'query[post__not_in]', selectedIds );
 		formData.append( 'query[post_mime_type]', 'image' );
+		formData.append( 'query[posts_per_page]', GALLERY_WIDGET.per_page );
 		formData.append( 'query[paged]', 1 );
+
+		selectedIds.forEach( function( id ) {
+			formData.append( 'query[post__not_in][]', id );
+		} );
 
 		// Make AJAX request
 		fetch( ajaxurl, {
@@ -1408,6 +1426,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						}
 					} );
 
+					// Deduplicate selected items before updating
+					selectedIds = Array.from( new Set( selectedIds ) );
 					cleanup();
 					editGallery( widgetEl, 'update' );
 
