@@ -784,7 +784,7 @@ document.addEventListener( 'DOMContentLoaded', function() {
 			galleryTemplate = document.getElementById( 'tmpl-edit-gallery-modal' ),
 			galleryClone    = galleryTemplate.content.cloneNode( true ),
 			galleryItems    = [],
-			galleryIds      = mode === 'update' ? selectedIds : widget.querySelector( '[data-property="ids"]').value.split( ',' );
+			galleryIds      = ( mode === 'update' ? selectedIds : widget.querySelector( '[data-property="ids"]' ).value.split( ',' ) ).filter( Boolean );
 
 		// Append cloned template and show relevant elements
 		header.append( dialogButtons );
@@ -828,6 +828,16 @@ document.addEventListener( 'DOMContentLoaded', function() {
 		galleryAdd.classList.add( 'cancel' );
 		galleryAdd.textContent = GALLERY_WIDGET.cancel_gallery;
 		galleryAdd.removeAttribute( 'hidden' );
+
+		// Nothing to fetch: show an empty gallery rather than querying the whole library
+		if ( galleryIds.length === 0 ) {
+			dialog.querySelector( '#widget-modal-media-content' ).dataset.widgetId = widget.id;
+			selectedIds = [];
+			enableGallerySorting( [], widget, 'edit' );
+			dialog.querySelector( '#gallery-button-insert' ).disabled = true;
+			dialog.showModal();
+			return;
+		}
 
 		formData = new FormData();
 		formData.append( 'action', 'query-attachments' );
@@ -1416,6 +1426,8 @@ document.addEventListener( 'DOMContentLoaded', function() {
 						}
 					} );
 
+					// Deduplicate selected items before updating
+					selectedIds = Array.from( new Set( selectedIds ) );
 					cleanup();
 					editGallery( widgetEl, 'update' );
 
