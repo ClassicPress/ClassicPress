@@ -954,6 +954,7 @@ ul.CodeMirror-hints {
 .widget-modal-details {
 	font-size: 0.875rem;
 	margin-top: 0.875rem;
+	display: none;
 }
 .widget-modal-close {
 	width: 46px;
@@ -1412,6 +1413,14 @@ ul.CodeMirror-hints {
 }
 
 @media only screen and (max-width: 900px) {
+	.widget-modal-left-sidebar {
+		display: none;
+	}
+
+	.widget-modal-details {
+		display: block;
+	}
+
 	.widget-modal-content {
 		flex-direction: column;
 	}
@@ -1494,17 +1503,6 @@ ul.CodeMirror-hints {
 }
 
 @media screen and (max-width: 690px) {
-	.widget-modal-container {
-		display: block;
-	}
-
-	.widget-modal-left-sidebar {
-		width: 100%;
-		min-width: auto;
-		padding: 1em 0;
-		border: 0;
-	}
-
 	/* Pagination in Customizer media upload modal. */
 	.wp-customizer .widget-modal-header-buttons {
 		flex-direction: column;
