@@ -1417,7 +1417,7 @@ ul.CodeMirror-hints {
 		display: none;
 	}
 
-	.widget-modal-details {
+	.wp-admin .widget-modal-details {
 		display: block;
 	}
 
@@ -1490,25 +1490,14 @@ ul.CodeMirror-hints {
 	#widget-modal button.clear-selection	{
 		min-height: auto;
 	}
-
-	/* Pagination in widget media upload modal. */
-	.wp-admin .widget-modal-header-buttons {
-		flex-direction: column;
-	}
-
-	.wp-admin .widget-modal-pages {
-		margin: 0;
-		padding: 1em;
-	}
 }
 
 @media screen and (max-width: 690px) {
-	/* Pagination in Customizer media upload modal. */
-	.wp-customizer .widget-modal-header-buttons {
+	.widget-modal-header-buttons {
 		flex-direction: column;
 	}
 
-	.wp-customizer .widget-modal-pages {
+	.widget-modal-pages {
 		margin: 0;
 		padding: 1em;
 	}
